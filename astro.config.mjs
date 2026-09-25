@@ -28,7 +28,6 @@ import { pluginCustomCopyButton } from "./src/plugins/expressive-code/custom-cop
 export default defineConfig({
 	site: "https://wnz27.github.io",
 	base: "/k7-notes/",
-	base: "/",
 	trailingSlash: "always",
 	integrations: [
 		tailwind({
