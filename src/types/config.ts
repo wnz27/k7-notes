@@ -35,6 +35,12 @@ export type SiteConfig = {
 		depth: 1 | 2 | 3;
 	};
 
+	fluidBackdrop: {
+		enable: boolean;
+		/** Scales pointer distortion and glow. 1 is the tuned default. */
+		intensity: number;
+	};
+
 	favicon: Favicon[];
 };
 

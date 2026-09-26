@@ -29,6 +29,10 @@ export const siteConfig: SiteConfig = {
 		enable: true, // Display the table of contents on the right side of the post
 		depth: 2, // Maximum heading depth to show in the table, from 1 to 3
 	},
+	fluidBackdrop: {
+		enable: true, // Animated WebGL fluid behind the page; falls back to a plain background
+		intensity: 1, // Pointer distortion and glow strength, 0 to ~1.5
+	},
 	favicon: [
 		// Leave this array empty to use the default favicon
 		// {

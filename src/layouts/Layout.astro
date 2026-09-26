@@ -4,6 +4,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
 import ConfigCarrier from "@components/ConfigCarrier.astro";
+import FluidBackdrop from "@components/misc/FluidBackdrop.astro";
 import { profileConfig, siteConfig } from "@/config";
 import {
 	AUTO_MODE,
@@ -152,6 +153,7 @@ const bannerOffset =
 		  data-overlayscrollbars-initialize
 	>
 		<ConfigCarrier></ConfigCarrier>
+		{siteConfig.fluidBackdrop.enable && <FluidBackdrop intensity={siteConfig.fluidBackdrop.intensity} />}
 		<slot />
 
 		<!-- increase the page height during page transition to prevent the scrolling animation from jumping -->

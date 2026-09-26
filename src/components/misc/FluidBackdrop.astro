@@ -1,0 +1,117 @@
+---
+interface Props {
+	/** Scales pointer distortion and glow. 1 is the tuned default. */
+	intensity?: number;
+}
+
+const { intensity = 1 } = Astro.props;
+---
+
+<div id="fluid-backdrop" aria-hidden="true" data-intensity={intensity}>
+	<canvas id="fluid-backdrop-canvas"></canvas>
+</div>
+
+<style>
+	#fluid-backdrop {
+		position: fixed;
+		inset: 0;
+		pointer-events: none;
+
+		/* A negative index paints above the root element's --page-bg but below all
+		   in-flow content. Using 0 instead would put the canvas *over* the cards,
+		   because a positioned z-index:0 element paints later than non-positioned
+		   in-flow content. */
+		z-index: -1;
+
+		/* --fluid-strength is driven by scroll: 1 inside the hero band, dropping to
+		   a faint ambient wash below it. --fluid-max-opacity keeps light mode
+		   restrained, where the same palette would otherwise flatten body text. */
+		--fluid-max-opacity: 0.55;
+		opacity: calc(var(--fluid-strength, 1) * var(--fluid-max-opacity));
+
+		/* Dissolve downward so the band gives way to the page background instead of
+		   ending on a hard edge. */
+		--fluid-mask: linear-gradient(
+			to bottom,
+			rgb(0 0 0) 0%,
+			rgb(0 0 0 / 0.92) 12%,
+			rgb(0 0 0 / 0.35) 55%,
+			transparent 100%
+		);
+		-webkit-mask-image: var(--fluid-mask);
+		mask-image: var(--fluid-mask);
+	}
+
+	:global(html.dark) #fluid-backdrop {
+		--fluid-max-opacity: 1;
+	}
+
+	#fluid-backdrop-canvas {
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+</style>
+
+<script>
+	import {
+		createFluidBackdrop,
+		type FluidBackdropHandle,
+	} from "@utils/fluid-backdrop";
+
+	/** How far, in viewport heights, the hero band takes to fade to ambient. */
+	const HERO_FADE_SPAN = 0.6;
+
+	/** Strength the backdrop settles at once the hero band has scrolled away. */
+	const AMBIENT_STRENGTH = 0.15;
+
+	let handle: FluidBackdropHandle | null = null;
+	let wrapper: HTMLElement | null = null;
+	let strengthQueued = false;
+
+	function updateStrength() {
+		strengthQueued = false;
+		if (!wrapper) return;
+		const scrolled = window.scrollY || document.documentElement.scrollTop || 0;
+		const span = window.innerHeight * HERO_FADE_SPAN;
+		const progress = span > 0 ? Math.min(1, scrolled / span) : 1;
+		wrapper.style.setProperty(
+			"--fluid-strength",
+			String(1 - progress * (1 - AMBIENT_STRENGTH)),
+		);
+	}
+
+	function queueStrengthUpdate() {
+		if (strengthQueued) return;
+		strengthQueued = true;
+		requestAnimationFrame(updateStrength);
+	}
+
+	function init() {
+		if (handle) return;
+
+		wrapper = document.getElementById("fluid-backdrop");
+		const canvas = document.getElementById("fluid-backdrop-canvas");
+		if (!wrapper || !(canvas instanceof HTMLCanvasElement)) return;
+
+		const parsed = Number.parseFloat(wrapper.dataset.intensity ?? "1");
+		handle = createFluidBackdrop(canvas, Number.isFinite(parsed) ? parsed : 1);
+
+		if (!handle) {
+			// No WebGL2 (or setup failed): drop the layer and leave the plain
+			// --page-bg exactly as it was.
+			wrapper.remove();
+			wrapper = null;
+			return;
+		}
+
+		updateStrength();
+	}
+
+	// Layout.astro assigns `window.onscroll` directly, so this must stay an
+	// addEventListener call — assigning here would silently replace its handler.
+	window.addEventListener("scroll", queueStrengthUpdate, { passive: true });
+	window.addEventListener("resize", queueStrengthUpdate, { passive: true });
+
+	init();
+</script>
