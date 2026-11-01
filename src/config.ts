@@ -8,8 +8,8 @@ import type {
 import { LinkPreset } from "./types/config";
 
 export const siteConfig: SiteConfig = {
-	title: "星尘笔记",
-	subtitle: "Stardust Notes · 漫游宇宙的技术博客",
+	title: "K7-Tech",
+	subtitle: "漫游宇宙的技术博客",
 	lang: "zh_CN", // Language code, e.g. 'en', 'zh_CN', 'ja', etc.
 	themeColor: {
 		hue: 265, // Default hue for the theme color, from 0 to 360. e.g. red: 0, teal: 200, cyan: 250, pink: 345
@@ -29,6 +29,10 @@ export const siteConfig: SiteConfig = {
 		enable: true, // Display the table of contents on the right side of the post
 		depth: 2, // Maximum heading depth to show in the table, from 1 to 3
 	},
+	fluidBackdrop: {
+		enable: true, // Animated WebGL fluid behind the page; falls back to a plain background
+		intensity: 1, // Pointer distortion and glow strength, 0 to ~1.5
+	},
 	favicon: [
 		// Leave this array empty to use the default favicon
 		// {
@@ -46,7 +50,7 @@ export const navBarConfig: NavBarConfig = {
 		LinkPreset.About,
 		{
 			name: "GitHub",
-			url: "https://github.com/saicaca/fuwari", // Internal links should not include the base path, as it is automatically added
+			url: "https://github.com/wnz27", // Internal links should not include the base path, as it is automatically added
 			external: true, // Show an external link icon and will open in a new tab
 		},
 	],
@@ -54,7 +58,7 @@ export const navBarConfig: NavBarConfig = {
 
 export const profileConfig: ProfileConfig = {
 	avatar: "assets/images/demo-avatar.png", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
-	name: "星尘漫游者",
+	name: "K7",
 	bio: "在代码与群星之间流浪。",
 	links: [
 		{
@@ -62,7 +66,7 @@ export const profileConfig: ProfileConfig = {
 			icon: "fa6-brands:github", // Visit https://icones.js.org/ for icon codes
 			// You will need to install the corresponding icon set if it's not already included
 			// `pnpm add @iconify-json/<icon-set-name>`
-			url: "https://github.com/", // TODO: 换成你的 GitHub 主页
+			url: "https://github.com/wnz27",
 		},
 	],
 };
