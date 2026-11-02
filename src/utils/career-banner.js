@@ -5,8 +5,8 @@ export function initCareerBanner(root) {
     const MONTH_COMPANIES = {"2020-04":"weimang","2020-05":"weimang","2020-06":"weimang","2020-07":"weimang","2020-08":"weimang","2020-09":"weimang","2020-10":"weimang","2020-11":"weimang","2020-12":"weimang","2021-01":"weimang","2021-02":"weimang","2021-03":"weimang","2021-04":"weimang","2021-05":"weimang","2021-06":"weimang","2021-07":"weimang","2021-09":"wayz","2021-10":"wayz","2021-11":"wayz","2021-12":"wayz","2022-01":"wayz","2022-02":"wayz","2022-03":"wayz","2022-04":"wayz","2022-05":"wayz","2022-06":"wayz","2022-07":"wayz","2022-08":"wayz","2022-09":"wayz","2022-10":"wayz","2022-11":"wayz","2022-12":"wayz","2023-01":"wayz","2023-02":"wayz","2023-03":"wayz","2023-06":"guanmai","2023-07":"guanmai","2023-08":"guanmai","2023-09":"guanmai","2023-10":"guanmai","2023-11":"guanmai","2023-12":"guanmai","2024-01":"guanmai","2024-02":"guanmai","2024-03":"guanmai","2024-04":"guanmai","2024-05":"guanmai","2024-06":"guanmai","2024-07":"guanmai","2024-08":"guanmai","2024-09":"guanmai","2024-11":"liveme","2024-12":"liveme","2025-01":"liveme","2025-02":"liveme","2025-03":"liveme","2025-04":"quanku","2025-05":"quanku","2025-06":"quanku","2025-07":"quanku","2025-08":"quanku","2025-09":"quanku","2025-10":"quanku","2025-11":"quanku","2025-12":"quanku","2026-01":"quanku","2026-02":"quanku","2026-03":"quanku","2026-04":"quanku","2026-05":"quanku","2026-06":"quanku","2026-07":"quanku","2026-08":"quanku","2026-09":"quanku","2026-10":"quanku","2026-11":"quanku"};
     const COMPANIES = {
       weimang: { name: '微芒', english: 'WEIMANG', color: '#8c9d56' },
-      wayz: { name: 'WAYZ', english: 'WAYZ', color: '#c49b43' },
-      guanmai: { name: 'Guanmai', english: 'GUANMAI', color: '#c77957' },
+      wayz: { name: '维智', english: '维智', color: '#c49b43' },
+      guanmai: { name: '观麦科技', english: '观麦科技', color: '#c77957' },
       liveme: { name: '乐我无限', english: 'LIVEME', color: '#9183ac' },
       quanku: { name: '全酷文化', english: 'QUANKU', color: '#548b7a' }
     };
