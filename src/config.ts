@@ -12,7 +12,7 @@ export const siteConfig: SiteConfig = {
 	subtitle: "漫游宇宙的技术博客",
 	lang: "zh_CN", // Language code, e.g. 'en', 'zh_CN', 'ja', etc.
 	themeColor: {
-		hue: 265, // Default hue for the theme color, from 0 to 360. e.g. red: 0, teal: 200, cyan: 250, pink: 345
+		hue: 160, // Default hue for the theme color, from 0 to 360. e.g. red: 0, teal: 200, cyan: 250, pink: 345
 		fixed: true, // Hide the theme color picker for visitors
 	},
 	banner: {
@@ -30,7 +30,7 @@ export const siteConfig: SiteConfig = {
 		depth: 2, // Maximum heading depth to show in the table, from 1 to 3
 	},
 	fluidBackdrop: {
-		enable: true, // Animated WebGL fluid behind the page; falls back to a plain background
+		enable: false, // Animated WebGL fluid behind the page; falls back to a plain background
 		intensity: 1, // Pointer distortion and glow strength, 0 to ~1.5
 	},
 	favicon: [

@@ -1,0 +1,76 @@
+---
+import "../../styles/career-banner.css";
+---
+
+<section id="career-banner" class="career-banner" aria-label="日子成格 · K7 的工作时间轴">
+
+    <div class="banner" aria-label="工作经历时间格子面板">
+      <div class="intro">
+        <h1><span>Small squares.</span><span class="serif">Long story<span class="period">.</span></span></h1>
+        <div class="intro-copy">
+          <p>在不同的坐标，<br>留下同一个人的轨迹。</p>
+          <small>2020 — 2026 · 五段经历，一条来时路</small>
+          <div class="chapter-line" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+      </div>
+
+      <section class="chart-section" aria-labelledby="chart-heading">
+        <div class="chart-top">
+          <div class="chart-title"><h2 id="chart-heading">把七年，放在同一张日历里。</h2><span class="view-badge" id="view-badge">七年全景</span></div>
+          <div class="chart-tools">
+            <button class="icon-button" id="previous" type="button" aria-label="上一个时间视图" disabled><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m10 3-5 5 5 5"/></svg></button>
+            <button class="icon-button" id="next" type="button" aria-label="下一个时间视图"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5"/></svg></button>
+          </div>
+        </div>
+        <div class="matrix-shell">
+          <div class="matrix-scroll" id="matrix-scroll" tabindex="0" aria-label="时间格子面板，窄屏可左右滚动">
+            <div class="matrix-inner">
+              <div class="month-axis" aria-hidden="true"><span></span><div class="months" id="months"></div></div>
+              <div class="matrix-row-wrap">
+                <div class="row-axis" id="row-axis" aria-hidden="true"></div>
+                <div class="matrix" id="matrix" role="grid" aria-label="七年工作日志全景，方向键移动，回车查看格子" aria-rowcount="7" aria-colcount="53"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="chart-caption">
+          <span class="hover-hint"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 2.5v10l3-2 2 3 2-1-2-3 4-1z"/></svg><span class="desktop-hint">悬浮一格，重访一段时光</span><span class="mobile-hint">点按格子查看 · 左右滑动</span></span>
+          <span class="date-label" id="date-label">2020.04 — 2026.11</span>
+        </div>
+      </section>
+
+      <section class="timeline" aria-label="时间轴控制">
+        <div class="timeline-controls">
+          <div class="year-list" id="year-list" role="group" aria-label="选择全景或年份">
+            <button class="year-button" type="button" data-year="all" aria-pressed="true">全景</button>
+            <button class="year-button" type="button" data-year="2020" aria-pressed="false">2020</button>
+            <button class="year-button" type="button" data-year="2021" aria-pressed="false">2021</button>
+            <button class="year-button" type="button" data-year="2022" aria-pressed="false">2022</button>
+            <button class="year-button" type="button" data-year="2023" aria-pressed="false">2023</button>
+            <button class="year-button" type="button" data-year="2024" aria-pressed="false">2024</button>
+            <button class="year-button" type="button" data-year="2025" aria-pressed="false">2025</button>
+            <button class="year-button" type="button" data-year="2026" aria-pressed="false">2026</button>
+          </div>
+          <button class="play-button" id="play" type="button" aria-pressed="false"><span class="play-symbol" id="play-symbol" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M3 1.5 10 6 3 10.5z"/></svg></span><span id="play-label">让时间走一会儿</span></button>
+        </div>
+        <div class="progress-track" aria-hidden="true"><div class="progress-bar" id="progress-bar"></div></div>
+        <div class="legend" id="legend" aria-label="公司颜色图例"></div>
+      </section>
+    </div>
+    <footer class="bottom-note"><p>颜色对应公司，格子对应时光。<br>依据工作日志的月份归档绘制，不代表提交次数或精确任职日期。</p><em>Still adding to the story.</em></footer>
+    <div class="sr-only" role="status" aria-live="polite" id="announcement"></div>
+    <noscript><p>时间轴记录了 2020–2026 年的五段工作经历：微芒、WAYZ、Guanmai、乐我无限、全酷文化。启用 JavaScript 可按年份探索。</p></noscript>
+
+
+  <div class="tooltip" id="tooltip" role="tooltip" aria-hidden="true">
+    <div class="tooltip-date" id="tooltip-date"></div>
+    <div class="tooltip-company"><i id="tooltip-dot" aria-hidden="true"></i><span id="tooltip-company"></span></div>
+    <div class="tooltip-meta"><div id="tooltip-detail"></div><div class="tooltip-stamp" id="tooltip-stamp"></div></div>
+  </div>
+</section>
+
+<script>
+import { initCareerBanner } from "../../utils/career-banner.js";
+const root = document.getElementById("career-banner");
+if (root) initCareerBanner(root);
+</script>

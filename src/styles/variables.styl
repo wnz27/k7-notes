@@ -23,57 +23,63 @@ define(vars)
         {key}: value[1]
 
 define({
-  --primary: oklch(0.70 0.14 var(--hue)) oklch(0.75 0.14 var(--hue))
-  --page-bg: oklch(0.95 0.01 var(--hue)) oklch(0.16 0.014 var(--hue))
-  --card-bg: white oklch(0.23 0.015 var(--hue))
+  --primary: #376657 #a3c6ac
+  --page-bg: #f2f0e8 #191e1b
+  --card-bg: #fbfaf5 #232a25
+  --text-strong: #292d26 #e7e9dc
+  --text-body: #454b41 #d0d6c9
+  --text-muted: #686f63 #abb4a7
 
-  --btn-content: oklch(0.55 0.12 var(--hue)) oklch(0.75 0.1 var(--hue))
+  --btn-content: #376657 #b5d0b9
 
-  --btn-regular-bg: oklch(0.95 0.025 var(--hue)) oklch(0.33 0.035 var(--hue))
-  --btn-regular-bg-hover: oklch(0.9 0.05 var(--hue)) oklch(0.38 0.04 var(--hue))
-  --btn-regular-bg-active: oklch(0.85 0.08 var(--hue)) oklch(0.43 0.045 var(--hue))
+  --btn-regular-bg: #e7ecdf #303e32
+  --btn-regular-bg-hover: #dce5d5 #3a4b3d
+  --btn-regular-bg-active: #d1ddc8 #435747
 
-  --btn-plain-bg-hover: oklch(0.95 0.025 var(--hue)) oklch(0.30 0.035 var(--hue))
-  --btn-plain-bg-active: oklch(0.98 0.01 var(--hue)) oklch(0.27 0.025 var(--hue))
+  --btn-plain-bg-hover: #e8ecdf #303e32
+  --btn-plain-bg-active: #dce4d5 #3a4b3d
 
-  --btn-card-bg-hover: oklch(0.98 0.005 var(--hue)) oklch(0.3 0.03 var(--hue))
-  --btn-card-bg-active: oklch(0.9 0.03 var(--hue)) oklch(0.35 0.035 var(--hue))
+  --btn-card-bg-hover: #eeeee3 #2d3930
+  --btn-card-bg-active: #e3e8d9 #364638
+  --btn-dark-bg: #435748 #344738
+  --btn-dark-bg-hover: #526a57 #415a46
+  --btn-dark-bg-active: #607c66 #4e6b54
 
   --enter-btn-bg: var(--btn-regular-bg)
   --enter-btn-bg-hover: var(--btn-regular-bg-hover)
   --enter-btn-bg-active: var(--btn-regular-bg-active)
 
-  --deep-text: oklch(0.25 0.02 var(--hue))
+  --deep-text: var(--text-strong)
 
-  --title-active: oklch(0.6 0.1 var(--hue))
+  --title-active: #294f43 #c1d6ba
 
-  --line-divider: black(0.08) white(0.08)
+  --line-divider: #dedfd2 #39453b
 
-  --line-color: black(0.1) white(0.1)
-  --meta-divider: black(0.2) white(0.2)
+  --line-color: #d2d6c7 #465447
+  --meta-divider: #a0a695 #6f7c6c
 
   --inline-code-bg: var(--btn-regular-bg)
   --inline-code-color: var(--btn-content)
-  --selection-bg: oklch(0.90 0.05 var(--hue)) oklch(0.40 0.08 var(--hue))
-  --codeblock-selection: oklch(0.40 0.08 var(--hue))
-  --codeblock-bg: oklch(0.17 0.015 var(--hue)) oklch(0.17 0.015 var(--hue))
-  --codeblock-topbar-bg: oklch(0.3 0.02 var(--hue)) oklch(0.12 0.015 var(--hue))
+  --selection-bg: #d5dfc5 #435a43
+  --codeblock-selection: #435a43
+  --codeblock-bg: #202820 #161d18
+  --codeblock-topbar-bg: #2c382e #111713
 
-  --license-block-bg: black(0.03) var(--codeblock-bg)
+  --license-block-bg: #eceee1 var(--codeblock-bg)
 
-  --link-underline: oklch(0.93 0.04 var(--hue)) oklch(0.40 0.08 var(--hue))
-  --link-hover: oklch(0.95 0.025 var(--hue)) oklch(0.40 0.08 var(--hue))
-  --link-active: oklch(0.90 0.05 var(--hue)) oklch(0.35 0.07 var(--hue))
+  --link-underline: #b7c6ae #58795b
+  --link-hover: #88a48b #8eaf8d
+  --link-active: #376657 #a3c6ac
 
-  --float-panel-bg: white oklch(0.19 0.015 var(--hue))
+  --float-panel-bg: #fbfaf5 #28322a
 
-  --scrollbar-bg-light: black(0.4)
-  --scrollbar-bg-hover-light: black(0.5)
-  --scrollbar-bg-active-light: black(0.6)
+  --scrollbar-bg-light: #a5af9c
+  --scrollbar-bg-hover-light: #7d8d78
+  --scrollbar-bg-active-light: #526f57
 
-  --scrollbar-bg-dark: white(0.4)
-  --scrollbar-bg-hover-dark: white(0.5)
-  --scrollbar-bg-active-dark: white(0.6)
+  --scrollbar-bg-dark: #5b6b58
+  --scrollbar-bg-hover-dark: #7e9276
+  --scrollbar-bg-active-dark: #a3b99a
 
   --scrollbar-bg: var(--scrollbar-bg-light) var(--scrollbar-bg-dark)
   --scrollbar-bg-hover: var(--scrollbar-bg-hover-light) var(--scrollbar-bg-hover-dark)
@@ -84,15 +90,15 @@ define({
   --display-light-icon: 1 0
   --display-dark-icon: 0 1
 
-  --admonitions-color-tip: oklch(0.7 0.14 180) oklch(0.75 0.14 180)
-  --admonitions-color-note: oklch(0.7 0.14 250) oklch(0.75 0.14 250)
-  --admonitions-color-important: oklch(0.7 0.14 310) oklch(0.75 0.14 310)
-  --admonitions-color-warning: oklch(0.7 0.14 60) oklch(0.75 0.14 60)
-  --admonitions-color-caution: oklch(0.6 0.2 25) oklch(0.65 0.2 25)
+  --admonitions-color-tip: #376657 #a3c6ac
+  --admonitions-color-note: #506e87 #a8bfd0
+  --admonitions-color-important: #79658e #bfb0d3
+  --admonitions-color-warning: #826726 #d2b773
+  --admonitions-color-caution: #a05237 #dda58b
 
-  --toc-badge-bg: oklch(0.89 0.050 var(--hue)) var(--btn-regular-bg)
-  --toc-btn-hover: oklch(0.926 0.015 var(--hue)) oklch(0.22 0.02 var(--hue))
-  --toc-btn-active: oklch(0.90 0.015 var(--hue)) oklch(0.25 0.02 var(--hue))
+  --toc-badge-bg: #e0e7d3 var(--btn-regular-bg)
+  --toc-btn-hover: #e8ecdf #2d3930
+  --toc-btn-active: #dce5d5 #364638
   --toc-width: calc((100vw - var(--page-width)) / 2 - 1rem)
-  --toc-item-active: oklch(0.70 0.13 var(--hue)) oklch(0.35 0.07 var(--hue))
+  --toc-item-active: #dce7d3 #344b39
 })
