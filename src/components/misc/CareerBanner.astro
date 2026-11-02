@@ -1,4 +1,7 @@
 ---
+import { profileConfig } from "../../config";
+import { url } from "../../utils/url-utils";
+import ImageWrapper from "./ImageWrapper.astro";
 import "../../styles/career-banner.css";
 ---
 
@@ -6,7 +9,15 @@ import "../../styles/career-banner.css";
 
     <div class="banner" aria-label="工作经历时间格子面板">
       <div class="intro">
-        <h1><span>Small squares.</span><span class="serif">Long story<span class="period">.</span></span></h1>
+        <div class="profile-intro">
+          <a class="intro-avatar" href={url('/about/')} aria-label={`关于 ${profileConfig.name}`}>
+            <ImageWrapper src={profileConfig.avatar || ""} alt={`${profileConfig.name} 的头像`} class="w-full h-full" />
+          </a>
+          <div class="intro-signature">
+            <h1>{profileConfig.name}</h1>
+            <p>{profileConfig.bio}</p>
+          </div>
+        </div>
         <div class="intro-copy">
           <p>在不同的坐标，<br>留下同一个人的轨迹。</p>
           <small>2020 — 2026 · 五段经历，一条来时路</small>

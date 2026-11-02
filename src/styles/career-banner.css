@@ -41,10 +41,11 @@
       overflow: hidden;
     }
     .intro { display: grid; grid-template-columns: 1.25fr 1fr; gap: 40px; align-items: end; }
-    h1 { margin: 0; font-family: "CareerBricolage", sans-serif; font-size: clamp(38px, 4.3vw, 56px); line-height: 1.04; letter-spacing: -.035em; font-weight: 700; }
-    h1 span { display: block; }
-    h1 .serif { font-family: "CareerInstrument", Georgia, serif; font-weight: 400; font-style: italic; font-size: 1.23em; line-height: 1.02; letter-spacing: -.025em; }
-    h1 .period { display: inline; color: var(--accent); }
+    .profile-intro { display: flex; align-items: center; gap: 24px; min-width: 0; }
+    .intro-avatar { display: block; flex: 0 0 96px; width: 96px; height: 96px; overflow: hidden; border-radius: 16px; }
+    .intro-signature { min-width: 0; }
+    h1 { margin: 0; font-family: "CareerBricolage", sans-serif; font-size: 32px; line-height: 1.2; letter-spacing: -.02em; font-weight: 700; }
+    .intro-signature p { margin: 10px 0 0; color: var(--muted); font-size: 16px; line-height: 1.85; text-wrap: pretty; }
     .intro-copy { padding: 0 0 5px 24px; }
     .intro-copy p { margin: 0; font-size: 20px; line-height: 1.85; letter-spacing: .03em; }
     .intro-copy small { display: block; color: var(--muted); font-size: 12px; margin-top: 15px; letter-spacing: .02em; }
@@ -156,7 +157,8 @@
 
       .banner { padding: 38px 30px 28px; }
       .intro { gap: 25px; }
-      h1 { font-size: 46px; }
+      .profile-intro { gap: 18px; }
+      .intro-avatar { flex-basis: 80px; width: 80px; height: 80px; }
       .intro-copy { padding-left: 5px; }
       .intro-copy p { font-size: 17px; }
       .year-button { min-width: 45px; padding: 0 9px; }
@@ -168,7 +170,10 @@
 
       .banner { margin-top: 0; padding: 26px 20px 22px; border-radius: 13px; }
       .intro { display: block; }
-      h1 { font-size: clamp(39px, 8vw, 54px); }
+      .profile-intro { gap: 16px; }
+      .intro-avatar { flex-basis: 64px; width: 64px; height: 64px; border-radius: 12px; }
+      h1 { font-size: 26px; }
+      .intro-signature p { margin-top: 6px; font-size: 14px; line-height: 1.75; }
       .intro-copy { padding: 0; margin-top: 25px; }
       .intro-copy p { font-size: 14px; line-height: 1.8; }
       .intro-copy p br { display: none; }
