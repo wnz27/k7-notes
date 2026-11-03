@@ -30,4 +30,4 @@ yarn.lock
 .idea
 *.iml
 
-./deploy/*
+deploy
