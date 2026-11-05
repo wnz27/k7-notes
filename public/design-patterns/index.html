@@ -23,13 +23,16 @@ main{min-width:0;padding:38px 44px 0;max-width:1680px;width:100%;margin:auto}.in
 .parts-legend{display:none}
 @media(max-width:700px){.parts-legend{display:flex;gap:5px 10px;flex-wrap:wrap;padding:4px 14px 14px}.part-key{font-size:10px;line-height:1.7;color:var(--muted);border-left:2px solid #ced7c2;padding-left:6px}.part-key.active{border-color:var(--accent);color:var(--ink)}.part-key b{font-weight:500}.part-key span{font-size:9px;margin-left:4px;color:var(--muted)}.geometry-label{font-size:23px}.geometry-sub{font-size:15px}.stage{height:230px;min-height:230px}}
 
+.back-link{display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:5px 11px;border:1px solid var(--line);border-radius:2px;color:var(--ink);font-size:11px;text-decoration:none;white-space:nowrap;transition:border-color .2s,color .2s,background .2s}.back-link:hover{border-color:var(--accent);color:var(--accent);background:var(--panel)}
+@media(max-width:700px){.top-actions{gap:8px}.back-link{min-height:32px;padding:4px 8px;font-size:10px}}
+@media(max-width:360px){.topbar{padding:0 14px}.brand{gap:8px}.top-actions{gap:6px}.top-actions .text-button{white-space:nowrap}.back-verb{display:none}}
 </style>
 </head>
 <body>
 <a class="skip-link" href="#pattern-heading">跳到模式内容</a>
 <header class="topbar">
   <a class="brand" href="#builder" aria-label="Pattern Atlas 首页"><svg class="joinery-mark" width="40" height="40" viewBox="0 0 68 64" aria-hidden="true"><title>燕尾榫与卯槽</title><ellipse cx="35" cy="53" rx="25" ry="5" fill="#4b3424" opacity=".08"/><g stroke="#513621" stroke-width=".55" stroke-linejoin="round"><polygon points="34.30,29.32 29.62,32.02 29.62,20.32 34.30,17.62" fill="#65432e"/><polygon points="29.62,32.02 24.40,26.72 24.40,15.02 29.62,20.32" fill="#4e3425"/><polygon points="24.40,26.72 15.40,31.92 15.40,20.22 24.40,15.02" fill="#4e3425"/><polygon points="24.58,34.94 19.90,37.64 19.90,25.94 24.58,23.24" fill="#65432e"/><polygon points="19.90,37.64 3.70,28.28 3.70,16.58 19.90,25.94" fill="#815537"/><polygon points="18.10,8.26 34.30,17.62 29.62,20.32 24.40,15.02 15.40,20.22 24.58,23.24 19.90,25.94 3.70,16.58" fill="#a57955"/><polygon points="62.20,45.44 47.80,53.76 47.80,42.06 62.20,33.74" fill="#a16d3d"/><polygon points="47.80,53.76 32.50,44.92 32.50,33.22 47.80,42.06" fill="#c58e56"/><polygon points="37.18,42.22 28.00,39.20 28.00,27.50 37.18,30.52" fill="#c58e56"/><polygon points="46.90,24.90 62.20,33.74 47.80,42.06 32.50,33.22 37.18,30.52 28.00,27.50 37.00,22.30 42.22,27.60" fill="#e4bc88"/></g><path d="M11.35 21.90 19.45 26.58 M9.10 25.28 15.40 28.92 M47.98 35.92 54.28 39.56" fill="none" stroke="#f5dfbc" stroke-width=".6" stroke-linecap="round" opacity=".52"/></svg><span>PATTERN<span class="brand-light"> ATLAS</span><small>设计模式交互速查手册</small></span></a>
-  <div class="top-actions"><span class="offline"><i></i> 离线可用</span><span class="edition">PYTHON EDITION / 01</span><button class="text-button" id="open-reading">阅读说明 ↗</button></div>
+  <div class="top-actions"><span class="offline"><i></i> 离线可用</span><span class="edition">PYTHON EDITION / 01</span><button class="text-button" id="open-reading">阅读说明 ↗</button><a class="back-link" href="/" aria-label="返回主站">← <span class="back-verb">返回</span>博客</a></div>
 </header>
 <div class="app-layout">
 <aside class="sidebar" aria-label="模式目录">
