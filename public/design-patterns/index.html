@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="GoF 23 种设计模式与简单工厂的离线交互速查手册，包含 3D 结构、流程动效、Python 示例和易混点。">
+<title>设计模式，拆开看 · Pattern Atlas</title>
+<style>
+:root{--paper:#f6f4ed;--panel:#fffefa;--ink:#283d36;--muted:#65756a;--line:#daddd1;--accent:#ac4e32;--soft:#edece2;--green:#dce5d7;--blue:#647aab;--mono:'SFMono-Regular',Consolas,'Liberation Mono',monospace;--sans:'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;--serif:'Songti SC','STSong','Noto Serif CJK SC',serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.65 var(--sans)}button,input,select{font:inherit;color:inherit}button,a,input,select{-webkit-tap-highlight-color:transparent}button{cursor:pointer}a{color:inherit;text-underline-offset:4px}button{border:0;background:none}button:disabled{cursor:default;opacity:.4}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:4px}button:hover:not(:disabled){color:var(--accent)}[hidden]{display:none!important}.mono,.eyebrow,.edition,.code-meta{font-family:var(--mono)}.muted{color:var(--muted)}.skip-link{position:fixed;left:15px;top:-80px;padding:8px 14px;background:var(--ink);color:white;z-index:10}.skip-link:focus{top:8px}
+.topbar{height:92px;padding:0 38px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:var(--paper)}.brand{display:flex;gap:13px;align-items:center;text-decoration:none;font-family:Georgia,serif;font-size:18px;letter-spacing:1.2px;line-height:1.3}.brand .joinery-mark{flex-shrink:0;overflow:visible}.brand-light{font-weight:400;color:var(--muted)}.brand small{display:block;font:10px/1.4 var(--sans);letter-spacing:2.2px;margin-top:6px}.top-actions{display:flex;align-items:center;gap:25px;font-size:12px}.offline{display:flex;align-items:center;gap:7px}.offline i,.status-dot{width:6px;height:6px;display:inline-block;background:#658364;border-radius:50%}.edition{font-size:10px;letter-spacing:1px;color:var(--muted)}.text-button{padding:4px 0;font-size:12px}.app-layout{display:grid;grid-template-columns:253px minmax(0,1fr)}.sidebar{padding:29px 21px 20px 28px;border-right:1px solid var(--line);position:sticky;top:0;height:100vh;overflow:auto;scrollbar-width:thin}.side-heading{display:flex;justify-content:space-between;font-size:12px;margin-bottom:18px}.side-heading .mono{color:var(--muted);font-size:10px}.search{height:38px;display:flex;align-items:center;gap:8px;border:1px solid var(--line);padding:0 9px;background:#fffefa88}.search svg{fill:none;stroke:var(--muted);stroke-width:1.3;flex-shrink:0}.search input{border:0;outline:none;min-width:0;width:100%;font-size:11px;background:none}.search kbd{font:10px var(--mono);color:var(--muted);border:1px solid var(--line);padding:0 4px}.category-tabs{display:flex;gap:2px;margin:13px 0 21px}.category-tabs button{font-size:11px;padding:5px 10px;border-radius:2px}.category-tabs .selected{background:var(--ink);color:var(--paper)!important}.nav-group{margin-bottom:20px}.nav-category{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:10px;padding:0 10px;margin:15px 0 7px;letter-spacing:1px}.nav-category:after{content:'';height:1px;flex:1;background:var(--line)}.nav-category small{font-family:var(--mono);font-size:9px}.pattern-link{width:100%;display:flex;align-items:center;text-align:left;padding:7px 10px;gap:11px;line-height:1.4;margin:2px 0;border-radius:3px;border:1px solid transparent}.pattern-link .num{font:10px var(--mono);color:#869187;min-width:15px}.pattern-link .nav-label{font-size:12px}.pattern-link .spatial-mark{margin-left:auto;font:9px var(--mono);color:#7b8c78}.pattern-link.active{background:#e4e8dc;border-color:#d6dece}.pattern-link.active .nav-label{font-weight:600}.pattern-link.active .num{color:var(--ink)}.pattern-link.active:after{content:'↗';margin-left:auto;font-size:12px}.pattern-link.active .spatial-mark{display:none}.side-foot{display:flex;gap:10px;border-top:1px solid var(--line);margin-top:25px;padding:18px 5px;font-size:10px}.side-foot p{margin:0}.side-foot p span{color:var(--muted);font-size:9px}.mini-cube{font-size:24px;line-height:1.4}.empty-nav{padding:20px 8px;font-size:12px;color:var(--muted)}
+main{min-width:0;padding:38px 44px 0;max-width:1680px;width:100%;margin:auto}.intro{display:flex;align-items:center;justify-content:space-between;gap:25px;margin-bottom:42px}.eyebrow{font-size:9px;letter-spacing:1.5px;display:flex;align-items:center;gap:10px;margin:0 0 13px}.eyebrow .line{width:24px;height:1px;background:var(--accent)}h1{font-family:var(--serif);font-size:46px;line-height:1.35;letter-spacing:-1.3px;font-weight:600;margin:0 0 13px}h1 em{font-style:normal;color:var(--accent)}.intro-copy{color:var(--muted);font-size:12px;letter-spacing:.2px;margin:0}.intro-index{border-left:1px solid var(--line);padding-left:28px;min-width:193px}.intro-index strong{font:48px/1.1 Georgia,serif;letter-spacing:-3px}.intro-index strong span{font:25px Georgia,serif;color:var(--accent);letter-spacing:-1px;vertical-align:top;margin-left:5px}.intro-index p{font-size:10px;margin:7px 0 0}.intro-index>span{font-size:9px;color:var(--muted)}.pattern-section{border-top:1px solid var(--ink)}.pattern-header{display:flex;justify-content:space-between;align-items:center;padding:24px 0 25px;gap:20px}.pattern-meta{display:flex;align-items:center;gap:10px;font-size:9px;color:var(--muted);letter-spacing:1px}.meta-line{width:18px;height:1px;background:var(--muted)}#bonus-tag{letter-spacing:0;color:var(--accent)}h2#pattern-heading{font:600 29px/1.3 var(--serif);margin:9px 0 8px;display:flex;align-items:baseline;gap:15px;flex-wrap:wrap}#pattern-heading span{font:italic 20px Georgia,serif;color:#788275}#pattern-intent{margin:0;font-size:12px;color:var(--muted)}.pattern-switch{display:flex;gap:7px;align-self:center}.icon-button{width:34px;height:34px;border:1px solid var(--line);border-radius:50%;font-size:16px}.workbench{display:grid;grid-template-columns:minmax(0,1fr) 285px;border:1px solid var(--line);background:var(--panel)}.visual-panel{min-width:0;border-right:1px solid var(--line);overflow:hidden}.stage-top{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:17px 20px 8px;font-size:9px}.stage-top>span{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.stage-top b{font-weight:500;font:9px var(--mono);letter-spacing:.8px}.stage-divider{color:#b8c0b2;padding:0 4px}#scenario{color:var(--muted);font-size:10px}#reset-view{font-size:10px}.stage{position:relative;aspect-ratio:800/440;width:100%;min-height:250px;background-image:radial-gradient(#cbd2c180 .7px,transparent .7px);background-size:19px 19px;isolation:isolate;touch-action:pan-y;outline-offset:-3px!important}.stage.spatial{cursor:grab;touch-action:none}.stage.dragging{cursor:grabbing}.stage svg{display:block;width:100%;height:100%;position:absolute;inset:0;overflow:hidden}.stage-watermark{position:absolute;bottom:13px;left:20px;font:8px var(--mono);letter-spacing:2.6px;color:#9da796;pointer-events:none}.stage-hint{position:absolute;bottom:11px;right:18px;font-size:9px;color:#7f8b7b;pointer-events:none}.view-controls{display:flex;justify-content:center;gap:24px;padding:8px 18px 14px}.view-controls label{display:flex;gap:8px;align-items:center;font-size:9px;color:var(--muted)}.view-controls input{width:80px;height:3px;accent-color:var(--ink)}.view-controls output{font:9px var(--mono);min-width:30px}.readouts{border-top:1px solid var(--line);border-bottom:1px solid var(--line);display:flex;min-height:65px;margin:0 20px;padding:12px 0;gap:15px}.readout{flex:1;padding-left:14px;border-left:1px solid var(--line);min-width:0}.readout:first-child{border:0;padding-left:0}.readout span{display:block;font-size:9px;color:var(--muted)}.readout strong{font:500 16px/1.4 var(--mono);overflow-wrap:anywhere;display:block;margin-top:5px;color:var(--ink)}.timeline{padding:19px 20px 5px;min-height:128px}.timeline-top{display:flex;gap:15px;align-items:center;font-size:12px}.timeline-top .mono{font-size:9px;color:var(--accent)}.step-dots{display:flex;gap:5px;margin:13px 0 10px}.step-dots button{flex:1;height:3px;background:#e4e8dd;padding:0;position:relative}.step-dots button:before{content:'';position:absolute;inset:-7px 0}.step-dots button.passed{background:#84967b}.step-dots button.current{background:var(--accent)}#step-description{font-size:11px;line-height:1.8;color:var(--muted);margin:8px 0 10px;min-height:40px}.demo-controls{display:flex;align-items:center;gap:10px;padding:0 20px 20px}.primary-button{background:var(--ink);color:var(--paper);padding:10px 19px;font-size:11px;border:1px solid var(--ink);border-radius:2px;white-space:nowrap}.primary-button:hover:not(:disabled){background:#3f5748;color:white}.secondary-button{border:1px solid var(--line);padding:10px 17px;font-size:11px;border-radius:2px;white-space:nowrap}.reset-button{font-size:10px;margin-left:auto;padding:9px 1px;color:var(--muted);white-space:nowrap}.trace{display:flex;gap:13px;align-items:flex-start;padding:12px 20px;border-top:1px solid var(--line);background:#f0f2e9;min-height:42px}.trace span{color:#82917b;font-size:8px;letter-spacing:1px;margin-top:2px}.trace code{font:10px/1.8 var(--mono);overflow-wrap:anywhere;color:#526448}
+.explain-panel{padding:24px 24px 20px;background:#f8f8f1;min-width:0}.explain-title{display:flex;justify-content:space-between;color:var(--muted)}.explain-title .eyebrow{font-size:8px;letter-spacing:1.5px}.small-number{font-size:17px;line-height:1}.explain-panel h3{font:600 24px/1.5 var(--serif);margin:6px 0 12px}.experiment-prompt{font-size:11px;color:var(--muted);margin:0 0 20px;line-height:1.9}.field-label{display:block;font-size:10px;color:var(--muted);margin-bottom:8px}.explain-panel select{width:100%;border:1px solid #cbd3c2;border-radius:2px;padding:9px 10px;background:#fffefa;font-size:11px;cursor:pointer}.quick-facts{padding-top:6px}.quick-facts>div{display:flex;gap:11px;border-bottom:1px solid var(--line);padding:18px 0}.quick-facts h4{font-size:11px;font-weight:500;margin:0 0 5px}.quick-facts p{font-size:10px;color:var(--muted);line-height:1.85;margin:0}.fact-icon{font:italic 16px Georgia,serif;min-width:13px;color:#839277}.comparison{margin-top:20px}.comparison p{font-size:10px;color:var(--muted);margin:7px 0;line-height:1.9}.comparison .text-button{font-size:10px;color:var(--accent)}.under-stage{display:flex;align-items:baseline;gap:15px;font-size:9px;margin:12px 1px 28px;color:var(--muted)}.under-stage>span{white-space:nowrap;color:var(--ink)}.under-stage p{margin:0;line-height:1.8}.reference-panel{border:1px solid var(--line);background:var(--panel)}.reference-tabs{display:flex;align-items:center;gap:25px;padding:0 22px;border-bottom:1px solid var(--line)}.reference-tabs button[role=tab]{padding:16px 0 12px;border-bottom:2px solid transparent;font-size:11px}.reference-tabs button[aria-selected=true]{border-color:var(--accent);color:var(--ink)}#copy-code{margin-left:auto;font-size:10px;color:var(--muted)}.code-meta{display:flex;justify-content:space-between;gap:15px;padding:14px 22px 8px;font-size:8px;color:#8b9585}.code-meta span:last-child{font-family:var(--sans)}pre{margin:0;padding:8px 24px 24px;overflow:auto;tab-size:4;line-height:1.85;font:11px/1.85 var(--mono);color:#3d5144;max-height:360px;scrollbar-width:thin}pre .kw{color:#ab503d}pre .str{color:#698044}pre .comment{color:#929a89}pre .number{display:inline-block;width:32px;color:#a0a896;user-select:none;font-size:9px}#decision-panel{padding:22px;font-size:12px}.decision-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:25px}.decision-grid p{font-size:11px;line-height:1.9;margin:0;color:var(--muted)}.page-bottom{display:flex;justify-content:space-between;align-items:center;gap:20px;margin:28px 0 38px;font-size:10px;color:var(--muted)}.page-bottom .mono{font-size:8px;letter-spacing:1px;color:#839277;margin-right:10px}.page-bottom p{margin:0}.page-bottom button{white-space:nowrap;font-size:11px}footer{display:flex;justify-content:space-between;gap:20px;border-top:1px solid var(--line);padding:20px 0 24px;font-size:9px;letter-spacing:.5px}footer>span:first-child{font-family:var(--mono)}
+.node rect,.node polygon{transition:fill .25s,stroke .25s}.node .node-label{font:500 16px var(--sans);fill:#304338;pointer-events:none}.node .node-sub{font:11px var(--mono);fill:#76826e;pointer-events:none}.node.focused .node-label{fill:#923f2a}.node.focused .node-sub{fill:#9c5b43}.node .node-dot{fill:#8b9a7d}.node.focused .node-dot{fill:var(--accent)}.scene-edge{fill:none;stroke:#b5c1ac;stroke-width:1.7;stroke-linejoin:round}.scene-edge.active{stroke:#b3684e;stroke-width:2}.edge-label{font:10px var(--mono);fill:#6e7d65;paint-order:stroke;stroke:#fffefa;stroke-width:5px;stroke-linejoin:round}.node.focused{filter:drop-shadow(0 5px 7px #9c785025)}.node.part-highlight{filter:drop-shadow(0 0 8px #ac4e3270)}.signal{fill:#b56748;pointer-events:none}.floor-line{stroke:#d9dfcf;stroke-width:1;fill:none}.geometry-label{font:500 13px var(--sans);fill:#314735;paint-order:stroke;stroke:#fffefa;stroke-width:4px;stroke-linejoin:round}.geometry-sub{font:9px var(--mono);fill:#7b866e;paint-order:stroke;stroke:#fffefa;stroke-width:3px}.geometry-line{stroke:#9caa8f;stroke-width:1;fill:none}.geometry-id{font:8px var(--mono);fill:#78876c}.scene-enter{animation:appear .35s ease-out}@keyframes appear{from{opacity:.5}to{opacity:1}}
+.dialog-close{position:absolute;right:22px;top:16px;font-size:26px}dialog{border:1px solid var(--line);background:var(--paper);color:var(--ink);max-width:620px;width:calc(100% - 32px);padding:40px;max-height:85vh;overflow:auto;box-shadow:0 30px 100px #253a3430}dialog::backdrop{background:#293e3560;backdrop-filter:blur(3px)}dialog h2{font:600 29px var(--serif);margin:0 0 20px}dialog p,dialog li{font-size:12px;line-height:1.9}dialog ol{padding-left:19px}dialog li{margin:9px 0}dialog h3{font-size:13px;margin-top:25px}dialog ul{padding-left:19px}dialog .primary-button{margin-top:12px}.noscript{padding:20px;color:var(--accent)}
+@media(min-width:1600px){main{padding-left:58px;padding-right:58px}.workbench{grid-template-columns:minmax(0,1fr) 315px}.explain-panel{padding:30px}.stage{max-height:510px}.intro{margin-bottom:48px}h1{font-size:54px}}
+@media(max-width:1200px){.app-layout{grid-template-columns:220px minmax(0,1fr)}.sidebar{padding-left:19px;padding-right:16px}main{padding:30px 28px 0}.workbench{grid-template-columns:minmax(0,1fr) 245px}.explain-panel{padding:20px 18px}.explain-panel h3{font-size:22px}h1{font-size:38px}.intro-index{min-width:160px;padding-left:20px}.intro-index strong{font-size:42px}.intro-copy{font-size:11px}.topbar{padding:0 28px}.demo-controls{gap:7px}.primary-button,.secondary-button{padding:9px 13px}.view-controls{gap:15px}.view-controls input{width:60px}}
+@media(max-width:1000px){.intro-index{display:none}.app-layout{grid-template-columns:205px minmax(0,1fr)}.workbench{grid-template-columns:1fr}.visual-panel{border-right:0}.explain-panel{border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr;column-gap:25px}.explain-title{grid-column:1/-1}.explain-panel h3{grid-column:1;font-size:22px;margin:0}.experiment-prompt{grid-column:1;margin-top:9px}.explain-panel .field-label,.explain-panel select{grid-column:1}.quick-facts{grid-column:2;grid-row:2/7;padding:0}.quick-facts>div{padding:10px 0}.comparison{grid-column:1/-1;border-top:1px solid var(--line);padding-top:15px;margin-top:20px}.comparison .field-label{margin-bottom:0}.comparison p{margin:5px 0}.intro{margin-bottom:30px}.stage{min-height:270px}.decision-grid{grid-template-columns:1fr}.edition{display:none}.reference-tabs{gap:20px;padding:0 18px}.code-meta span:last-child{display:none}.page-bottom{align-items:flex-start}}
+@media(max-width:700px){.topbar{height:76px;padding:0 20px}.brand{font-size:15px;gap:10px}.brand .joinery-mark{width:32px;height:32px}.brand small{font-size:8px;letter-spacing:1.3px}.top-actions{gap:16px}.offline{display:none}.top-actions .text-button{font-size:10px}.app-layout{display:block}.sidebar{position:relative;top:auto;height:auto;padding:17px 20px 13px;border-right:0;border-bottom:1px solid var(--line);overflow:visible}.side-heading{display:none}.search{height:36px}.search input{font-size:12px}.category-tabs{margin:10px 0 9px;gap:10px}.category-tabs button{font-size:11px;padding:5px 13px}#pattern-list{display:flex;gap:6px;overflow:auto;max-height:105px;scrollbar-width:thin;padding-bottom:3px}.nav-group{display:contents}.nav-category{display:none}.pattern-link{min-width:max-content;width:auto;padding:8px 10px;gap:7px;margin:0;height:34px}.pattern-link .num{font-size:9px}.pattern-link .nav-label{font-size:11px}.pattern-link .spatial-mark{font-size:8px}.pattern-link.active:after{display:none}.side-foot{display:none}main{padding:27px 20px 0}.intro{margin-bottom:27px}.eyebrow{font-size:7px;letter-spacing:1.2px;margin-bottom:10px}h1{font-size:34px;letter-spacing:-1px;margin-bottom:10px}.intro-copy{font-size:10px;max-width:300px;line-height:1.9}.pattern-header{padding:19px 0;gap:10px}h2#pattern-heading{font-size:25px;gap:10px;margin-top:8px}#pattern-heading span{font-size:17px}#pattern-intent{font-size:11px;line-height:1.85}.pattern-meta{font-size:8px;gap:7px}.pattern-switch{gap:5px;align-self:flex-start;margin-top:23px}.icon-button{width:29px;height:29px}.workbench{margin:0 -1px}.stage-top{padding:14px 14px 6px;gap:5px}.stage-top>span{gap:5px;font-size:8px}#scenario{font-size:9px;max-width:200px}#reset-view{font-size:9px}.stage{aspect-ratio:auto;height:260px;min-height:260px}.stage svg{height:100%}.stage-watermark{font-size:6px;left:14px}.stage-hint{font-size:8px;right:12px;bottom:12px}.view-controls{padding:4px 10px 13px;gap:18px}.view-controls input{width:62px}.readouts{margin:0 14px;gap:8px;padding:12px 0;min-height:66px}.readout{padding-left:10px}.readout span{font-size:8px}.readout strong{font-size:12px}.timeline{padding:16px 14px 4px;min-height:132px}.timeline-top{gap:10px;font-size:11px}#step-description{font-size:10px;line-height:1.9}.demo-controls{padding:0 14px 18px;gap:8px}.primary-button,.secondary-button{font-size:10px;padding:10px 14px}.reset-button{font-size:9px}.trace{padding:11px 14px;gap:10px}.trace code{font-size:9px}.explain-panel{display:block;padding:23px 19px}.explain-panel h3{font-size:23px;line-height:1.5}.explain-panel h3 br{display:none}.experiment-prompt{margin:10px 0 17px;font-size:11px}.explain-panel select{font-size:12px;padding:10px}.quick-facts{padding-top:10px}.quick-facts>div{padding:15px 0}.quick-facts h4{font-size:12px}.quick-facts p,.comparison p{font-size:11px}.comparison{border:0;margin-top:17px;padding:0}.comparison .text-button{font-size:11px}.under-stage{font-size:9px;gap:12px;margin:12px 0 23px}.reference-tabs{gap:18px;padding:0 14px;flex-wrap:wrap}.reference-tabs button[role=tab]{font-size:10px;padding-top:13px}#copy-code{font-size:9px;padding:10px 0}.code-meta{padding:12px 14px 4px;font-size:7px}pre{font-size:10px;padding:8px 14px 19px;max-height:330px}pre .number{width:26px;font-size:8px}.page-bottom{margin:23px 0 30px;font-size:9px;gap:13px}.page-bottom p .mono{display:block;margin-bottom:4px}.page-bottom button{font-size:10px}footer{font-size:8px;gap:15px;padding:17px 0}footer>span:last-child{display:none}dialog{padding:30px 24px}dialog h2{font-size:25px}.node .node-label{font-size:19px}.node .node-sub{font-size:13px}.edge-label{font-size:13px}.geometry-label{font-size:16px}.geometry-sub{font-size:12px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
+@media print{.sidebar,.top-actions,.pattern-switch,.view-controls,.demo-controls,.reference-tabs,.page-bottom button{display:none!important}.topbar{height:60px}.app-layout{display:block}main{padding:25px}.intro{margin-bottom:20px}.workbench{break-inside:avoid}.explain-panel{display:block}.code-meta{padding:10px}pre{max-height:none;font-size:9px}.stage{height:250px;min-height:250px}.reference-panel{margin-top:15px}}
+
+.parts-legend{display:none}
+@media(max-width:700px){.parts-legend{display:flex;gap:5px 10px;flex-wrap:wrap;padding:4px 14px 14px}.part-key{font-size:10px;line-height:1.7;color:var(--muted);border-left:2px solid #ced7c2;padding-left:6px}.part-key.active{border-color:var(--accent);color:var(--ink)}.part-key b{font-weight:500}.part-key span{font-size:9px;margin-left:4px;color:var(--muted)}.geometry-label{font-size:23px}.geometry-sub{font-size:15px}.stage{height:230px;min-height:230px}}
+
+</style>
+</head>
+<body>
+<a class="skip-link" href="#pattern-heading">跳到模式内容</a>
+<header class="topbar">
+  <a class="brand" href="#builder" aria-label="Pattern Atlas 首页"><svg class="joinery-mark" width="40" height="40" viewBox="0 0 68 64" aria-hidden="true"><title>燕尾榫与卯槽</title><ellipse cx="35" cy="53" rx="25" ry="5" fill="#4b3424" opacity=".08"/><g stroke="#513621" stroke-width=".55" stroke-linejoin="round"><polygon points="34.30,29.32 29.62,32.02 29.62,20.32 34.30,17.62" fill="#65432e"/><polygon points="29.62,32.02 24.40,26.72 24.40,15.02 29.62,20.32" fill="#4e3425"/><polygon points="24.40,26.72 15.40,31.92 15.40,20.22 24.40,15.02" fill="#4e3425"/><polygon points="24.58,34.94 19.90,37.64 19.90,25.94 24.58,23.24" fill="#65432e"/><polygon points="19.90,37.64 3.70,28.28 3.70,16.58 19.90,25.94" fill="#815537"/><polygon points="18.10,8.26 34.30,17.62 29.62,20.32 24.40,15.02 15.40,20.22 24.58,23.24 19.90,25.94 3.70,16.58" fill="#a57955"/><polygon points="62.20,45.44 47.80,53.76 47.80,42.06 62.20,33.74" fill="#a16d3d"/><polygon points="47.80,53.76 32.50,44.92 32.50,33.22 47.80,42.06" fill="#c58e56"/><polygon points="37.18,42.22 28.00,39.20 28.00,27.50 37.18,30.52" fill="#c58e56"/><polygon points="46.90,24.90 62.20,33.74 47.80,42.06 32.50,33.22 37.18,30.52 28.00,27.50 37.00,22.30 42.22,27.60" fill="#e4bc88"/></g><path d="M11.35 21.90 19.45 26.58 M9.10 25.28 15.40 28.92 M47.98 35.92 54.28 39.56" fill="none" stroke="#f5dfbc" stroke-width=".6" stroke-linecap="round" opacity=".52"/></svg><span>PATTERN<span class="brand-light"> ATLAS</span><small>设计模式交互速查手册</small></span></a>
+  <div class="top-actions"><span class="offline"><i></i> 离线可用</span><span class="edition">PYTHON EDITION / 01</span><button class="text-button" id="open-reading">阅读说明 ↗</button></div>
+</header>
+<div class="app-layout">
+<aside class="sidebar" aria-label="模式目录">
+  <div class="side-heading"><span>模式索引</span><span class="mono">01—24</span></div>
+  <label class="search"><svg viewBox="0 0 20 20" width="17" height="17" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/><path d="m12 12 5 5"/></svg><input id="search" type="search" autocomplete="off" placeholder="搜索名称、场景…" aria-label="搜索模式"><kbd>/</kbd></label>
+  <div class="category-tabs" role="group" aria-label="筛选模式分类"><button data-category="all" class="selected" aria-pressed="true">全部</button><button data-category="creational" aria-pressed="false">创建</button><button data-category="structural" aria-pressed="false">结构</button><button data-category="behavioral" aria-pressed="false">行为</button></div>
+  <nav id="pattern-list" aria-label="设计模式列表"></nav>
+  <div class="side-foot"><span class="mini-cube">◇</span><p>先看问题，再选模式。<br><span>一个简单函数，有时已经足够。</span></p></div>
+</aside>
+<main id="main-content">
+  <section class="intro" aria-label="手册介绍"><div><p class="eyebrow"><span class="line"></span> A FIELD GUIDE TO SOFTWARE DESIGN</p><h1>设计模式，<em>拆开看。</em></h1><p class="intro-copy">转动结构，走一遍调用。把抽象的对象关系，变成看得见的过程。</p></div><div class="intro-index"><strong>23<span>+1</span></strong><p>GoF 设计模式 + 简单工厂</p><span>3D 结构 / 2D 流程 / Python</span></div></section>
+  <section class="pattern-section" aria-labelledby="pattern-heading">
+    <div class="pattern-header"><div><div class="pattern-meta"><span id="pattern-no" class="mono"></span><span class="meta-line"></span><span id="pattern-category"></span><span id="bonus-tag" hidden>补充 · 非 GoF</span></div><h2 id="pattern-heading" tabindex="-1"></h2><p id="pattern-intent"></p></div><div class="pattern-switch"><button id="previous-pattern" class="icon-button" aria-label="上一个模式">←</button><button id="next-pattern" class="icon-button" aria-label="下一个模式">→</button></div></div>
+    <div class="workbench">
+      <section class="visual-panel" aria-label="可交互原理演示">
+        <div class="stage-top"><span><i class="status-dot"></i><b id="render-kind"></b><span class="stage-divider">/</span><span id="scenario"></span></span><button id="reset-view" class="text-button">↺ 还原视角</button></div>
+        <div id="stage" class="stage" tabindex="0" role="group" aria-label="原理图；三维模式可拖动旋转，也可使用视角滑块">
+          <svg id="scene" viewBox="0 0 800 440" role="img" aria-labelledby="scene-title scene-description"><title id="scene-title"></title><desc id="scene-description"></desc></svg>
+          <span class="stage-watermark" aria-hidden="true">PATTERN / LAB</span><span class="stage-hint" id="stage-hint"></span>
+        </div>
+        <div class="view-controls" id="view-controls"><label>旋转 <input type="range" id="yaw" min="-75" max="75" value="-28"><output id="yaw-value">−28°</output></label><label>俯视 <input type="range" id="pitch" min="15" max="65" value="28"><output id="pitch-value">28°</output></label></div>
+        <div id="parts-legend" class="parts-legend" aria-label="图中对象"></div>
+        <div id="readouts" class="readouts" aria-label="模型结果"></div>
+        <div class="timeline"><div class="timeline-top"><span id="step-counter" class="mono"></span><span id="step-title"></span></div><div class="step-dots" id="step-dots" role="group" aria-label="演示步骤"></div><p id="step-description" aria-live="polite"></p></div>
+        <div class="demo-controls"><button class="primary-button" id="play">▶ 播放过程</button><button id="step-next" class="secondary-button">下一步 →</button><button id="reset" class="reset-button" aria-label="重置演示">↺ 重置</button></div>
+        <div class="trace"><span class="mono">TRACE</span><code id="trace-log"></code></div>
+      </section>
+      <aside class="explain-panel" aria-label="模式速查说明">
+        <div class="explain-title"><span class="eyebrow">THE IDEA</span><span class="small-number" aria-hidden="true">↗</span></div>
+        <h3>先换个条件，<br>再观察结果。</h3><p class="experiment-prompt" id="experiment-prompt"></p>
+        <label for="variant" class="field-label">实验条件</label><select id="variant"></select>
+        <div class="quick-facts"><div><span class="fact-icon">?</span><div><h4>解决什么问题</h4><p id="problem"></p></div></div><div><span class="fact-icon">↗</span><div><h4>什么时候用</h4><p id="when"></p></div></div><div><span class="fact-icon">!</span><div><h4>代价与边界</h4><p id="tradeoff"></p></div></div></div>
+        <div class="comparison"><span class="field-label">容易混淆</span><p id="compare-copy"></p><button id="compare-link" class="text-button"></button></div>
+      </aside>
+    </div>
+    <div class="under-stage"><span>模型说明</span><p id="model-caveat"></p></div>
+    <section class="reference-panel" aria-label="代码与使用判断"><div class="reference-tabs" role="tablist" aria-label="代码与使用判断"><button id="code-tab" role="tab" aria-selected="true" aria-controls="code-panel" tabindex="0">Python 最小示例</button><button id="decision-tab" role="tab" aria-selected="false" aria-controls="decision-panel" tabindex="-1">使用判断</button><button id="copy-code" class="text-button">复制代码 ⧉</button></div><div id="code-panel" role="tabpanel" aria-labelledby="code-tab"><div class="code-meta"><span>PYTHON 3 · 可在本地运行</span><span>演示图与代码用于解释同一机制，非逐行执行</span></div><pre><code id="python-code"></code></pre></div><div id="decision-panel" role="tabpanel" aria-labelledby="decision-tab" hidden><div class="decision-grid"><div><span class="field-label">适合引入</span><p id="decision-when"></p></div><div><span class="field-label">先别引入</span><p id="avoid"></p></div><div><span class="field-label">做个迁移练习</span><p id="transfer"></p></div></div></div></section>
+    <div class="page-bottom"><p><span class="mono">NOTE 01</span> 模式是命名过的经验。只在变化真的出现时，引入对应的结构。</p><button id="next-bottom" class="text-button">下一个模式 →</button></div>
+  </section>
+  <footer><span>PATTERN ATLAS <span class="muted">/ 设计模式速查手册</span></span><span>以结构理解，以行为验证。</span></footer>
+</main>
+</div>
+<dialog id="reading-dialog" aria-labelledby="reading-heading"><button id="close-reading" class="dialog-close" aria-label="关闭阅读说明">×</button><p class="eyebrow">ABOUT THIS FIELD GUIDE</p><h2 id="reading-heading">如何使用这本手册</h2><p>面向了解类、对象、继承和组合的 Python 读者。收录 GoF 23 种设计模式，另补简单工厂。</p><ol><li>从目录搜索问题或模式，先读一句话意图。</li><li>选择实验条件，预测最后的结果，再点「下一步」。切换另一条件做对照。</li><li>3D 模式可拖动旋转或调整滑块；视角只改变观察方向。2D 模式用箭头表示引用或消息方向。</li><li>结合 Python 示例判断代价；在「使用判断」中做一个迁移练习。</li></ol><p>分步模型是确定性的教学示意。方块表示对象或组成部分，位置不代表真实内存布局；计数和金额是示例参数。代码不在浏览器执行。</p><button class="primary-button" id="start-reading">开始探索 →</button></dialog>
+<noscript><p class="noscript">请启用 JavaScript 以查看模式目录、代码和交互演示。</p></noscript>
+<script>
+/* Original teaching examples. */
+(() => {
+  const n = (id, label, sub, x, y, tone = 'neutral', z = 0, size = {}) => ({id, label, sub, x, y, z, tone, ...size});
+  const e = (from, to, label = '') => ({from, to, label});
+  const f = (title, description, active, nodes, edges, stats, log) => ({title, description, active, nodes, edges, stats: stats.map(([label,value]) => ({label, value: String(value)})), log});
+  const item = (id,name,en,category,intent,problem,when,avoid,tradeoff,compare,code,demo) => ({id,name,en,category,intent,problem,when,avoid,tradeoff,compare,code,demo});
+  const singleton = multiple => {
+    const clients = [n('a','调用方 A','get_instance()',150,115),n('b','调用方 B','get_instance()',150,275)];
+    const first = n('one','实例 #1','配置中心',580,115,'accent');
+    const second = n('two','实例 #2','配置中心',580,275,'blue');
+    return {label: multiple ? '对照：每次新建' : '共享同一实例', frames: [
+      f('先预测对象数量','两个调用方先后请求配置对象。两次调用会创建几个对象？',['a','b'],clients,[],[['请求数',0],['实例数',0]],'等待 A 发起请求'),
+      f('首次请求','A 请求时对象不存在，先创建实例 #1。',['a','one'],[...clients,first],[e('a','one','创建')],[['请求数',1],['实例数',1]],'A → 创建 #1'),
+      f('第二次请求',multiple ? '普通构造再次创建实例 #2，A 和 B 的引用不同。' : '缓存已存在，B 直接得到 #1，A 和 B 指向同一个对象。',multiple ? ['b','two'] : ['b','one'],[...clients,first,...(multiple?[second]:[])],[e('a','one'),e('b',multiple?'two':'one',multiple?'创建':'复用')],[['请求数',2],['实例数',multiple?2:1],['A is B',multiple?'False':'True']],multiple?'B → 创建 #2；A is B = False':'B → 复用 #1；A is B = True')
+    ]};
+  };
+  const factory = (isMethod,latte) => {
+    const product = latte ? '拿铁' : '美式';
+    const type = latte ? 'Latte' : 'Americano';
+    const nodes = [n('client','客户端','只使用 brew()',130,205),n('creator',isMethod ? `${product}店` : '咖啡工厂',isMethod?'覆写 create()':'按 kind 分支',395,205,'blue'),n('product',product,type,660,205,'accent')];
+    return {label: `${isMethod?'使用':'选择'}${product}`, frames:[
+      f('提出需求',isMethod?'客户端持有具体店铺，但复用父类的 serve() 工作流程。':'客户端提供产品类型，构造细节集中在工厂函数。',['client'],nodes.slice(0,2),[e('client','creator')],[['目标产品',product],['已创建',0]],isMethod?`选择 ${type}Shop`:`make_coffee('${latte?'latte':'americano'}')`),
+      f(isMethod?'子类决定产品':'工厂选择产品',isMethod?'父类调用工厂方法，具体子类返回对应产品。':'工厂根据参数，定位对应的产品构造器。',['creator','product'],nodes,[e('client','creator'),e('creator','product','创建')],[['目标产品',product],['已创建',1]],isMethod?`${type}Shop.create() → ${type}()`:`kind → ${type}()`),
+      f('通过统一接口使用','调用方使用 brew()，不用再关心产品构造细节。',['product'],nodes,[e('client','creator'),e('creator','product','brew()')],[['返回结果',`${product}已煮好`],['已创建',1]],`${type}.brew() → ${product}已煮好`)
+    ]};
+  };
+  const family = dark => {
+    const theme = dark?'深色':'浅色';
+    const nodes=[n('client','客户端','create_ui(factory)',115,205,'neutral',0,{w:145}),n('factory',`${theme}工厂`,'一组创建方法',365,205,'accent'),n('button',`${theme}按钮`,'Button',645,115,'blue'),n('menu',`${theme}菜单`,'Menu',645,295,'blue')];
+    return {label:`${theme}产品族`,frames:[
+      f('选择一个产品族','把一个具体工厂交给客户端；按钮和菜单来自同一主题族。',['factory'],nodes.slice(0,2),[e('client','factory')],[['主题',theme],['产品数',0]],`注入 ${dark?'Dark':'Light'}Factory`),
+      f('创建第一类产品','工厂的 button() 创建当前主题的按钮。',['factory','button'],nodes.slice(0,3),[e('client','factory'),e('factory','button','button()')],[['主题',theme],['产品数',1]],`${theme}工厂 → ${theme}按钮`),
+      f('创建配套产品','同一工厂的 menu() 返回配套菜单；产品族变化时替换整个工厂。',['menu'],nodes,[e('client','factory'),e('factory','button','button()'),e('factory','menu','menu()')],[['主题',theme],['产品数',2],['配套一致','是']],`${theme}按钮 + ${theme}菜单；客户端流程不变`)
+    ]};
+  };
+  const builder = deluxe => {
+    const parts=[n('bread','面包','基础层',0,0,'blue',0,{w:175,h:32,d:100}),n('cheese','芝士','第二步',0,50,'accent',0,{w:175,h:28,d:100}),n('tomato','番茄','第三步',0,100,'accent',0,{w:175,h:28,d:100})];
+    const ingredients=parts.map((part,i)=>({...part,x:(i-1)*190,y:0,w:125,d:85,sub:i===2?'可选 · 待加入':'待加入'}));
+    const total = deluxe?3:2;
+    return {label:deluxe?'三层套餐':'两层套餐',frames:[
+      f('先选择构建方案','桌面是尚未加入成品的原料；Builder 此时为空。调用方决定按配方加入哪几层。',[],ingredients,[],[['已添加',0],['目标层数',total]],'原料已备好；builder = SandwichBuilder()'),
+      ...parts.slice(0,total).map((part,i)=>f(`添加${part.label}`,`第 ${i+1} 步把${part.label}加入当前产品；同一个构建器可以选择不同配方。`,[part.id],parts.slice(0,i+1),[],[['已添加',i+1],['目标层数',total]],`add('${part.label}') → [${parts.slice(0,i+1).map(p=>p.label).join(', ')}]`)),
+      f('取出完成品','build() 返回完整产品的副本，并重置构建器，避免下一次继续使用旧内容。',parts.slice(0,total).map(p=>p.id),parts.slice(0,total),[],[['成品层数',total],['构建器已重置','是']],`build() → ${parts.slice(0,total).map(p=>p.label).join(' + ')}`)
+    ]};
+  };
+  const prototype = deep => {
+    const nodes=[n('original','原对象','tags: [草稿]',160,120),n('clone','复制对象','clone()',160,290,'blue'),n('list','标签列表 #1','[草稿]',590,120,'accent'),...(deep?[n('list2','标签列表 #2','[草稿]',590,290,'blue')]:[])];
+    return {label:deep?'深复制 deepcopy':'浅复制 copy',frames:[
+      f('读取原型','已有文档包含一个可变的嵌套列表 tags。',['original','list'],[nodes[0],nodes[2]],[e('original','list')],[['顶层对象',1],['标签列表',1]],'original.tags = [草稿]'),
+      f('从原型复制',deep?'递归复制嵌套列表，副本得到独立的标签列表。':'仅创建新的顶层对象，嵌套标签列表仍被共享。',['clone',deep?'list2':'list'],nodes,[e('original','list'),e('clone',deep?'list2':'list')],[['顶层对象',2],['标签列表',deep?2:1]],deep?'deepcopy(original) → 独立嵌套列表':'copy(original) → 共享嵌套列表'),
+      f('修改副本标签',deep?'向副本追加“已审”；原型标签仍然只有“草稿”。':'副本追加“已审”时，两个对象都看到共享列表发生变化。',deep?['clone','list2']:['original','clone','list'],nodes.map(p=>p.id===(deep?'list2':'list')?{...p,sub:'[草稿, 已审]'}:p),[e('original','list'),e('clone',deep?'list2':'list')],[['原型标签',deep?'草稿':'草稿, 已审'],['副本标签','草稿, 已审']],deep?'副本变化；原型不变':'共享引用：原型与副本同时观察到变化')
+    ]};
+  };
+  const adapter = adapted => {
+    const nodes=[n('client','新客户端','期待 send(text)',125,205),n('adapter','适配器','send → push',390,205,'accent'),n('legacy','旧接口','只有 push(text)',665,205,'blue')];
+    return {label:adapted?'接入适配器':'对照：直接调用',frames:[
+      f('发现接口不匹配','新客户端调用 send()，旧库只暴露 push()。',['client','legacy'],adapted?nodes:[nodes[0],nodes[2]],[],[['目标方法','send()'],['旧库方法','push()']],'客户端和旧库的方法名不同'),
+      f(adapted?'转换调用':'方法不存在',adapted?'对象适配器持有旧库对象，将 send(text) 转发成 push(text)。':'直接向旧对象调用 send() 会找不到方法；数据还没有送出。',adapted?['adapter']:['legacy'],adapted?nodes:[nodes[0],nodes[2]],adapted?[e('client','adapter','send()'),e('adapter','legacy','push()')]:[e('client','legacy','send() ×')],[['接口兼容',adapted?'是':'否'],['送达消息',0]],adapted?'Adapter.send(text) → Legacy.push(text)':'AttributeError: send'),
+      f('观察结果',adapted?'客户端仍使用自己的目标接口，旧库代码不用改。':'缺少适配器时不能完成本次目标接口调用。',adapted?['legacy']:['client'],adapted?nodes:[nodes[0],nodes[2]],adapted?[e('client','adapter'),e('adapter','legacy')]:[],[['送达消息',adapted?1:0],['修改旧库','无需']],adapted?'push(订单已创建) → 已送达':'没有消息送达')
+    ]};
+  };
+  const bridge = email => {
+    const impl=email?'邮件':'短信';
+    const nodes=[n('notice','紧急通知','抽象：urgent()',145,205,'accent'),n('channel','发送接口','实现：send(text)',410,205,'blue'),n('sms',`${impl}通道`,email?'EmailSender':'SmsSender',675,205)];
+    return {label:`紧急通知 × ${impl}`,frames:[
+      f('拆开两个变化维度','通知级别与发送通道分别定义，通过组合连接，而不是为每种组合创建子类。',['notice','channel'],nodes.slice(0,2),[e('notice','channel','持有实现')],[['通知级别','紧急'],['发送通道',impl]],'UrgentNotice(sender)'),
+      f('注入具体实现','切换通道只替换 Sender；通知级别的封装逻辑保持不变。',['channel','sms'],nodes,[e('notice','channel'),e('channel','sms','委托')],[['通知级别','紧急'],['发送通道',impl]],`sender = ${email?'EmailSender':'SmsSender'}()`),
+      f('跨桥调用','通知抽象加上“紧急”前缀，具体实现负责实际发送。',['notice','sms'],nodes,[e('notice','channel','send()'),e('channel','sms','发送')],[['送达通道',impl],['消息','[紧急] 服务异常']],`${impl}: [紧急] 服务异常`)
+    ]};
+  };
+  const composite = nested => {
+    const nodes=[n('root','订单','Group',-10,165,'blue',-90,{w:110,h:36,d:65}),n('a','咖啡','¥20',120,90,'accent',-60,{w:100,h:35,d:65}),n('b',nested?'套餐':'蛋糕',nested?'Group':'¥30',5,70,'blue',-25,{w:100,h:35,d:65}),...(nested?[n('c','蛋糕','¥30',0,-5,'accent',65,{w:100,h:35,d:60}),n('d','饼干','¥10',-70,25,'accent',20,{w:90,h:35,d:60})]:[])];
+    const edges=[e('root','a'),e('root','b'),...(nested?[e('b','c'),e('b','d')]:[])];
+    return {label:nested?'嵌套套餐：¥60':'平铺订单：¥50',frames:[
+      f('先预测汇总结果','订单与单品都提供 total()，客户端不用逐个判断是否为容器。',['root'],nodes,edges,[['层级',nested?3:2],['合计','待计算']],'order.total()'),
+      f('递归委托给子项',nested?'根订单调用单品和套餐的 total()，套餐再向下委托。':'根订单分别向咖啡和蛋糕委托 total()。',nested?['a','b','c','d']:['a','b'],nodes,edges,[['单品数',nested?3:2],['合计','计算中']],nested?'20 + (30 + 10)':'20 + 30'),
+      f('统一返回合计','叶节点返回自身金额，容器返回子项金额之和，任意深度遵守同一接口。',['root'],nodes.map(p=>p.id==='root'?{...p,sub:`¥${nested?60:50}`} :p),edges,[['单品数',nested?3:2],['合计',`¥${nested?60:50}`]],`total() = ${nested?60:50}`)
+    ]};
+  };
+  const decorator = twice => {
+    const nodes=[n('base','咖啡','cost() = 20',0,0,'blue',0,{w:160,h:36,d:100}),n('milk','加奶层','委托 + 5',0,55,'accent',0,{w:180,h:30,d:115}),...(twice?[n('sugar','加糖层','委托 + 2',0,110,'accent',0,{w:200,h:30,d:130})]:[])];
+    return {label:twice?'咖啡 + 奶 + 糖':'咖啡 + 奶',frames:[
+      f('叠加包装器','各层都暴露 cost()，外层持有内层；这里的分层表示调用嵌套。',[twice?'sugar':'milk'],nodes,[],[['基础价格',20],['附加层',twice?2:1]],twice?'Sugar(Milk(Coffee()))':'Milk(Coffee())'),
+      f('从外向内委托','外层先调用内层，最终到达原始咖啡对象。',['base'],nodes,twice?[e('sugar','milk','cost()'),e('milk','base','cost()')]:[e('milk','base','cost()')],[['当前返回',20],['委托方向','外 → 内']],'Coffee.cost() → 20'),
+      f('从内向外增强','内层结果逐层返回，每个包装器增加自己的行为或费用。',twice?['milk','sugar']:['milk'],nodes,twice?[e('base','milk','20 + 5'),e('milk','sugar','25 + 2')]:[e('base','milk','20 + 5')],[['最终价格',twice?27:25],['返回方向','内 → 外']],twice?'20 → 25 → 27':'20 → 25')
+    ]};
+  };
+  const facade = stop => {
+    const nodes=[n('client','客户端',stop?'stop()':'watch()',110,205),n('facade','影院门面','协调多个子系统',350,205,'accent'),n('light','灯光',stop?'开启':'调暗',650,85,'blue'),n('screen','屏幕',stop?'收起':'展开',650,205,'blue'),n('player','播放器',stop?'停止':'播放',650,325,'blue')];
+    return {label:stop?'结束观影':'开始观影',frames:[
+      f('一个面向任务的入口','客户端把完整用例交给门面，不必知道每个子系统的调用细节。',['client','facade'],nodes,[e('client','facade')],[['客户端调用',1],['已协调子系统',0]],stop?'cinema.stop()':'cinema.watch()'),
+      f('门面协调子系统','门面根据任务按顺序调用播放器、屏幕、灯光；它们仍可独立使用。',stop?['player','screen']:['light','screen'],nodes,[e('client','facade'),e('facade','light'),e('facade','screen'),e('facade','player')],[['客户端调用',1],['已协调子系统',2]],stop?'player.stop() → screen.up()':'light.dim() → screen.down()'),
+      f('用例完成','门面简化了入口和调用顺序，没有替代子系统自身的职责。',['light','screen','player'],nodes,[e('client','facade'),e('facade','light'),e('facade','screen'),e('facade','player')],[['客户端调用',1],['已协调子系统',3],['影院状态',stop?'空闲':'观影中']],stop?'light.on() → 结束':'player.play() → 开始观影')
+    ]};
+  };
+  const flyweight = shared => {
+    const pool = n('style','样式 #1','字形 A · 字体 Serif',0,125,'accent',-50,{w:175,h:40,d:70});
+    const glyphs=[n('a','位置 (0,0)','字符上下文',-180,0,'blue',60,{w:115,h:36,d:65}),n('b','位置 (1,0)','字符上下文',0,0,'blue',60,{w:115,h:36,d:65}),n('c','位置 (2,0)','字符上下文',180,0,'blue',60,{w:115,h:36,d:65})];
+    const styles=shared?[pool]:[...glyphs.map((g,i)=>n(`s${i}`,`样式 #${i+1}`,'A · Serif',g.x,125,'accent',-50,{w:115,h:36,d:65}))];
+    const links=glyphs.map((g,i)=>e(g.id,shared?'style':`s${i}`,'引用'));
+    return {label:shared?'共享内在样式':'对照：重复样式',frames:[
+      f('区分状态','字符 A 和字体是可共享的内在状态；每次出现的位置是独立的外部状态。',glyphs.map(g=>g.id),glyphs,[],[['字符出现次数',3],['已建样式',0]],'同一字形 A 出现在三个位置'),
+      f(shared?'命中样式池':'每次重新创建',shared?'按 (字符, 字体) 查询池，三次请求复用一个不可变样式对象。':'没有样式池，每次出现都重新构造同样的内在状态。',styles.map(s=>s.id),[...glyphs,...styles],links,[['字符出现次数',3],['已建样式',shared?1:3]],shared?'get(A, Serif) → #1, #1, #1':'创建 #1, #2, #3'),
+      f('带上外部状态绘制','共享样式不包含位置；同一份内在状态可以在不同位置绘制。',glyphs.map(g=>g.id),[...glyphs,...styles],links,[['样式对象',shared?1:3],['位置上下文',3],['本例省去样式副本',shared?2:0]],'draw(style, x, y) → 三个独立位置')
+    ]};
+  };
+  const proxy = allowed => {
+    const nodes=[n('client','客户端','read()',130,205),n('proxy','访问代理',allowed?'已授权':'未授权',395,205,'accent'),n('real','真实文件','read()',660,205,'blue')];
+    return {label:allowed?'允许访问':'拒绝访问',frames:[
+      f('请求同一接口','代理与真实对象都提供 read()，客户端先访问代理。',['client'],nodes,[e('client','proxy','read()')],[['权限',allowed?'允许':'拒绝'],['真实调用次数',0]],'client → proxy.read()'),
+      f('代理检查访问条件',allowed?'检查通过，才把调用转交给真实对象。':'检查失败，代理直接返回拒绝结果，不触达真实对象。',['proxy'],nodes,[e('client','proxy'),...(allowed?[e('proxy','real','转交')]:[])],[['权限',allowed?'允许':'拒绝'],['真实调用次数',0]],allowed?'检查通过 → real.read()':'检查失败 → PermissionError'),
+      f('观察真实对象是否执行',allowed?'真实文件被读取一次，结果经代理返回客户端。':'真实文件保持未访问，结果在代理处结束。',allowed?['real']:['proxy'],nodes,[e('client','proxy'),...(allowed?[e('proxy','real')]:[])],[['真实调用次数',allowed?1:0],['返回结果',allowed?'文件内容':'拒绝访问']],allowed?'real.read() → 文件内容':'真实对象没有执行')
+    ]};
+  };
+  window.CREATION_PATTERNS = [
+    item('singleton','单例','Singleton','creational',
+      '在指定作用域内只创建一个实例，并复用同一个访问点。',
+      '多个调用方必须指向同一个对象，重复构造会造成状态分散。',
+      '确实需要进程内共享且生命周期明确的配置、注册表；先考虑显式依赖注入。',
+      '跨进程唯一、分布式锁或数据库并发一致性；单例本身不能解决这些问题。',
+      '隐藏的全局依赖增加测试隔离难度；懒初始化的并发访问需要同步。',
+      {id:'flyweight',name:'享元',difference:'单例控制一种对象的实例数；享元按内在状态复用多种对象，并保留独立外部状态。'},
+      `from threading import Lock
+
+class SingletonMeta(type):
+    _instances = {}
+    _lock = Lock()
+
+    def __call__(cls, *args, **kwargs):
+        with cls._lock:
+            if cls not in cls._instances:
+                cls._instances[cls] = super().__call__(*args, **kwargs)
+            return cls._instances[cls]
+
+class Settings(metaclass=SingletonMeta):
+    def __init__(self):
+        self.theme = "light"
+
+a, b = Settings(), Settings()
+a.theme = "dark"
+print(a is b)      # True
+print(b.theme)     # dark
+# 仅保护本例构造过程；并不保护所有实例方法。
+# 不保证跨进程唯一；首次初始化后传入的新参数不会重新初始化。
+`,{kind:'2d',metaphor:'两个调用方申请同一个配置对象',caveat:'箭头表示对象引用，不是网络请求；唯一性限于示例进程。',variants:[singleton(false),singleton(true)]}),
+    item('simple-factory','简单工厂','Simple Factory','creational',
+      '把按参数选择并创建产品的逻辑集中到一个入口。',
+      '产品构造分支散落在调用方，新增产品时要到处修改。',
+      '产品类型少且创建规则集中、变化可控的场景；简单函数通常足够。',
+      '产品族需要成套一致，或大量扩展需要由不同子类独立提供产品时。',
+      '调用方更简单，但集中分支会随产品增加而修改；它不属于 GoF 23 种。',
+      {id:'factory-method',name:'工厂方法',difference:'简单工厂在一个入口中选择产品；工厂方法由创建者的子类覆写创建步骤。'},
+      `class Americano:
+    def brew(self):
+        return "美式已煮好"
+
+class Latte:
+    def brew(self):
+        return "拿铁已煮好"
+
+def make_coffee(kind):
+    constructors = {"americano": Americano, "latte": Latte}
+    return constructors[kind]()
+
+for kind in ("americano", "latte"):
+    coffee = make_coffee(kind)
+    print(coffee.brew())
+# 美式已煮好
+# 拿铁已煮好
+`,{kind:'2d',metaphor:'按点单参数选择咖啡产品',caveat:'这里每次创建新产品；工厂也可以管理复用，但不是本例的重点。',variants:[factory(false,false),factory(false,true)]}),
+    item('factory-method','工厂方法','Factory Method','creational',
+      '在父类定义创建接口，让子类决定工作流程中使用的具体产品。',
+      '通用业务流程需要创建产品，但产品类型应由扩展点决定。',
+      '框架流程稳定，插件或子类需要替换其中的产品创建步骤。',
+      '只有一次简单构造、没有可复用流程或扩展需求时，直接构造更清楚。',
+      '新增产品可以新增创建者子类，但产品与创建者类的数量也会增长。',
+      {id:'abstract-factory',name:'抽象工厂',difference:'工厂方法关注一个创建扩展点；抽象工厂提供一组用于创建配套产品的方法。'},
+      `class Americano:
+    def brew(self):
+        return "美式已煮好"
+
+class Latte:
+    def brew(self):
+        return "拿铁已煮好"
+
+class CoffeeShop:
+    def create(self):
+        raise NotImplementedError
+
+    def serve(self):
+        return self.create().brew()
+
+class AmericanoShop(CoffeeShop):
+    def create(self):
+        return Americano()
+
+class LatteShop(CoffeeShop):
+    def create(self):
+        return Latte()
+
+print(AmericanoShop().serve())
+print(LatteShop().serve())
+`,{kind:'2d',metaphor:'店铺子类决定 serve() 使用哪种咖啡',caveat:'子类只替换创建步骤；客户端如何选择子类仍是外部配置的职责。',variants:[factory(true,false),factory(true,true)]}),
+    item('abstract-factory','抽象工厂','Abstract Factory','creational',
+      '通过同一个工厂创建一组相关产品，隔离具体产品族。',
+      '客户端需要配套的多类产品，混搭具体实现容易破坏一致性。',
+      '同一平台的按钮与菜单、同一数据库族的连接与命令等成套切换。',
+      '只创建一种产品，或各产品之间没有配套关系时。',
+      '新增产品族方便；新增产品种类需要修改工厂接口及所有具体工厂。',
+      {id:'factory-method',name:'工厂方法',difference:'抽象工厂切换一整套配套产品；工厂方法通常替换父类流程中的某个创建步骤。'},
+      `class Button:
+    def __init__(self, theme):
+        self.theme = theme
+
+class Menu:
+    def __init__(self, theme):
+        self.theme = theme
+
+class UIFactory:
+    theme = ""
+    def button(self):
+        return Button(self.theme)
+    def menu(self):
+        return Menu(self.theme)
+
+class LightFactory(UIFactory):
+    theme = "light"
+
+class DarkFactory(UIFactory):
+    theme = "dark"
+
+def create_ui(factory):
+    button, menu = factory.button(), factory.menu()
+    return button.theme, menu.theme
+
+print(create_ui(LightFactory()))  # ('light', 'light')
+print(create_ui(DarkFactory()))   # ('dark', 'dark')
+`,{kind:'2d',metaphor:'同一主题工厂生产按钮与菜单',caveat:'配套一致来自客户端使用同一工厂；模式不会自动阻止外部手动混搭。',variants:[family(false),family(true)]}),
+    item('builder','建造者','Builder','creational',
+      '把复杂产品拆成构建步骤，用不同步骤组合生成不同表示。',
+      '构造参数过多或步骤有依赖，一次构造很难表达过程和不同配方。',
+      '复杂请求、文档或套餐需要分步构建，同一流程可生成不同产品表示。',
+      '只有几个独立参数时，普通构造器、命名参数或 dataclass 通常更直接。',
+      '过程更清晰，但增加构建器；必须明确取出产品后的复用与重置规则。',
+      {id:'abstract-factory',name:'抽象工厂',difference:'建造者逐步组装一个复杂产品；抽象工厂创建多个彼此配套的产品。'},
+      `class SandwichBuilder:
+    def __init__(self):
+        self.parts = []
+
+    def add(self, part):
+        self.parts.append(part)
+        return self
+
+    def build(self):
+        product = tuple(self.parts)
+        self.parts = []
+        return product
+
+def make_meal(builder, deluxe=False):
+    builder.add("面包").add("芝士")
+    if deluxe:
+        builder.add("番茄")
+    return builder.build()
+
+builder = SandwichBuilder()
+print(make_meal(builder))        # ('面包', '芝士')
+print(make_meal(builder, True))  # ('面包', '芝士', '番茄')
+`,{kind:'3d',metaphor:'按步骤搭建不同层数的套餐',caveat:'实体层代表已加入的产品部分，不是 Python 的内存布局；链式调用本身不等于建造者。',variants:[builder(false),builder(true)]}),
+    item('prototype','原型','Prototype','creational',
+      '以已有对象为原型复制新对象，再调整副本。',
+      '初始化复杂或具体类型不宜暴露，但需要创建结构相似的对象。',
+      '文档模板、编辑器图元、复杂配置等需要按已有实例复制。',
+      '对象含文件句柄、锁或外部连接时，需要明确复制语义，不能直接假定 deepcopy 正确。',
+      '减少重复初始化，但必须决定哪些嵌套状态共享，哪些递归复制；复制不保证一定更快。',
+      {id:'builder',name:'建造者',difference:'原型从已有对象复制；建造者从构建步骤逐步得到对象。'},
+      `from copy import copy, deepcopy
+from dataclasses import dataclass
+
+@dataclass
+class Document:
+    title: str
+    tags: list
+
+original = Document("原稿", ["草稿"])
+shallow = copy(original)
+deep = deepcopy(original)
+shallow.tags.append("已审")
+
+print(shallow is original)           # False
+print(shallow.tags is original.tags) # True
+print(deep.tags is original.tags)    # False
+print(original.tags)  # ['草稿', '已审']
+print(deep.tags)      # ['草稿']
+`,{kind:'2d',metaphor:'复制文档后修改嵌套标签列表',caveat:'展示普通可复制 Python 对象；自定义复制协议或外部资源可能需要特别处理。',variants:[prototype(false),prototype(true)]}),
+    item('adapter','适配器','Adapter','structural',
+      '把现有对象的接口转换成客户端需要的接口。',
+      '已有功能能完成工作，但方法名、参数或返回形态与目标接口不一致。',
+      '接入旧库、第三方 SDK 或协议迁移；把转换限制在明确边界内。',
+      '双方语义根本不兼容时，改方法名无法解决业务契约差异。',
+      '复用旧实现，但增加转发层；参数、错误与返回值的语义也需要适配。',
+      {id:'bridge',name:'桥接',difference:'适配器补齐已有接口的不兼容；桥接在设计时拆开两个独立变化维度。'},
+      `class LegacyGateway:
+    def push(self, text):
+        return f"已送达: {text}"
+
+class GatewayAdapter:
+    def __init__(self, legacy):
+        self.legacy = legacy
+
+    def send(self, text):
+        return self.legacy.push(text)
+
+def notify(gateway):
+    return gateway.send("订单已创建")
+
+gateway = GatewayAdapter(LegacyGateway())
+print(notify(gateway))  # 已送达: 订单已创建
+# notify(LegacyGateway()) 会因没有 send() 而失败。
+`,{kind:'2d',metaphor:'把旧 push() 接口接入新的 send() 客户端',caveat:'本例只需要转换方法名；实际适配可能还需转换参数、返回值与错误。',variants:[adapter(true),adapter(false)]}),
+    item('bridge','桥接','Bridge','structural',
+      '将抽象与实现分开，通过组合让两个维度独立变化。',
+      '两个变化维度全部用继承组合，子类数量会按组合数量增长。',
+      '通知级别 × 发送通道、图形 × 渲染后端等确有两个独立变化轴。',
+      '只有一个变化维度时，不必预设第二个接口层。',
+      '组合避免继承组合爆炸，但接口分层与对象配置更复杂。',
+      {id:'adapter',name:'适配器',difference:'桥接主动设计独立演化的抽象和实现；适配器包装已有不兼容接口。'},
+      `class SmsSender:
+    def send(self, text):
+        return f"短信: {text}"
+
+class EmailSender:
+    def send(self, text):
+        return f"邮件: {text}"
+
+class Notice:
+    def __init__(self, sender):
+        self.sender = sender
+    def deliver(self, text):
+        return self.sender.send(text)
+
+class UrgentNotice(Notice):
+    def deliver(self, text):
+        return self.sender.send(f"[紧急] {text}")
+
+for sender in (SmsSender(), EmailSender()):
+    print(UrgentNotice(sender).deliver("服务异常"))
+# 短信: [紧急] 服务异常
+# 邮件: [紧急] 服务异常
+`,{kind:'2d',metaphor:'紧急通知跨过发送接口，切换短信或邮件实现',caveat:'箭头表示持有并委托实现；示例只模拟发送，不产生网络请求。',variants:[bridge(false),bridge(true)]}),
+    item('composite','组合','Composite','structural',
+      '用统一接口表示叶节点与容器，递归处理树形整体。',
+      '部分与整体嵌套成树，调用方不想为单项和分组维护两套处理代码。',
+      '文件目录、组织结构、菜单与订单分组等具有递归部分整体关系的数据。',
+      '需要严格限制不同节点可执行的操作时，要避免一个过宽的统一接口。',
+      '递归调用简单，但需要维护无环树与节点所有权；叶子不一定适合所有容器操作。',
+      {id:'decorator',name:'装饰器',difference:'组合通常聚合多个子项，表达树；装饰器通常包裹单个组件，逐层增强行为。'},
+      `class Item:
+    def __init__(self, price):
+        self.price = price
+    def total(self):
+        return self.price
+
+class Group:
+    def __init__(self, *children):
+        self.children = children
+    def total(self):
+        return sum(child.total() for child in self.children)
+
+coffee, cake, cookie = Item(20), Item(30), Item(10)
+flat = Group(coffee, cake)
+nested = Group(coffee, Group(cake, cookie))
+
+print(flat.total())    # 50
+print(nested.total())  # 60
+# Item 与 Group 都提供 total()；本例假设结构无环。
+`,{kind:'3d',metaphor:'订单分组形成可递归汇总的层次树',caveat:'高度仅表示树的层级；连线表示包含关系，不表示调用耗时或内存距离。',variants:[composite(false),composite(true)]}),
+    item('decorator','装饰器','Decorator','structural',
+      '保持组件接口，用持有组件的包装器逐层增加行为。',
+      '功能可以多种组合且要按对象动态添加，继承难覆盖所有组合。',
+      'I/O 流、日志、压缩、计费附加项等可组合的增强操作。',
+      '只是控制能否访问一个对象时，应优先按代理的目的来理解。',
+      '组合灵活，但调用层次增加；包装顺序可能改变结果和调试路径。',
+      {id:'proxy',name:'代理',difference:'装饰器着重叠加行为；代理着重控制访问，二者可能具有相似的包装结构。'},
+      `class Coffee:
+    def cost(self):
+        return 20
+
+class Extra:
+    def __init__(self, inner):
+        self.inner = inner
+    def cost(self):
+        return self.inner.cost()
+
+class Milk(Extra):
+    def cost(self):
+        return super().cost() + 5
+
+class Sugar(Extra):
+    def cost(self):
+        return super().cost() + 2
+
+print(Milk(Coffee()).cost())         # 25
+print(Sugar(Milk(Coffee())).cost())  # 27
+# 这是 GoF 对象装饰器，不等同于 Python 的 @ 语法。
+`,{kind:'3d',metaphor:'外层费用包装器调用内层，再逐层返回加价结果',caveat:'分层是展开的调用嵌套示意；本例加价可交换，但其他装饰操作未必可以交换顺序。',variants:[decorator(false),decorator(true)]}),
+    item('facade','外观 / 门面','Facade','structural',
+      '为复杂子系统提供一个面向任务的简化入口。',
+      '客户端需要记住多个子系统和调用顺序，耦合到过多细节。',
+      '为常用流程提供稳定入口，例如初始化、结账或一键开启影院。',
+      '不要把所有业务塞进一个全能门面；跨服务事务也不会因此自动保证。',
+      '降低客户端耦合，但门面要保持职责集中，避免变成巨型类。',
+      {id:'proxy',name:'代理',difference:'外观面向一个子系统提供简化的新接口；代理通常保持目标接口并控制访问。'},
+      `class Light:
+    def set(self, mode):
+        return f"灯光: {mode}"
+
+class Screen:
+    def set(self, mode):
+        return f"屏幕: {mode}"
+
+class Player:
+    def set(self, mode):
+        return f"播放器: {mode}"
+
+class Cinema:
+    def __init__(self):
+        self.light, self.screen, self.player = Light(), Screen(), Player()
+    def watch(self):
+        return [self.light.set("调暗"), self.screen.set("展开"), self.player.set("播放")]
+    def stop(self):
+        return [self.player.set("停止"), self.screen.set("收起"), self.light.set("开启")]
+
+cinema = Cinema()
+print(cinema.watch())
+print(cinema.stop())
+`,{kind:'2d',metaphor:'一次观影操作协调灯光、屏幕和播放器',caveat:'仅展示成功路径与协调顺序，不包含失败回滚；门面不会自动提供事务。',variants:[facade(false),facade(true)]}),
+    item('flyweight','享元','Flyweight','structural',
+      '共享不可变的内在状态，把每次使用的外部状态单独传入。',
+      '大量细粒度对象有重复的大块状态，重复存储造成开销。',
+      '字形、棋子样式、地图纹理等重复状态多、共享价值明确的场景。',
+      '对象很少、共享查找成本更高，或共享状态必须频繁独立修改时。',
+      '节省重复状态，但要维护共享池，严格隔离位置等外部状态并控制池生命周期。',
+      {id:'singleton',name:'单例',difference:'享元允许按键存在多份共享实例；单例约束指定作用域中的单一实例。'},
+      `from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class GlyphStyle:
+    char: str
+    font: str
+    def draw(self, x, y):
+        return f"{self.char}/{self.font}@({x},{y})"
+
+class StylePool:
+    def __init__(self):
+        self.styles = {}
+    def get(self, char, font):
+        key = (char, font)
+        if key not in self.styles:
+            self.styles[key] = GlyphStyle(char, font)
+        return self.styles[key]
+
+pool = StylePool()
+styles = [pool.get("A", "Serif") for _ in range(3)]
+print(styles[0] is styles[1])  # True
+print(len(pool.styles))        # 1
+for x, style in enumerate(styles):
+    print(style.draw(x, 0))
+# 三个位置上下文共享同一个不可变样式；本例池不处理并发。
+`,{kind:'3d',metaphor:'三个字符位置引用同一份内在样式',caveat:'对象数是本例计算值，不是内存字节数；节省的是重复样式，位置上下文仍然各自存在。',variants:[flyweight(true),flyweight(false)]}),
+    item('proxy','代理','Proxy','structural',
+      '通过保持目标接口的替身控制对真实对象的访问。',
+      '直接访问对象不方便或不允许，需要鉴权、延迟加载、缓存或远程转发。',
+      '保护代理、虚拟代理和远程代理；代理与真实对象遵守同一调用契约。',
+      '只想对多个子系统提供更简单的操作入口时，属于外观的主要目的。',
+      '访问策略集中，但增加一层间接调用；远程失败、缓存一致性等仍需单独处理。',
+      {id:'decorator',name:'装饰器',difference:'代理决定是否、何时、怎样到达目标；装饰器强调在目标行为之外叠加功能。'},
+      `class SecretFile:
+    def __init__(self):
+        self.reads = 0
+    def read(self):
+        self.reads += 1
+        return "文件内容"
+
+class FileProxy:
+    def __init__(self, target, allowed):
+        self.target, self.allowed = target, allowed
+    def read(self):
+        if not self.allowed:
+            raise PermissionError("拒绝访问")
+        return self.target.read()
+
+target = SecretFile()
+for allowed in (False, True):
+    try:
+        print(FileProxy(target, allowed).read())
+    except PermissionError as error:
+        print(error)
+print(target.reads)  # 1，拒绝时没有触达真实对象
+`,{kind:'2d',metaphor:'鉴权代理决定是否访问真实文件',caveat:'权限为教学用布尔值；实际系统不能让调用方自行声明可信权限。',variants:[proxy(true),proxy(false)]})
+  ];
+})();
+
+/* Original teaching scenarios; coordinates are diagram positions, not memory addresses. */
+(() => {
+  const n = (id, label, sub, x, y, tone = 'neutral', w = 128) => ({ id, label, sub, x, y, z: 0, w, h: 58, tone });
+  const e = (from, to, label = '') => ({ from, to, label });
+  const f = (title, description, nodes, edges, active, stats, log) => ({ title, description, nodes, edges, active, stats: Object.entries(stats).map(([label, value]) => ({ label, value: String(value) })), log });
+  const demo = (metaphor, caveat, variants) => ({ kind: '2d', metaphor, caveat, variants });
+
+  function approval(amount) {
+    const chain = [n('staff', '组长', '额度 ≤ 500', 180, 210), n('manager', '经理', '额度 ≤ 2,000', 400, 210), n('director', '总监', '额度 ≤ 5,000', 620, 210)];
+    const handled = amount <= 500 ? 0 : 2;
+    return {
+      label: `报销 ¥${amount.toLocaleString()}`,
+      frames: [
+        f('请求进入链头', `报销 ${amount} 元；调用方只提交给组长，不指定最终处理人。`, [n('request', '报销单', `¥${amount.toLocaleString()}`, 180, 85, 'accent'), ...chain], [e('request', 'staff', 'handle')], ['request'], { '已检查': 0, '已批准': 0 }, 'client → staff.handle(amount)'),
+        f('只从第一个处理者开始', '链中每个节点只了解自身条件和下一个节点；调用方不做额度分流。', chain, [e('staff', 'manager', 'next'), e('manager', 'director', 'next')], ['staff'], { '已检查': 0, '已批准': 0 }, 'staff.next = manager; manager.next = director'),
+        ...chain.slice(0, handled + 1).map((node, i) => {
+          const accepted = i === handled;
+          return f(accepted ? `${node.label}处理并终止` : `${node.label}向后转交`, accepted ? `额度足够，${node.label}完成审批，后续节点不再处理。` : `额度不足；当前节点把同一请求交给下一节点。`, chain, chain.slice(1, i + (accepted ? 1 : 2)).map((v, j) => e(chain[j].id, v.id, 'next')), [node.id], { '已检查': i + 1, '已批准': accepted ? 1 : 0 }, accepted ? `${node.id}: approved(${amount}); return` : `${node.id}: next.handle(${amount})`);
+        })
+      ]
+    };
+  }
+
+  function command(undo) {
+    const nodes = [n('invoker', '按钮 / Invoker', '只认识 execute()', 150, 200), n('cmd', 'Insert 命令', 'receiver + text', 400, 200, 'blue'), n('doc', '文档 / Receiver', '真正修改文字', 650, 200)];
+    return { label: undo ? '执行后撤销' : '排队后依次执行', frames: [
+      f('把请求封装为对象', 'Insert 保存接收者和要插入的文本；创建命令时尚未执行。', nodes, [e('invoker', 'cmd', '持有')], ['cmd'], { '文档内容': '空', '已执行': 0 }, 'command = Insert(document, "A")'),
+      f(undo ? '统一入口执行' : '命令先进入队列', undo ? '调用者只调用 execute；命令再调用文档的方法。' : '两个命令可以先保存，稍后由同一调用者触发。', undo ? nodes : [...nodes, n('cmd2', 'Insert("B")', '第二个请求', 400, 330, 'blue')], undo ? [e('invoker', 'cmd', 'execute'), e('cmd', 'doc', 'append A')] : [e('invoker', 'cmd', 'queue[0]'), e('invoker', 'cmd2', 'queue[1]')], undo ? ['cmd', 'doc'] : ['cmd', 'cmd2'], { '文档内容': undo ? 'A' : '空', '已执行': undo ? 1 : 0 }, undo ? 'command.execute() → document.text = "A"' : 'queue = [Insert(doc, "A"), Insert(doc, "B")]'),
+      f(undo ? '命令显式恢复旧值' : '队列顺序成为执行顺序', undo ? 'undo 恢复 execute 之前保存的文字。撤销能力需要命令自行实现。' : '依次执行两个请求，文档得到 AB；接收者不需要知道队列。', nodes.map(v => v.id === 'doc' ? { ...v, sub: undo ? '内容恢复为空' : '当前内容：AB', tone: 'accent' } : v), [e('invoker', 'cmd', undo ? 'undo' : 'execute × 2'), e('cmd', 'doc', undo ? 'restore' : 'append')], ['doc'], { '文档内容': undo ? '空' : 'AB', '已执行': undo ? 1 : 2 }, undo ? 'command.undo() → document.text = before' : 'for command in queue: command.execute()')
+    ] };
+  }
+
+  function expression(multiply) {
+    const value = multiply ? 14 : 5;
+    const nodes = [n('add', 'Add', '+', 400, 90, 'blue'), n('two', 'Number(2)', '终结符', 220, 230), ...(multiply ? [n('mul', 'Multiply', '×', 570, 230, 'blue'), n('three', 'Number(3)', '终结符', 470, 355), n('four', 'Number(4)', '终结符', 680, 355)] : [n('three', 'Number(3)', '终结符', 570, 230)])];
+    const edges = [e('add', 'two', 'left'), e('add', multiply ? 'mul' : 'three', 'right'), ...(multiply ? [e('mul', 'three', 'left'), e('mul', 'four', 'right')] : [])];
+    return { label: multiply ? '2 + (3 × 4)' : '2 + 3', frames: [
+      f('先表示语法结构', '每种语法规则对应一种表达式对象；树的层级表示组合关系。', nodes, edges, ['add'], { '最终结果': '待求值' }, multiply ? 'Add(Number(2), Multiply(Number(3), Number(4)))' : 'Add(Number(2), Number(3))'),
+      f('递归解释子表达式', multiply ? 'Add 先得到左值 2，再递归解释 Multiply；后者得到 3 × 4 = 12。' : '两个 Number 直接返回自身的数值 2 和 3。', nodes, edges, multiply ? ['mul', 'three', 'four'] : ['two', 'three'], { '左值': 2, '右值': multiply ? 12 : 3 }, multiply ? 'Multiply.interpret() = 3 * 4 = 12' : 'Number.interpret() → 2, 3'),
+      f('父规则合并结果', `根节点执行加法并返回 ${value}；增加语法规则会增加相应的表达式类。`, nodes.map(v => v.id === 'add' ? { ...v, sub: `结果 = ${value}`, tone: 'accent' } : v), edges, ['add'], { '最终结果': value }, `Add.interpret() = 2 + ${multiply ? 12 : 3} = ${value}`)
+    ] };
+  }
+
+  function iteration(reverse) {
+    const order = reverse ? ['C', 'B', 'A'] : ['A', 'B', 'C'];
+    const items = [n('a', 'A', '集合元素', 220, 150), n('b', 'B', '集合元素', 400, 150), n('c', 'C', '集合元素', 580, 150)];
+    return { label: reverse ? '逆向迭代' : '正向迭代', frames: [
+      f('创建独立游标', '遍历方式由迭代器封装；调用方使用同一种 next 协议。', [...items, n('cursor', 'Iterator', reverse ? '逆向游标' : '正向游标', 400, 310, 'blue')], [], ['cursor'], { '已返回': 0, '元素总数': 3 }, reverse ? 'iterator = reversed(collection)' : 'iterator = iter(collection)'),
+      ...order.map((letter, index) => f(index === 2 ? '最后一个元素，然后结束' : `next → ${letter}`, `第 ${index + 1} 次 next 返回 ${letter}。${index === 2 ? '再调用一次将触发 StopIteration。' : '集合本身保持不变，游标向前推进。'}`, [...items, n('cursor', 'Iterator', `已返回 ${order.slice(0, index + 1).join(' → ')}`, 400, 310, 'blue', 220)], [e('cursor', letter.toLowerCase(), 'next')], [letter.toLowerCase()], { '已返回': index + 1, '元素总数': 3 }, `next(iterator) → "${letter}"${index === 2 ? '; next → StopIteration' : ''}`))
+    ] };
+  }
+
+  function mediation(valid) {
+    const nodes = [n('name', '姓名输入框', valid ? '值：小林' : '值：空', 170, 100), n('mail', '邮箱输入框', '值：有效邮箱', 170, 320), n('mediator', 'FormMediator', '协调表单规则', 410, 210, 'blue', 170), n('button', '提交按钮', valid ? '可启用' : '应禁用', 665, 210)];
+    return { label: valid ? '字段完整' : '缺少姓名', frames: [
+      f('组件只认识协调者', '输入框和按钮不直接相互调用；它们共享同一个中介者。', nodes, [e('name', 'mediator'), e('mail', 'mediator'), e('mediator', 'button')], ['mediator'], { '输入变化': 0, '按钮状态': '未计算' }, 'name.mediator = form; mail.mediator = form'),
+      f('输入变化通知中介者', '任一输入变化都交给中介者；校验规则集中在协调者里。', nodes, [e('name', 'mediator', 'changed'), e('mail', 'mediator', 'changed')], ['name', 'mediator'], { '姓名有效': valid ? '是' : '否', '邮箱有效': '是' }, 'mediator.changed() → bool(name) and valid_email'),
+      f('协调者更新按钮', valid ? '两个条件同时成立，中介者启用按钮。' : '即使邮箱有效，姓名为空仍使按钮禁用。', nodes.map(v => v.id === 'button' ? { ...v, sub: valid ? 'enabled = True' : 'enabled = False', tone: 'accent' } : v), [e('mediator', 'button', valid ? 'enable' : 'disable')], ['button'], { '按钮状态': valid ? '启用' : '禁用', '组件互调': 0 }, `button.enabled = ${valid ? 'True' : 'False'}`)
+    ] };
+  }
+
+  function snapshot(late) {
+    const nodes = [n('editor', 'Editor', '发起人：保存 / 恢复', 180, 210), n('snapshot', 'Memento', '封装内部状态', 410, 210, 'blue'), n('history', 'History', '管理快照引用', 650, 210)];
+    const saved = late ? 'AB' : 'A';
+    return { label: late ? '在 AB 时保存' : '在 A 时保存', frames: [
+      f('选择保存时刻', `文档当前为 ${saved}。保存的时机决定以后能回到哪个版本。`, nodes.map(v => v.id === 'editor' ? { ...v, sub: `内容：${saved}` } : v), [], ['editor'], { '当前内容': saved, '保存点': '无' }, `editor.text = "${saved}"`),
+      f('发起人生成快照', 'Editor 负责封装快照；History 只保存它，不读取或修改内部内容。', nodes, [e('editor', 'snapshot', 'save()'), e('snapshot', 'history', '保管引用')], ['snapshot', 'history'], { '当前内容': saved, '保存点': saved }, 'history.append(editor.save())'),
+      f('继续编辑为 ABC', '当前状态改变，之前的快照保持不变。', nodes.map(v => v.id === 'editor' ? { ...v, sub: '内容：ABC' } : v), [], ['editor'], { '当前内容': 'ABC', '保存点': saved }, 'editor.text = "ABC"'),
+      f('恢复到保存点', `由 Editor 读取自己的快照，恢复为 ${saved}；不是逐条执行操作的逆过程。`, nodes.map(v => v.id === 'editor' ? { ...v, sub: `内容：${saved}`, tone: 'accent' } : v), [e('history', 'snapshot', '取出'), e('snapshot', 'editor', 'restore')], ['editor'], { '当前内容': saved, '保存点': saved }, `editor.restore(history.pop()) → "${saved}"`)
+    ] };
+  }
+
+  function observing(detach) {
+    const nodes = [n('subject', 'Subject', '文章发布主题', 190, 210, 'blue', 145), n('mail', '邮件订阅者', 'update(event)', 590, 95), n('sms', '短信订阅者', 'update(event)', 590, 220), n('app', 'App 订阅者', detach ? '已取消订阅' : 'update(event)', 590, 345)];
+    const ids = detach ? ['mail', 'sms'] : ['mail', 'sms', 'app'];
+    return { label: detach ? 'App 取消订阅' : '保留三个订阅者', frames: [
+      f('维护订阅关系', '主题保存观察者引用；观察者可以注册，也可以主动取消。', nodes, ids.map(id => e('subject', id, '已订阅')), ['subject'], { '订阅人数': ids.length, '本次收到': 0 }, detach ? 'subject.detach(app)' : 'subject.attach(mail, sms, app)'),
+      f('主题发布一个变化', '主题遍历当前订阅列表，调用统一的 update 接口。', nodes, ids.map(id => e('subject', id, 'update')), ['subject'], { '订阅人数': ids.length, '本次收到': 0 }, 'subject.publish("新文章")'),
+      f('当前观察者收到通知', detach ? '邮件与短信收到事件，App 不再收到；无需修改主题的发布逻辑。' : '同一个变化触发三个观察者。各观察者可自行决定如何响应。', nodes.map(v => ids.includes(v.id) ? { ...v, sub: '已收到：新文章', tone: 'accent' } : v), ids.map(id => e('subject', id, '已通知')), ids, { '订阅人数': ids.length, '本次收到': ids.length }, `${ids.join(', ')}.update("新文章")`)
+    ] };
+  }
+
+  function stateMachine(blocked) {
+    const nodes = [n('draft', 'Draft', '可编辑 / 可提交', 170, 200, 'blue'), n('review', 'Review', '等待审核', 400, 200, 'blue'), n('published', 'Published', '已发布', 630, 200, 'blue')];
+    const transitions = [e('draft', 'review', 'submit'), e('review', 'published', 'approve')];
+    return { label: blocked ? '草稿直接审核' : '提交后再审核', frames: [
+      f('上下文持有当前状态', '同一个 approve 请求交给当前状态处理；起始状态是 Draft。', nodes, transitions, ['draft'], { '当前状态': 'Draft', '发布次数': 0 }, 'article.state = Draft()'),
+      f(blocked ? 'Draft 拒绝 approve' : 'submit 改变当前状态', blocked ? '当前 Draft 不接受审核通过事件；状态保持 Draft。' : 'Draft.submit 把上下文的状态切换为 Review。', nodes.map(v => v.id === (blocked ? 'draft' : 'review') ? { ...v, tone: 'accent' } : v), transitions, [blocked ? 'draft' : 'review'], { '当前状态': blocked ? 'Draft' : 'Review', '发布次数': 0 }, blocked ? 'Draft.approve() → rejected; state unchanged' : 'Draft.submit(context) → context.state = Review()'),
+      f(blocked ? '合法提交后进入 Review' : 'Review 接受 approve', blocked ? '随后执行 submit 才进入审核态。相同请求的效果取决于当前状态。' : 'Review.approve 切换为 Published；状态对象决定合法转换。', nodes.map(v => v.id === (blocked ? 'review' : 'published') ? { ...v, tone: 'accent' } : v), transitions, [blocked ? 'review' : 'published'], { '当前状态': blocked ? 'Review' : 'Published', '发布次数': blocked ? 0 : 1 }, blocked ? 'Draft.submit(context) → Review' : 'Review.approve(context) → Published')
+    ] };
+  }
+
+  function strategy(express) {
+    const cost = express ? 25 : 10;
+    const nodes = [n('context', 'Checkout', '只调用 shipping(weight)', 190, 210, 'blue', 160), n('standard', '普通配送策略', '每公斤 ¥5', 480, 110), n('express', '加急配送策略', '每公斤 ¥10 + ¥5', 480, 310), n('result', '运费', `¥${cost}`, 690, 210, 'accent', 100)];
+    return { label: express ? '选择加急配送' : '选择普通配送', frames: [
+      f('外部选择策略', '相同包裹重 2 kg；调用方先决定本次使用哪一种可替换算法。', nodes, [e('context', express ? 'express' : 'standard', '注入')], [express ? 'express' : 'standard'], { '重量': '2 kg', '运费': '待计算' }, express ? 'checkout.shipping = express' : 'checkout.shipping = standard'),
+      f('上下文委托算法', express ? '加急算法计算 2 × 10 + 5。' : '普通算法计算 2 × 5；结算流程不需要知道公式细节。', nodes, [e('context', express ? 'express' : 'standard', 'shipping(2)')], ['context', express ? 'express' : 'standard'], { '重量': '2 kg', '算法': express ? '加急' : '普通' }, express ? 'express(2) = 2 * 10 + 5' : 'standard(2) = 2 * 5'),
+      f('同一接口，不同结果', `运费为 ¥${cost}；切换策略不会自动触发另一策略或改变上下文状态。`, nodes, [e(express ? 'express' : 'standard', 'result', `¥${cost}`)], ['result'], { '重量': '2 kg', '运费': `¥${cost}` }, `checkout.total_shipping(2) → ${cost}`)
+    ] };
+  }
+
+  function template(csv) {
+    const type = csv ? 'CSV' : 'JSON';
+    const nodes = [n('read', 'read', '基类读取', 150, 210), n('parse', `parse_${type.toLowerCase()}`, '子类可变步骤', 400, 210, 'blue', 155), n('save', 'save', '基类保存', 650, 210)];
+    return { label: `${type} 导入器`, frames: [
+      f('模板固定步骤顺序', '基类 run 规定 read → parse → save；子类只覆盖解析步骤。', nodes, [e('read', 'parse'), e('parse', 'save')], ['read', 'parse', 'save'], { '已完成': '0 / 3', '输入类型': type }, 'Importer.run(): read(); parse(raw); save(rows)'),
+      f('1 · 共用读取步骤', `读取一段 ${type} 文本，还没有解析成记录。`, nodes, [e('read', 'parse', 'raw')], ['read'], { '已完成': '1 / 3', '输入类型': type }, csv ? 'raw = "name\nAda"' : 'raw = \'[{"name": "Ada"}]\''),
+      f('2 · 子类实现 parse', csv ? 'CSVImporter 把表头与数据行组成字典记录。' : 'JSONImporter 用 JSON 解析器得到字典列表。', nodes, [e('parse', 'save', 'rows')], ['parse'], { '已完成': '2 / 3', '记录数': 1 }, csv ? 'list(csv.DictReader(io.StringIO(raw)))' : 'json.loads(raw)'),
+      f('3 · 回到共用保存步骤', '两种导入器都把同一种记录结构交给 save；算法骨架保持一致。', nodes.map(v => v.id === 'save' ? { ...v, sub: '保存 Ada 的记录', tone: 'accent' } : v), [e('read', 'parse'), e('parse', 'save')], ['save'], { '已完成': '3 / 3', '记录数': 1 }, 'save([{"name": "Ada"}])')
+    ] };
+  }
+
+  function visiting(labelMode) {
+    const nodes = [n('visitor', labelMode ? 'LabelVisitor' : 'TaxVisitor', labelMode ? '生成标签操作' : '计算税额操作', 170, 210, 'blue', 160), n('book', 'Book(100)', 'accept(visitor)', 430, 100), n('food', 'Food(100)', 'accept(visitor)', 430, 320), n('result', '操作结果', labelMode ? '图书 / 食品' : '5 + 10 = 15', 680, 210, 'accent', 140)];
+    return { label: labelMode ? '生成品类标签' : '计算分类税额', frames: [
+      f('固定元素，替换操作', 'Book 与 Food 的类不变，调用方选择要施加的访问者。', nodes, [e('visitor', 'book', 'accept'), e('visitor', 'food', 'accept')], ['visitor'], { '已访问': 0, '结果': '待计算' }, labelMode ? 'visitor = LabelVisitor()' : 'visitor = TaxVisitor()'),
+      f('由元素选择对应入口', 'Book.accept 调用 visit_book(self)。先按元素选择入口，再执行当前访问者的实现。', nodes, [e('visitor', 'book', 'accept'), e('book', 'visitor', 'visit_book')], ['book', 'visitor'], { '已访问': 1, '结果': labelMode ? '图书' : '5' }, labelMode ? 'Book.accept(v) → v.visit_book(self) → "图书"' : 'Book.accept(v) → v.visit_book(self) → 100 * 0.05'),
+      f('另一类元素走另一入口', 'Food.accept 调用 visit_food(self)。增加操作可增加访问者；增加元素类型则要修改访问者接口。', nodes, [e('food', 'visitor', 'visit_food'), e('visitor', 'result', '汇总')], ['food', 'result'], { '已访问': 2, '结果': labelMode ? '图书 / 食品' : '税额 15' }, labelMode ? 'Food.accept(v) → "食品"; results = ["图书", "食品"]' : 'Food.accept(v) → 10; total_tax = 5 + 10 = 15')
+    ] };
+  }
+
+  window.BEHAVIOR_PATTERNS = [
+    {
+      id: 'chain-of-responsibility', name: '责任链', en: 'Chain of Responsibility', category: 'behavioral',
+      intent: '把请求沿处理链传递，由能够处理的节点接手。',
+      problem: '提交方不应写死审批人，处理规则和顺序却会随业务变化。',
+      when: '分级审批、逐级匹配处理器；发送方无需知道最终接收者。',
+      avoid: '每个步骤都必须执行且顺序固定时，普通流水线通常更直接。',
+      tradeoff: '链顺序影响结果；请求可能无人处理，需要定义链尾语义。',
+      compare: { id: 'decorator', name: '装饰器', difference: '责任链寻找处理者，节点可终止传递；装饰器层层叠加职责并委托被包装对象。' },
+      code: `class Approver:
+    def __init__(self, name, limit, next_handler=None):
+        self.name, self.limit = name, limit
+        self.next = next_handler
+
+    def handle(self, amount):
+        if amount <= self.limit:
+            return self.name
+        if self.next:
+            return self.next.handle(amount)
+        return "无人可审批"
+
+director = Approver("总监", 5000)
+manager = Approver("经理", 2000, director)
+staff = Approver("组长", 500, manager)
+print(staff.handle(400))   # 组长
+print(staff.handle(4000))  # 总监
+print(staff.handle(6000))  # 无人可审批`,
+      demo: demo('报销单穿过审批链', '这里采用首个能处理者终止的链；某些责任链会让多个节点继续处理。额度是教学参数。', [approval(400), approval(4000)])
+    },
+    {
+      id: 'command', name: '命令', en: 'Command', category: 'behavioral',
+      intent: '把一次请求连同接收者和参数封装成对象。',
+      problem: '按钮与业务操作绑在一起，就难以统一排队、记录或撤销。',
+      when: '编辑器操作、任务队列、宏命令，需要把触发时机和执行逻辑分开。',
+      avoid: '只是立即调用一个简单函数时，额外的命令类未必有收益。',
+      tradeoff: '命令数量会增加；undo、重试与持久化都需要额外设计，不由模式自动提供。',
+      compare: { id: 'strategy', name: '策略', difference: '命令代表一次带参数的请求；策略代表可替换的算法，通常会被上下文重复使用。' },
+      code: `class Document:
+    def __init__(self):
+        self.text = ""
+
+class Insert:
+    def __init__(self, doc, text):
+        self.doc, self.text = doc, text
+
+    def execute(self):
+        self.before = self.doc.text
+        self.doc.text += self.text
+
+    def undo(self):
+        self.doc.text = self.before
+
+doc = Document()
+command = Insert(doc, "A")
+command.execute()
+print(doc.text)  # A
+command.undo()
+print(repr(doc.text))  # ''
+queue = [Insert(doc, "A"), Insert(doc, "B")]
+for command in queue:
+    command.execute()
+print(doc.text)  # AB`,
+      demo: demo('可排队、可撤销的文档插入', 'undo 用执行前快照实现；只撤销最近一次且无并发修改的操作。外部不可逆动作不一定能撤销。', [command(true), command(false)])
+    },
+    {
+      id: 'interpreter', name: '解释器', en: 'Interpreter', category: 'behavioral',
+      intent: '用表达式对象表示语法规则，递归解释组合而成的句子。',
+      problem: '业务规则像一门小语言，直接堆条件分支会难以组合和求值。',
+      when: '语法简单且稳定的小型规则语言、表达式树。',
+      avoid: '复杂通用语言应考虑成熟解析器；不要把不可信字符串交给 eval。',
+      tradeoff: '每条规则往往对应一个类；语法复杂时类数量和解析成本都会上升。',
+      compare: { id: 'composite', name: '组合', difference: '组合表达树形整体与部分；解释器常借助组合树，但额外定义语法规则和求值语义。' },
+      code: `class Number:
+    def __init__(self, value):
+        self.value = value
+    def interpret(self):
+        return self.value
+
+class Add:
+    def __init__(self, left, right):
+        self.left, self.right = left, right
+    def interpret(self):
+        return self.left.interpret() + self.right.interpret()
+
+class Multiply(Add):
+    def interpret(self):
+        return self.left.interpret() * self.right.interpret()
+
+simple = Add(Number(2), Number(3))
+nested = Add(Number(2), Multiply(Number(3), Number(4)))
+print(simple.interpret())  # 5
+print(nested.interpret())  # 14`,
+      demo: demo('沿语法树求值', '直接构造语法树，未实现字符串词法分析或解析器；树的层级已经明确运算关系。', [expression(false), expression(true)])
+    },
+    {
+      id: 'iterator', name: '迭代器', en: 'Iterator', category: 'behavioral',
+      intent: '通过统一接口顺序访问集合，而不暴露内部存储方式。',
+      problem: '调用方直接依赖索引和存储结构，换成树或流时遍历代码就要重写。',
+      when: '集合有多种遍历方式，或需要惰性产生元素、维护独立游标。',
+      avoid: 'Python 的 for、生成器和内建迭代器已经够用时，优先直接使用。',
+      tradeoff: '需要定义遍历期间修改集合的行为；一次性迭代器耗尽后不会自动重来。',
+      compare: { id: 'visitor', name: '访问者', difference: '迭代器决定如何逐个取元素；访问者决定对不同类型元素执行什么操作。' },
+      code: `class Shelf:
+    def __init__(self, books):
+        self._books = tuple(books)
+
+    def __iter__(self):
+        for book in self._books:
+            yield book
+
+    def __reversed__(self):
+        for book in reversed(self._books):
+            yield book
+
+shelf = Shelf(["A", "B", "C"])
+forward = iter(shelf)
+backward = reversed(shelf)
+print(list(forward))   # ['A', 'B', 'C']
+print(list(backward))  # ['C', 'B', 'A']
+print(list(forward))   # []，已经耗尽`,
+      demo: demo('集合不动，游标改变访问顺序', '用固定集合展示正向与逆向遍历；不演示遍历中修改集合、并发或无限流。', [iteration(false), iteration(true)])
+    },
+    {
+      id: 'mediator', name: '中介者', en: 'Mediator', category: 'behavioral',
+      intent: '让多个组件通过一个协调者协作，减少彼此直接依赖。',
+      problem: '表单中的输入框和按钮互相调用，组件数量一多就形成关系网。',
+      when: '表单联动、对话框控件、参与者之间有明确的集中协调规则。',
+      avoid: '独立组件之间没有协作规则时，不需要为了集中而集中。',
+      tradeoff: '关系复杂性集中到中介者；规则过多会使它变成难维护的巨型对象。',
+      compare: { id: 'observer', name: '观察者', difference: '中介者封装多方的协作规则；观察者传播一个主题的变化，通常不负责整体协调。' },
+      code: `class Field:
+    def __init__(self, mediator):
+        self.mediator, self.value = mediator, ""
+    def set(self, value):
+        self.value = value
+        self.mediator.changed()
+
+class Button:
+    enabled = False
+
+class FormMediator:
+    def __init__(self):
+        self.name, self.email = Field(self), Field(self)
+        self.button = Button()
+    def changed(self):
+        self.button.enabled = bool(self.name.value) and (
+            "@" in self.email.value)
+
+form = FormMediator()
+form.email.set("ada@example.test")
+print(form.button.enabled)  # False
+form.name.set("Ada")
+print(form.button.enabled)  # True`,
+      demo: demo('输入组件通过表单协调者更新按钮', '邮箱校验仅用 @ 示意业务条件，不是完整校验器；中介者不等同网络消息代理。', [mediation(false), mediation(true)])
+    },
+    {
+      id: 'memento', name: '备忘录', en: 'Memento', category: 'behavioral',
+      intent: '在保持封装的前提下保存对象状态，供以后恢复。',
+      problem: '历史管理器需要撤回状态，却不应掌握对象内部所有字段。',
+      when: '编辑器快照、游戏存档、对象状态回滚。',
+      avoid: '状态很大且变化很频繁时，完整快照可能比增量操作记录更昂贵。',
+      tradeoff: '占用存储；快照必须独立于后续修改，还要定义保存粒度与保留期限。',
+      compare: { id: 'command', name: '命令', difference: '备忘录保存“当时是什么”；命令保存“要做什么”。命令的撤销也可以借助备忘录。' },
+      code: `from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class _Snapshot:
+    _text: str
+
+class Editor:
+    def __init__(self, text):
+        self.text = text
+    def save(self):
+        return _Snapshot(self.text)
+    def restore(self, snapshot):
+        self.text = snapshot._text
+
+for saved_text in ("A", "AB"):
+    editor = Editor(saved_text)
+    history = [editor.save()]  # 仅保管，不检查字段
+    editor.text = "ABC"
+    editor.restore(history.pop())
+    print(editor.text)  # A，然后 AB`,
+      demo: demo('同一次恢复，取决于保存时刻', '以不可变字符串快照示意封装；Python 下划线是访问约定。可变嵌套状态要额外处理复制。', [snapshot(false), snapshot(true)])
+    },
+    {
+      id: 'observer', name: '观察者', en: 'Observer', category: 'behavioral',
+      intent: '主题变化时，通知当前注册的多个观察者。',
+      problem: '新增通知渠道不应迫使主题依赖每一种具体接收者。',
+      when: 'UI 数据绑定、领域事件、同一变化需要触发多种独立响应。',
+      avoid: '只有一个固定调用目标时，直接调用更清楚；需要可靠投递时应另设计消息机制。',
+      tradeoff: '要管理订阅生命周期、防止重复订阅和通知环；通知顺序、异步性与失败隔离需显式约定。',
+      compare: { id: 'mediator', name: '中介者', difference: '观察者强调一对多变化通知；中介者集中封装多个参与者之间的协作规则。' },
+      code: `class Subject:
+    def __init__(self):
+        self.observers = []
+    def attach(self, observer):
+        self.observers.append(observer)
+    def detach(self, observer):
+        self.observers.remove(observer)
+    def publish(self, event):
+        for observer in tuple(self.observers):
+            observer.update(event)
+
+class Subscriber:
+    def __init__(self, name):
+        self.name = name
+    def update(self, event):
+        print(self.name, event)
+
+subject = Subject()
+mail, sms, app = [Subscriber(n) for n in ("邮件", "短信", "App")]
+for observer in (mail, sms, app):
+    subject.attach(observer)
+subject.publish("第一篇文章")  # 三个接收者
+subject.detach(app)
+subject.publish("第二篇文章")  # 邮件、短信`,
+      demo: demo('文章发布触发当前订阅者', '经典直接通知的观察者模型；箭头不表示并行或可靠投递，也不把所有异步 Pub/Sub 等同此模式。', [observing(false), observing(true)])
+    },
+    {
+      id: 'state', name: '状态', en: 'State', category: 'behavioral',
+      intent: '把与状态有关的行为交给状态对象，让同一请求产生不同反应。',
+      problem: '对象每个方法都在重复检查 status，合法转换规则散落在条件分支里。',
+      when: '订单、文档、播放器等有清晰状态和转换规则的对象。',
+      avoid: '只有少量稳定状态且行为简单时，枚举加条件判断可能更易读。',
+      tradeoff: '增加状态类；必须明确谁负责转换，避免上下文和状态对象互相争夺规则。',
+      compare: { id: 'strategy', name: '策略', difference: '状态描述对象当前所处阶段，事件可推动内部转换；策略通常由外部选择可替换算法。' },
+      code: `class Draft:
+    name = "Draft"
+    def handle(self, context, event):
+        if event == "submit":
+            context.state = Review()
+
+class Review:
+    name = "Review"
+    def handle(self, context, event):
+        if event == "approve":
+            context.state = Published()
+
+class Published:
+    name = "Published"
+    def handle(self, context, event):
+        pass
+
+class Article:
+    def __init__(self):
+        self.state = Draft()
+    def send(self, event):
+        self.state.handle(self, event)
+        print(self.state.name)
+
+article = Article()
+article.send("approve")  # Draft，不接受此事件
+article.send("submit")   # Review
+article.send("approve")  # Published`,
+      demo: demo('稿件由当前状态决定能否审核', '仅演示三种状态和两个事件；转换规则是示例业务，并非状态模式要求的固定流程。', [stateMachine(false), stateMachine(true)])
+    },
+    {
+      id: 'strategy', name: '策略', en: 'Strategy', category: 'behavioral',
+      intent: '把同一任务的不同算法封装起来，由上下文按统一接口使用。',
+      problem: '配送或计价算法不断增加，结算流程被越来越多分支打断。',
+      when: '多种可互换的计费、排序、压缩或路径算法，需要独立选择和测试。',
+      avoid: '算法只有一种或只是简单参数差异时，参数或函数往往已经足够。',
+      tradeoff: '调用方需要了解算法差异；在 Python 中策略可直接使用函数，不必强建类层次。',
+      compare: { id: 'template-method', name: '模板方法', difference: '策略通过组合替换算法；模板方法通过继承替换固定骨架中的步骤。' },
+      code: `def standard(weight):
+    return weight * 5
+
+def express(weight):
+    return weight * 10 + 5
+
+class Checkout:
+    def __init__(self, shipping):
+        self.shipping = shipping
+    def total_shipping(self, weight):
+        return self.shipping(weight)
+
+checkout = Checkout(standard)
+print(checkout.total_shipping(2))  # 10
+checkout.shipping = express
+print(checkout.total_shipping(2))  # 25`,
+      demo: demo('同一个结算流程，换一种运费算法', '价格为教学参数；展示函数作为策略，算法选择与页面中的“状态模式”业务转换不同。', [strategy(false), strategy(true)])
+    },
+    {
+      id: 'template-method', name: '模板方法', en: 'Template Method', category: 'behavioral',
+      intent: '在基类固定算法骨架，把可变步骤留给子类实现。',
+      problem: '多个导入器重复相同流程，只有解析方式存在差异。',
+      when: '处理步骤和顺序稳定，但少数步骤会随具体类型变化。',
+      avoid: '步骤组合经常在运行时改变时，组合或策略通常更灵活。',
+      tradeoff: '子类与基类骨架耦合；子类不应随意覆盖模板方法来破坏顺序。',
+      compare: { id: 'strategy', name: '策略', difference: '模板方法把变化点留在继承层次；策略把算法作为对象或函数注入上下文。' },
+      code: `import csv
+import io
+import json
+from abc import ABC, abstractmethod
+
+class Importer(ABC):
+    def run(self, raw):
+        data = self.read(raw)
+        rows = self.parse(data)
+        return self.save(rows)
+    def read(self, raw):
+        return raw
+    @abstractmethod
+    def parse(self, data):
+        pass
+    def save(self, rows):
+        return rows
+
+class JSONImporter(Importer):
+    def parse(self, data):
+        return json.loads(data)
+
+class CSVImporter(Importer):
+    def parse(self, data):
+        return list(csv.DictReader(io.StringIO(data)))
+
+print(JSONImporter().run('[{"name":"Ada"}]'))
+print(CSVImporter().run("name\\nAda"))
+# 两次都是 [{'name': 'Ada'}]`,
+      demo: demo('导入器共享骨架，仅替换解析步骤', 'read 和 save 在最小示例中只返回数据，不做真实文件或数据库操作；骨架顺序可直接检查。', [template(false), template(true)])
+    },
+    {
+      id: 'visitor', name: '访问者', en: 'Visitor', category: 'behavioral',
+      intent: '把对一组元素类型的操作放进访问者，通过 accept 分派到对应操作。',
+      problem: '元素类型稳定，但不断新增计税、导出等操作，不想反复改元素类。',
+      when: '稳定的语法树、文档节点或商品类型，需要经常添加跨类型操作。',
+      avoid: '元素种类经常增加时，每次都要同步修改所有访问者，维护成本很高。',
+      tradeoff: '访问者需要元素暴露足够信息；增加操作容易，增加元素类型较难。',
+      compare: { id: 'iterator', name: '迭代器', difference: '迭代器负责取出元素；访问者利用元素的具体类型选择操作，两者可以一起使用。' },
+      code: `class Book:
+    def __init__(self, price):
+        self.price = price
+    def accept(self, visitor):
+        return visitor.visit_book(self)
+
+class Food:
+    def __init__(self, price):
+        self.price = price
+    def accept(self, visitor):
+        return visitor.visit_food(self)
+
+class TaxVisitor:
+    def visit_book(self, book):
+        return book.price * 0.05
+    def visit_food(self, food):
+        return food.price * 0.10
+
+class LabelVisitor:
+    def visit_book(self, book):
+        return "图书"
+    def visit_food(self, food):
+        return "食品"
+
+items = [Book(100), Food(100)]
+print(sum(item.accept(TaxVisitor()) for item in items))  # 15.0
+print([item.accept(LabelVisitor()) for item in items])  # ['图书', '食品']`,
+      demo: demo('相同元素，施加不同访问操作', 'Python 用显式 visit_book / visit_food 表达两次分派；不是依赖语言的函数重载。税率为教学参数。', [visiting(false), visiting(true)])
+    }
+  ];
+})();
+
+(() => {
+'use strict';
+const patterns = [...window.CREATION_PATTERNS, ...window.BEHAVIOR_PATTERNS];
+const $ = id => document.getElementById(id);
+const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const categories = {creational:{name:'创建型',en:'CREATIONAL',note:'对象如何诞生'},structural:{name:'结构型',en:'STRUCTURAL',note:'对象如何组合'},behavioral:{name:'行为型',en:'BEHAVIORAL',note:'对象如何协作'}};
+const state = {id:'builder',variant:0,step:0,category:'all',query:'',yaw:-28,pitch:28,playing:false};
+let timer = null, animationFrame = null, copyTimer = null, drag = null;
+const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+const mobile = window.matchMedia('(max-width: 700px)');
+const current = () => patterns.find(p => p.id === state.id);
+const variant = () => current().demo.variants[state.variant];
+const frame = () => variant().frames[state.step];
+function stop() {clearTimeout(timer); timer=null;state.playing=false;$('play').textContent='▶ 播放过程';}
+function renderNav() {
+  const filtered = patterns.filter(p => (state.category === 'all' || p.category===state.category) && [p.name,p.en,p.intent,p.problem,p.when].join(' ').toLowerCase().includes(state.query.toLowerCase()));
+  $('pattern-list').innerHTML = Object.entries(categories).map(([key,category]) => {
+    const list=filtered.filter(p=>p.category===key);
+    return list.length?`<div class="nav-group"><div class="nav-category">${category.name}<small>${list.length.toString().padStart(2,'0')}</small></div>${list.map(p=>`<button class="pattern-link ${p.id===state.id?'active':''}" data-pattern="${p.id}" ${p.id===state.id?'aria-current="page"':''}><span class="num">${(patterns.indexOf(p)+1).toString().padStart(2,'0')}</span><span class="nav-label">${escape(p.name)}</span>${p.demo.kind==='3d'?'<span class="spatial-mark">3D</span>':''}</button>`).join('')}</div>`:'';
+  }).join('') || '<p class="empty-nav">没有找到匹配的模式。<br>试试「通知」「创建」或英文名称。</p>';
+}
+function highlightCode(code) {
+ return code.split('\n').map((line,i)=>{
+   let html='',index=0;
+   const re=/(#[^\n]*|"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|\b(?:class|def|return|if|else|elif|for|in|import|from|as|with|assert|True|False|None|lambda|yield|pass|raise|not|and|or|is|while|try|except|super)\b)/g;
+   for(const m of line.matchAll(re)){html+=escape(line.slice(index,m.index));html+=`<span class="${m[0].startsWith('#')?'comment':/^["']/.test(m[0])?'str':'kw'}">${escape(m[0])}</span>`;index=m.index+m[0].length;}
+   return `<span class="code-line"><span class="number" aria-hidden="true">${i+1}</span>${html+escape(line.slice(index))}</span>`;
+ }).join('\n');
+}
+function setTab(name) {
+ const names=['code','decision'];
+ names.forEach(n=>{$(`${n}-tab`).setAttribute('aria-selected',String(n===name));$(`${n}-tab`).tabIndex=n===name?0:-1;$(`${n}-panel`).hidden=n!==name;});
+ $('copy-code').hidden=name!=='code';
+}
+function selectPattern(id, fromHash=false) {
+ if(!patterns.some(p=>p.id===id))id='builder';
+ stop();state.id=id;state.variant=0;state.step=0;state.yaw=-28;state.pitch=28;
+ const p=current(),index=patterns.indexOf(p),category=categories[p.category];
+ if(!fromHash && location.hash!=='#'+id)history.replaceState(null,'','#'+id);
+ $('pattern-no').textContent=String(index+1).padStart(2,'0')+' / 24';
+ $('pattern-category').textContent=category.name+' · '+category.en;
+ $('bonus-tag').hidden=id!=='simple-factory';
+ $('pattern-heading').innerHTML=`${escape(p.name)}模式 <span>${escape(p.en)}</span>`;
+ document.title=`${p.name}模式 · Pattern Atlas 设计模式速查`;
+ $('pattern-intent').textContent=p.intent;
+ $('render-kind').textContent=p.demo.kind==='3d'?'3D STRUCTURE':'2D PROCESS';
+ $('scenario').textContent=p.demo.metaphor;
+ $('stage').classList.toggle('spatial',p.demo.kind==='3d');
+ $('view-controls').hidden=p.demo.kind!=='3d';$('reset-view').hidden=p.demo.kind!=='3d';
+ $('stage-hint').textContent=p.demo.kind==='3d'?'拖动旋转 · 滑块调整视角':'箭头表示引用 / 消息方向';
+ $('variant').innerHTML=p.demo.variants.map((v,i)=>`<option value="${i}">${escape(v.label)}</option>`).join('');
+ $('experiment-prompt').textContent='试着预测「'+p.demo.variants[0].label+'」与「'+p.demo.variants[1].label+'」的结果有何不同，再逐步验证。';
+ ['problem','when','tradeoff','avoid'].forEach(key=>$(key).textContent=p[key]);
+ $('decision-when').textContent=p.when;
+ $('transfer').textContent='换一个你熟悉的业务：'+p.problem+' 先指出变化的是哪一部分，再说明为什么「'+p.name+'」能隔离这种变化，以及它增加了什么成本。';
+ $('compare-copy').textContent=p.compare.difference;
+ $('compare-link').textContent='对照阅读：'+p.compare.name+' →';
+ $('compare-link').dataset.pattern=p.compare.id;
+ $('model-caveat').textContent=p.demo.caveat;
+ $('python-code').innerHTML=highlightCode(p.code);
+ $('next-bottom').textContent='下一个：'+patterns[(index+1)%patterns.length].name+' →';
+ $('yaw').value=state.yaw;$('pitch').value=state.pitch;
+ setTab('code');renderNav();renderFrame();
+}
+const palette={neutral:{top:'#edf0e4',front:'#d3ddc8',side:'#b6c5a9',stroke:'#8d9e7e'},accent:{top:'#f2c6a6',front:'#dba27a',side:'#b97651',stroke:'#a56747'},blue:{top:'#d3dcf0',front:'#b0c0df',side:'#889fc9',stroke:'#748ab3'}};
+function nodeTone(n){return palette[n.tone]||palette.neutral;}
+function defs() {return '<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9" fill="none" stroke="#9eaf92" stroke-width="1.5"/></marker><marker id="arrow-active" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9" fill="none" stroke="#b3684e" stroke-width="1.5"/></marker></defs>';}
+function render2D(f) {
+ const byId=new Map(f.nodes.map(n=>[n.id,n]));const active=new Set(f.active||[]);
+ const edges=f.edges.map(e=>{
+  const a=byId.get(e.from),b=byId.get(e.to);if(!a||!b)return '';
+  const dx=b.x-a.x,dy=b.y-a.y;const al=Math.max(Math.abs(dx)/((a.w||125)/2+8),Math.abs(dy)/((a.h||55)/2+8))||1;const bl=Math.max(Math.abs(dx)/((b.w||125)/2+8),Math.abs(dy)/((b.h||55)/2+8))||1;
+  const sx=a.x+dx/al,sy=a.y+dy/al,tx=b.x-dx/bl,ty=b.y-dy/bl;
+  const hot=active.has(e.to)&&active.has(e.from);
+  // Parallel or reverse messages use a small bend to remain distinguishable.
+  const reverse=f.edges.some(other=>other!==e&&other.from===e.to&&other.to===e.from);
+  const bend=reverse?20:0,mx=(sx+tx)/2-dy/(Math.hypot(dx,dy)||1)*bend,my=(sy+ty)/2+dx/(Math.hypot(dx,dy)||1)*bend;
+  const path=reverse?`M${sx},${sy} Q${mx},${my} ${tx},${ty}`:`M${sx},${sy} L${tx},${ty}`;
+  return `<g><path class="scene-edge ${hot?'active':''}" d="${path}" marker-end="url(#${hot?'arrow-active':'arrow'})"/>${e.label?`<text class="edge-label" x="${mx}" y="${my-10}" text-anchor="middle">${escape(e.label)}</text>`:''}</g>`;
+ }).join('');
+ const nodes=f.nodes.map(n=>{const c=nodeTone(n),hot=active.has(n.id);const w=n.w||125,h=n.h||55;
+ return `<g class="node ${hot?'focused':''}" data-part="${escape(n.id)}" aria-label="${escape(n.label+': '+(n.sub||''))}" transform="translate(${n.x-w/2} ${n.y-h/2})"><title>${escape(n.label+' '+(n.sub||''))}</title><rect x="3" y="5" width="${w}" height="${h}" rx="4" fill="#d5dccb" opacity=".38"/><rect width="${w}" height="${h}" rx="4" fill="${hot?'#fae8d9':c.top}" stroke="${hot?'#b56c4c':c.stroke}" stroke-width="${hot?1.7:1}"/><circle class="node-dot" cx="11" cy="11" r="2"/><text class="node-label" x="${w/2}" y="${h/2+(n.sub?-2:6)}" text-anchor="middle">${escape(n.label)}</text>${n.sub?`<text class="node-sub" x="${w/2}" y="${h/2+17}" text-anchor="middle">${escape(n.sub)}</text>`:''}</g>`;
+ }).join('');
+ return defs()+edges+nodes;
+}
+function render3D(f) {
+ const yr=state.yaw*Math.PI/180,pr=state.pitch*Math.PI/180,cy=Math.cos(yr),sy=Math.sin(yr),cp=Math.cos(pr),sp=Math.sin(pr);
+ const project=([x,y,z])=>{const rx=x*cy+z*sy,rz=-x*sy+z*cy;return {x:400+rx*1.08,y:285+(-y*cp+rz*sp)*1.08,depth:rz*cp+y*sp};};
+ const points=arr=>arr.map(v=>{const p=project(v);return p.x.toFixed(2)+','+p.y.toFixed(2);}).join(' ');
+ let floor='';for(let n=-300;n<=300;n+=50){floor+=`<path class="floor-line" d="M${points([[n,-38,-160],[n,-38,160]]).replace(' ',' L')}"/>`;}
+ for(let n=-150;n<=150;n+=50){floor+=`<path class="floor-line" d="M${points([[-300,-38,n],[300,-38,n]]).replace(' ',' L')}"/>`;}
+ const active=new Set(f.active||[]),byId=new Map(f.nodes.map(n=>[n.id,n]));
+ const edges=f.edges.map(e=>{const a=byId.get(e.from),b=byId.get(e.to);if(!a||!b)return '';const pa=project([a.x,a.y,a.z]),pb=project([b.x,b.y,b.z]);const hot=active.has(e.from)&&active.has(e.to);return `<g><path class="scene-edge ${hot?'active':''}" d="M${pa.x},${pa.y} L${pb.x},${pb.y}" marker-end="url(#${hot?'arrow-active':'arrow'})"/>${e.label?`<text class="edge-label" text-anchor="middle" x="${(pa.x+pb.x)/2}" y="${(pa.y+pb.y)/2-9}">${escape(e.label)}</text>`:''}</g>`;}).join('');
+ const faces=[],labels=[];
+ f.nodes.forEach(n=>{
+  const x=n.x,y=n.y,z=n.z||0,w=(n.w||110)/2,h=(n.h||48)/2,d=(n.d||65)/2,c=nodeTone(n),hot=active.has(n.id);
+  const verts=[[-w,-h,-d],[w,-h,-d],[w,-h,d],[-w,-h,d],[-w,h,-d],[w,h,-d],[w,h,d],[-w,h,d]].map(v=>[v[0]+x,v[1]+y,v[2]+z]);
+  const sides=[{i:[4,5,6,7],normal:[0,1,0],color:c.top},{i:[3,2,6,7],normal:[0,0,1],color:c.front},{i:[0,1,5,4],normal:[0,0,-1],color:c.side},{i:[1,2,6,5],normal:[1,0,0],color:c.side},{i:[0,3,7,4],normal:[-1,0,0],color:c.front}];
+  sides.forEach(face=>{const [nx,ny,nz]=face.normal;const dot=-nx*sy*cp+ny*sp+nz*cy*cp;if(dot<=0)return;const vs=face.i.map(i=>verts[i]),depth=vs.reduce((sum,v)=>sum+project(v).depth,0)/4;
+   faces.push({depth,svg:`<polygon points="${points(vs)}" fill="${face.color}" stroke="${hot?'#a45937':c.stroke}" stroke-width="${hot?1.8:1}" stroke-linejoin="round"/>`});
+  });
+  const p=project([x,y,z]);labels.push({depth:p.depth,svg:`<g class="node ${hot?'focused':''}" data-part="${escape(n.id)}" aria-label="${escape(n.label+': '+(n.sub||''))}"><title>${escape(n.label+' '+(n.sub||''))}</title><text class="geometry-label" x="${p.x}" y="${p.y+(n.sub?-1:5)}" text-anchor="middle">${escape(n.label)}</text>${n.sub?`<text class="geometry-sub" x="${p.x}" y="${p.y+16}" text-anchor="middle">${escape(n.sub)}</text>`:''}</g>`});
+ });
+ faces.sort((a,b)=>a.depth-b.depth);labels.sort((a,b)=>a.depth-b.depth);
+ return defs()+floor+edges+faces.map(f=>f.svg).join('')+labels.map(l=>l.svg).join('');
+}
+function drawScene(animate=false) {
+ if(animationFrame){cancelAnimationFrame(animationFrame);animationFrame=null;}
+ const f=frame(),p=current(),markup=p.demo.kind==='3d'?render3D(f):render2D(f);
+ $('scene').innerHTML=`<title id="scene-title">${escape(p.name+'模式：'+f.title)}</title><desc id="scene-description">${escape(f.description+'。'+f.stats.map(s=>s.label+': '+s.value).join('；'))}</desc><g ${animate&&!reduced.matches?'class="scene-enter"':''}>${markup}</g>`;
+ $('scene').setAttribute('viewBox','0 0 800 440');
+ if(p.demo.kind==='3d'){
+  const boxes=[...$('scene').querySelectorAll('polygon')].map(el=>el.getBBox());
+  if(boxes.length){const x0=Math.min(...boxes.map(b=>b.x)),x1=Math.max(...boxes.map(b=>b.x+b.width)),y0=Math.min(...boxes.map(b=>b.y)),y1=Math.max(...boxes.map(b=>b.y+b.height));if(mobile.matches){const w=Math.max(420,x1-x0+70),h=Math.max(280,y1-y0+70);$('scene').setAttribute('viewBox',`${(x0+x1-w)/2} ${(y0+y1-h)/2} ${w} ${h}`);}else{const left=Math.min(0,x0-24),top=Math.min(0,y0-24),right=Math.max(800,x1+24),bottom=Math.max(440,y1+24);$('scene').setAttribute('viewBox',`${left} ${top} ${right-left} ${bottom-top}`);}}
+ }
+ if(animate&&!reduced.matches)animateSignals();
+}
+function animateSignals(){
+ const paths=[...$('scene').querySelectorAll('.scene-edge.active')];if(!paths.length)return;
+ const ns='http://www.w3.org/2000/svg',dots=paths.map(path=>{const dot=document.createElementNS(ns,'circle');dot.setAttribute('r','3');dot.setAttribute('class','signal');$('scene').appendChild(dot);return {dot,path,len:path.getTotalLength()};});
+ let start=null;
+ const tick=now=>{if(start===null)start=now;const phase=Math.min((now-start)/800,1);dots.forEach(({dot,path,len})=>{const p=path.getPointAtLength(len*phase);dot.setAttribute('cx',p.x);dot.setAttribute('cy',p.y);});if(phase<1&&!document.hidden)animationFrame=requestAnimationFrame(tick);else{dots.forEach(({dot})=>dot.remove());animationFrame=null;}};
+ animationFrame=requestAnimationFrame(tick);
+}
+function renderFrame(animate=false){
+ const f=frame(),count=variant().frames.length;
+ $('readouts').innerHTML=f.stats.map(s=>`<div class="readout"><span>${escape(s.label)}</span><strong>${escape(s.value)}</strong></div>`).join('');
+ $('step-counter').textContent=String(state.step+1).padStart(2,'0')+' / '+String(count).padStart(2,'0');
+ $('step-title').textContent=f.title;$('step-description').textContent=f.description;
+ $('trace-log').textContent=f.log;
+ $('parts-legend').innerHTML=f.nodes.map(n=>`<span class="part-key ${(f.active||[]).includes(n.id)?'active':''}"><b>${escape(n.label)}</b><span>${escape(n.sub)}</span></span>`).join('');
+ $('step-dots').innerHTML=variant().frames.map((f,i)=>`<button data-step="${i}" class="${i<state.step?'passed':i===state.step?'current':''}" aria-label="第 ${i+1} 步：${escape(f.title)}" ${i===state.step?'aria-current="step"':''}></button>`).join('');
+ $('step-next').disabled=state.step===count-1;
+ $('play').textContent=state.playing?'Ⅱ 暂停过程':state.step===count-1?'↺ 重播过程':'▶ 播放过程';
+ $('yaw-value').textContent=state.yaw+'°';$('pitch-value').textContent=state.pitch+'°';
+ drawScene(animate);
+}
+function advance(){if(state.step<variant().frames.length-1){state.step++;renderFrame(true);}else stop();}
+function schedule(){clearTimeout(timer);timer=setTimeout(()=>{if(!state.playing)return;advance();if(state.step===variant().frames.length-1)stop();else schedule();},1800);}
+function cycle(delta){const index=patterns.indexOf(current());selectPattern(patterns[(index+delta+patterns.length)%patterns.length].id);}
+$('pattern-list').addEventListener('click',e=>{const button=e.target.closest('[data-pattern]');if(button){selectPattern(button.dataset.pattern);$('pattern-heading').focus({preventScroll:true});}});
+$('search').addEventListener('input',e=>{state.query=e.target.value.trim();renderNav();});
+document.querySelectorAll('[data-category]').forEach(button=>button.addEventListener('click',()=>{state.category=button.dataset.category;document.querySelectorAll('[data-category]').forEach(b=>{b.classList.toggle('selected',b===button);b.setAttribute('aria-pressed',String(b===button));});renderNav();}));
+$('variant').addEventListener('change',e=>{stop();state.variant=Number(e.target.value);state.step=0;renderFrame(true);});
+$('step-next').addEventListener('click',()=>{stop();advance();});
+$('step-dots').addEventListener('click',e=>{const button=e.target.closest('[data-step]');if(button){stop();state.step=Number(button.dataset.step);renderFrame(true);}});
+$('play').addEventListener('click',()=>{if(state.playing){stop();return;}if(state.step===variant().frames.length-1){state.step=0;renderFrame();}state.playing=true;$('play').textContent='Ⅱ 暂停过程';schedule();});
+$('reset').addEventListener('click',()=>{stop();state.step=0;renderFrame();});
+$('previous-pattern').addEventListener('click',()=>cycle(-1));$('next-pattern').addEventListener('click',()=>cycle(1));$('next-bottom').addEventListener('click',()=>{cycle(1);$('pattern-heading').scrollIntoView({block:'start',behavior:reduced.matches?'instant':'smooth'});});
+$('compare-link').addEventListener('click',e=>selectPattern(e.currentTarget.dataset.pattern));
+function updateView(){state.yaw=Number($('yaw').value);state.pitch=Number($('pitch').value);$('yaw-value').textContent=state.yaw+'°';$('pitch-value').textContent=state.pitch+'°';drawScene();}
+$('yaw').addEventListener('input',updateView);$('pitch').addEventListener('input',updateView);
+$('reset-view').addEventListener('click',()=>{$('yaw').value=-28;$('pitch').value=28;updateView();});
+$('stage').addEventListener('pointerdown',e=>{if(current().demo.kind!=='3d'||e.button!==0)return;drag={x:e.clientX,y:e.clientY,yaw:state.yaw,pitch:state.pitch};$('stage').setPointerCapture(e.pointerId);$('stage').classList.add('dragging');});
+$('stage').addEventListener('pointermove',e=>{if(!drag)return;state.yaw=Math.round(Math.max(-75,Math.min(75,drag.yaw+(e.clientX-drag.x)*.28)));state.pitch=Math.round(Math.max(15,Math.min(65,drag.pitch+(e.clientY-drag.y)*.2)));$('yaw').value=state.yaw;$('pitch').value=state.pitch;updateView();});
+function endDrag(){drag=null;$('stage').classList.remove('dragging');}
+$('stage').addEventListener('pointerup',endDrag);$('stage').addEventListener('pointercancel',endDrag);$('stage').addEventListener('lostpointercapture',endDrag);
+$('stage').addEventListener('keydown',e=>{if(current().demo.kind!=='3d')return;if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;e.preventDefault();if(e.key==='ArrowLeft')$('yaw').value=state.yaw-5;if(e.key==='ArrowRight')$('yaw').value=state.yaw+5;if(e.key==='ArrowUp')$('pitch').value=state.pitch+5;if(e.key==='ArrowDown')$('pitch').value=state.pitch-5;updateView();});
+['code','decision'].forEach(name=>{
+ $(`${name}-tab`).addEventListener('click',()=>setTab(name));
+ $(`${name}-tab`).addEventListener('keydown',e=>{if(!['ArrowRight','ArrowLeft','Home','End'].includes(e.key))return;e.preventDefault();const names=['code','decision'];const i=names.indexOf(name),next=e.key==='Home'?0:e.key==='End'?names.length-1:(i+(e.key==='ArrowRight'?1:names.length-1))%names.length;setTab(names[next]);$(`${names[next]}-tab`).focus();});
+});
+$('copy-code').addEventListener('click',async()=>{
+ let copied=false;try{if(navigator.clipboard){await navigator.clipboard.writeText(current().code);copied=true;}}catch{}
+ if(!copied){const textarea=document.createElement('textarea');textarea.value=current().code;textarea.style.cssText='position:fixed;top:0;left:-10000px';document.body.appendChild(textarea);textarea.select();copied=document.execCommand('copy');textarea.remove();$('copy-code').focus();}
+ $('copy-code').textContent=copied?'已复制 ✓':'请选中代码复制';clearTimeout(copyTimer);copyTimer=setTimeout(()=>$('copy-code').textContent='复制代码 ⧉',2000);
+});
+const dialog=$('reading-dialog');$('open-reading').addEventListener('click',()=>dialog.showModal());$('close-reading').addEventListener('click',()=>dialog.close());$('start-reading').addEventListener('click',()=>dialog.close());dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}});
+window.addEventListener('hashchange',()=>selectPattern(location.hash.slice(1),true));
+document.addEventListener('keydown',e=>{if(e.key==='/'&&!dialog.open&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){e.preventDefault();$('search').focus();}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){stop();if(animationFrame){cancelAnimationFrame(animationFrame);animationFrame=null;}}});
+const observer=new IntersectionObserver(entries=>{if(!entries[0].isIntersecting){stop();if(animationFrame){cancelAnimationFrame(animationFrame);animationFrame=null;}}},{threshold:.05});observer.observe($('stage'));
+mobile.addEventListener('change',()=>drawScene());
+selectPattern(location.hash.slice(1)||'builder',true);
+})();
+
+</script>
+</body>
+</html>
