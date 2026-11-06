@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="GoF 23 种设计模式与简单工厂的离线交互速查手册，包含 3D 结构、流程动效、Python 示例和易混点。" data-i18n-content="metaDescription">
+<title>设计模式，拆开看 · Pattern Atlas</title>
+<style>
+/*STYLE*/
+</style>
+</head>
+<body>
+<a class="skip-link" href="#pattern-heading" data-i18n="skipContent">跳到模式内容</a>
+<header class="topbar">
+  <a class="brand" href="#builder" aria-label="Pattern Atlas 首页" data-i18n-aria="brandHome"><svg class="joinery-mark" width="40" height="40" viewBox="0 0 68 64" aria-hidden="true"><title data-i18n="brandMarkTitle">燕尾榫与卯槽</title><ellipse cx="35" cy="53" rx="25" ry="5" fill="#4b3424" opacity=".08"/><g stroke="#513621" stroke-width=".55" stroke-linejoin="round"><polygon points="34.30,29.32 29.62,32.02 29.62,20.32 34.30,17.62" fill="#65432e"/><polygon points="29.62,32.02 24.40,26.72 24.40,15.02 29.62,20.32" fill="#4e3425"/><polygon points="24.40,26.72 15.40,31.92 15.40,20.22 24.40,15.02" fill="#4e3425"/><polygon points="24.58,34.94 19.90,37.64 19.90,25.94 24.58,23.24" fill="#65432e"/><polygon points="19.90,37.64 3.70,28.28 3.70,16.58 19.90,25.94" fill="#815537"/><polygon points="18.10,8.26 34.30,17.62 29.62,20.32 24.40,15.02 15.40,20.22 24.58,23.24 19.90,25.94 3.70,16.58" fill="#a57955"/><polygon points="62.20,45.44 47.80,53.76 47.80,42.06 62.20,33.74" fill="#a16d3d"/><polygon points="47.80,53.76 32.50,44.92 32.50,33.22 47.80,42.06" fill="#c58e56"/><polygon points="37.18,42.22 28.00,39.20 28.00,27.50 37.18,30.52" fill="#c58e56"/><polygon points="46.90,24.90 62.20,33.74 47.80,42.06 32.50,33.22 37.18,30.52 28.00,27.50 37.00,22.30 42.22,27.60" fill="#e4bc88"/></g><path d="M11.35 21.90 19.45 26.58 M9.10 25.28 15.40 28.92 M47.98 35.92 54.28 39.56" fill="none" stroke="#f5dfbc" stroke-width=".6" stroke-linecap="round" opacity=".52"/></svg><span>PATTERN<span class="brand-light"> ATLAS</span><small data-i18n="brandSubtitle">设计模式交互速查手册</small></span></a>
+  <div class="top-actions"><span class="offline"><i></i> <span data-i18n="offline">离线可用</span></span><span class="edition">PYTHON EDITION / 01</span><button class="text-button" id="open-reading" data-i18n="readingLink">阅读说明 ↗</button><a class="back-link" href="/" aria-label="返回主站" data-i18n-aria="backAria">← <span class="back-verb" data-i18n="backVerb">返回</span><span data-i18n="backNoun">博客</span></a></div>
+</header>
+<div class="app-layout">
+<aside class="sidebar" aria-label="模式目录" data-i18n-aria="sidebarAria">
+  <div class="side-heading"><span data-i18n="patternIndex">模式索引</span><span class="mono">01—24</span></div>
+  <div class="language-row"><span data-i18n="readingLanguage">阅读语言</span><button class="language-toggle" id="language-toggle" type="button" aria-label="Switch to English" lang="en">EN</button></div>
+  <label class="search"><svg viewBox="0 0 20 20" width="17" height="17" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/><path d="m12 12 5 5"/></svg><input id="search" type="search" autocomplete="off" placeholder="搜索名称、场景…" data-i18n-placeholder="searchPlaceholder" aria-label="搜索模式" data-i18n-aria="searchAria"><kbd>/</kbd></label>
+  <div class="category-tabs" role="group" aria-label="筛选模式分类" data-i18n-aria="categoryGroupAria"><button data-category="all" class="selected" aria-pressed="true" data-i18n="all">全部</button><button data-category="creational" aria-pressed="false" data-i18n="creation">创建</button><button data-category="structural" aria-pressed="false" data-i18n="structure">结构</button><button data-category="behavioral" aria-pressed="false" data-i18n="behavior">行为</button></div>
+  <nav id="pattern-list" aria-label="设计模式列表" data-i18n-aria="patternListAria"></nav>
+  <div class="side-foot"><span class="mini-cube">◇</span><p><span data-i18n="sideFootOne">先看问题，再选模式。</span><br><span data-i18n="sideFootTwo">一个简单函数，有时已经足够。</span></p></div>
+</aside>
+<main id="main-content">
+  <section class="intro" aria-label="手册介绍" data-i18n-aria="introAria"><div><p class="eyebrow"><span class="line"></span> A FIELD GUIDE TO SOFTWARE DESIGN</p><h1><span data-i18n="heroLead">设计模式，</span><em data-i18n="heroEmphasis">拆开看。</em></h1><p class="intro-copy" data-i18n="heroCopy">转动结构，走一遍调用。把抽象的对象关系，变成看得见的过程。</p></div><div class="intro-index"><strong>23<span>+1</span></strong><p data-i18n="heroCount">GoF 设计模式 + 简单工厂</p><span data-i18n="heroTopics">3D 结构 / 2D 流程 / Python</span></div></section>
+  <section class="pattern-section" aria-labelledby="pattern-heading">
+    <div class="pattern-header"><div><div class="pattern-meta"><span id="pattern-no" class="mono"></span><span class="meta-line"></span><span id="pattern-category"></span><span id="bonus-tag" hidden data-i18n="bonusTag">补充 · 非 GoF</span></div><h2 id="pattern-heading" tabindex="-1"></h2><p id="pattern-intent"></p></div><div class="pattern-switch"><button id="previous-pattern" class="icon-button" aria-label="上一个模式" data-i18n-aria="previousAria">←</button><button id="next-pattern" class="icon-button" aria-label="下一个模式" data-i18n-aria="nextAria">→</button></div></div>
+    <div class="workbench">
+      <section class="visual-panel" aria-label="可交互原理演示" data-i18n-aria="visualPanelAria">
+        <div class="stage-top"><span><i class="status-dot"></i><b id="render-kind"></b><span class="stage-divider">/</span><span id="scenario"></span></span><button id="reset-view" class="text-button" data-i18n="resetView">↺ 还原视角</button></div>
+        <div id="stage" class="stage" tabindex="0" role="group" aria-label="原理图；三维模式可拖动旋转，也可使用视角滑块" data-i18n-aria="stageAria">
+          <svg id="scene" viewBox="0 0 800 440" role="img" aria-labelledby="scene-title scene-description"><title id="scene-title"></title><desc id="scene-description"></desc></svg>
+          <span class="stage-watermark" aria-hidden="true">PATTERN / LAB</span><span class="stage-hint" id="stage-hint"></span>
+        </div>
+        <div class="view-controls" id="view-controls"><label><span data-i18n="yaw">旋转</span> <input type="range" id="yaw" min="-75" max="75" value="-28"><output id="yaw-value">−28°</output></label><label><span data-i18n="pitch">俯视</span> <input type="range" id="pitch" min="15" max="65" value="28"><output id="pitch-value">28°</output></label></div>
+        <div id="parts-legend" class="parts-legend" aria-label="图中对象" data-i18n-aria="partsLegendAria"></div>
+        <div id="readouts" class="readouts" aria-label="模型结果" data-i18n-aria="readoutsAria"></div>
+        <div class="timeline"><div class="timeline-top"><span id="step-counter" class="mono"></span><span id="step-title"></span></div><div class="step-dots" id="step-dots" role="group" aria-label="演示步骤" data-i18n-aria="stepsAria"></div><p id="step-description" aria-live="polite"></p></div>
+        <div class="demo-controls"><button class="primary-button" id="play" data-i18n="play">▶ 播放过程</button><button id="step-next" class="secondary-button" data-i18n="nextStep">下一步 →</button><button id="reset" class="reset-button" aria-label="重置演示" data-i18n-aria="resetDemoAria" data-i18n="reset">↺ 重置</button></div>
+        <div class="trace"><span class="mono">TRACE</span><code id="trace-log"></code></div>
+      </section>
+      <aside class="explain-panel" aria-label="模式速查说明" data-i18n-aria="explainPanelAria">
+        <div class="explain-title"><span class="eyebrow">THE IDEA</span><span class="small-number" aria-hidden="true">↗</span></div>
+        <h3><span data-i18n="experimentLead">先换个条件，</span><br><span data-i18n="experimentResult">再观察结果。</span></h3><p class="experiment-prompt" id="experiment-prompt"></p>
+        <label for="variant" class="field-label" data-i18n="experimentCondition">实验条件</label><select id="variant"></select>
+        <div class="quick-facts"><div><span class="fact-icon">?</span><div><h4 data-i18n="problemLabel">解决什么问题</h4><p id="problem"></p></div></div><div><span class="fact-icon">↗</span><div><h4 data-i18n="whenLabel">什么时候用</h4><p id="when"></p></div></div><div><span class="fact-icon">!</span><div><h4 data-i18n="tradeoffLabel">代价与边界</h4><p id="tradeoff"></p></div></div></div>
+        <div class="comparison"><span class="field-label" data-i18n="comparisonLabel">容易混淆</span><p id="compare-copy"></p><button id="compare-link" class="text-button"></button></div>
+      </aside>
+    </div>
+    <div class="under-stage"><span data-i18n="modelNote">模型说明</span><p id="model-caveat"></p></div>
+    <section class="reference-panel" aria-label="代码与使用判断" data-i18n-aria="referencePanelAria"><div class="reference-tabs" role="tablist" aria-label="代码与使用判断" data-i18n-aria="referenceTabsAria"><button id="code-tab" role="tab" aria-selected="true" aria-controls="code-panel" tabindex="0" data-i18n="codeTab">Python 最小示例</button><button id="decision-tab" role="tab" aria-selected="false" aria-controls="decision-panel" tabindex="-1" data-i18n="decisionTab">使用判断</button><button id="copy-code" class="text-button" data-i18n="copyCode">复制代码 ⧉</button></div><div id="code-panel" role="tabpanel" aria-labelledby="code-tab"><div class="code-meta"><span data-i18n="codeMetaOne">PYTHON 3 · 可在本地运行</span><span data-i18n="codeMetaTwo">演示图与代码用于解释同一机制，非逐行执行</span></div><pre><code id="python-code"></code></pre></div><div id="decision-panel" role="tabpanel" aria-labelledby="decision-tab" hidden><div class="decision-grid"><div><span class="field-label" data-i18n="decisionWhen">适合引入</span><p id="decision-when"></p></div><div><span class="field-label" data-i18n="decisionAvoid">先别引入</span><p id="avoid"></p></div><div><span class="field-label" data-i18n="decisionPractice">做个迁移练习</span><p id="transfer"></p></div></div></div></section>
+    <div class="page-bottom"><p><span class="mono">NOTE 01</span> <span data-i18n="bottomNote">模式是命名过的经验。只在变化真的出现时，引入对应的结构。</span></p><button id="next-bottom" class="text-button" data-i18n="nextPattern">下一个模式 →</button></div>
+  </section>
+  <footer><span>PATTERN ATLAS <span class="muted" data-i18n="footerSubtitle">/ 设计模式速查手册</span></span><span data-i18n="footerMotto">以结构理解，以行为验证。</span></footer>
+</main>
+</div>
+<dialog id="reading-dialog" aria-labelledby="reading-heading"><button id="close-reading" class="dialog-close" aria-label="关闭阅读说明" data-i18n-aria="closeReadingAria">×</button><p class="eyebrow">ABOUT THIS FIELD GUIDE</p><h2 id="reading-heading" data-i18n="readingHeading">如何使用这本手册</h2><p data-i18n="readingIntro">面向了解类、对象、继承和组合的 Python 读者。收录 GoF 23 种设计模式，另补简单工厂。</p><ol><li data-i18n="readingStepOne">从目录搜索问题或模式，先读一句话意图。</li><li data-i18n="readingStepTwo">选择实验条件，预测最后的结果，再点「下一步」。切换另一条件做对照。</li><li data-i18n="readingStepThree">3D 模式可拖动旋转或调整滑块；视角只改变观察方向。2D 模式用箭头表示引用或消息方向。</li><li data-i18n="readingStepFour">结合 Python 示例判断代价；在「使用判断」中做一个迁移练习。</li></ol><p data-i18n="readingCaveat">分步模型是确定性的教学示意。方块表示对象或组成部分，位置不代表真实内存布局；计数和金额是示例参数。代码不在浏览器执行。</p><button class="primary-button" id="start-reading" data-i18n="startReading">开始探索 →</button></dialog>
+<noscript><p class="noscript" data-i18n="noscript">请启用 JavaScript 以查看模式目录、代码和交互演示。</p></noscript>
+<script>
+window.BOOKLET_UI_EN = {
+  metaDescription: 'An offline interactive guide to the 23 GoF design patterns and Simple Factory, with 3D structures, animated flows, Python examples, and pattern comparisons.',
+  brandMarkTitle: 'Dovetail joint and mortise',
+  skipContent: 'Skip to pattern content',
+  brandHome: 'Pattern Atlas home',
+  brandSubtitle: 'Interactive design pattern field guide',
+  offline: 'Available offline',
+  readingLink: 'How to read ↗',
+  backAria: 'Back to blog',
+  backVerb: 'Back to ',
+  backNoun: 'blog',
+  sidebarAria: 'Pattern directory',
+  patternIndex: 'Pattern index',
+  readingLanguage: 'Reading language',
+  searchPlaceholder: 'Search names or scenarios…',
+  searchAria: 'Search patterns',
+  categoryGroupAria: 'Filter by pattern category',
+  all: 'All',
+  creation: 'Create',
+  structure: 'Structural',
+  behavior: 'Behavioral',
+  patternListAria: 'Design pattern list',
+  sideFootOne: 'Start with the problem, then choose a pattern.',
+  sideFootTwo: 'Sometimes a simple function is enough.',
+  introAria: 'Guide introduction',
+  heroLead: 'Design patterns, ',
+  heroEmphasis: 'made visible.',
+  heroCopy: 'Rotate the structure. Walk through the calls. See how objects work together.',
+  heroCount: 'GoF patterns + Simple Factory',
+  heroTopics: '3D structures / 2D flows / Python',
+  bonusTag: 'Bonus · not GoF',
+  previousAria: 'Previous pattern',
+  nextAria: 'Next pattern',
+  visualPanelAria: 'Interactive pattern demo',
+  resetView: '↺ Reset view',
+  stageAria: 'Pattern diagram; drag to rotate 3D views or use the view sliders',
+  yaw: 'Rotation',
+  pitch: 'Tilt',
+  partsLegendAria: 'Objects in diagram',
+  readoutsAria: 'Demo results',
+  stepsAria: 'Demo steps',
+  play: '▶ Play sequence',
+  nextStep: 'Next step →',
+  resetDemoAria: 'Reset demo',
+  reset: '↺ Reset',
+  explainPanelAria: 'Pattern quick reference',
+  experimentLead: 'Change a condition,',
+  experimentResult: 'then watch the result.',
+  experimentCondition: 'Experiment',
+  problemLabel: 'Problem it solves',
+  whenLabel: 'When to use it',
+  tradeoffLabel: 'Trade-offs and limits',
+  comparisonLabel: 'Often confused with',
+  modelNote: 'About this model',
+  referencePanelAria: 'Code and usage guidance',
+  referenceTabsAria: 'Code and usage guidance',
+  codeTab: 'Minimal Python example',
+  decisionTab: 'Usage decision',
+  copyCode: 'Copy code ⧉',
+  codeMetaOne: 'PYTHON 3 · Run locally',
+  codeMetaTwo: 'The diagram and code explain the same mechanism; the diagram does not execute line by line',
+  decisionWhen: 'Good fit',
+  decisionAvoid: 'Hold off',
+  decisionPractice: 'Try a transfer exercise',
+  bottomNote: 'Patterns are named experience. Introduce one when the relevant variation actually appears.',
+  nextPattern: 'Next pattern →',
+  footerSubtitle: '/ Design pattern field guide',
+  footerMotto: 'Understand the structure. Verify the behavior.',
+  closeReadingAria: 'Close reading guide',
+  readingHeading: 'How to use this guide',
+  readingIntro: 'For readers familiar with basic Python, classes, objects, inheritance, and composition. Covers the 23 GoF design patterns plus Simple Factory.',
+  readingStepOne: 'Search the directory by problem or pattern, then read its one-sentence intent.',
+  readingStepTwo: 'Choose a condition, predict the outcome, then select Next step. Switch conditions to compare.',
+  readingStepThree: 'Drag 3D patterns or use sliders to change the view; the viewing angle does not alter the result. In 2D patterns, arrows show references or messages.',
+  readingStepFour: 'Use the Python example to weigh costs, then try a transfer exercise under Usage decision.',
+  readingCaveat: 'The step-by-step model is a deterministic teaching aid. Blocks represent objects or parts, and their positions do not reflect memory layout. Counts and prices are example values. Python code does not run in the browser.',
+  startReading: 'Start exploring →',
+  noscript: 'Enable JavaScript to view the pattern directory, code, and interactive demos.'
+};
+/*DATA*/
+/*EN_DATA*/
+/*APP*/
+</script>
+</body>
+</html>

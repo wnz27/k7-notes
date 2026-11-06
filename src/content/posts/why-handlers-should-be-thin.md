@@ -1,11 +1,14 @@
 ---
 title: "Handler 为什么应该薄：从一次分层困惑说起"
 published: 2026-11-03
+updated: 2026-11-06
 description: "从一次分层困惑出发，厘清 Model、Service 与 Handler 的职责，讨论业务规则的归属、薄 Handler 的价值及简单 CRUD 的分层成本。"
 tags: ["后端开发", "分层设计", "工程实践"]
 category: "软件工程"
 draft: false
 ---
+
+> 时间说明：本文的分层思考来自 2020 年入职初期的开发笔记，其中「薄薄薄」和 Handler 只调用 Service 的约定记录于 2020 年 6 月 13 日。代码示例来自 2023 年 10 月的 serverdemo 练习项目，本文在原笔记基础上补充了示例与分层取舍。
 
 翻看刚参加工作时的笔记，我发现自己给 Handler 留了一句很用力的提醒：「薄薄薄」。
 
