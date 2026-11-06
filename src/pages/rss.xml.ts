@@ -6,7 +6,7 @@ import MarkdownIt from "markdown-it";
 import sanitizeHtml from "sanitize-html";
 import { siteConfig } from "@/config";
 
-const parser = new MarkdownIt();
+const parser = new MarkdownIt({ html: true });
 
 function stripInvalidXmlChars(str: string): string {
 	return str.replace(

@@ -50,6 +50,10 @@ function translateTree(root: Node) {
 		return;
 	}
 	if (root instanceof Element) {
+		if (root instanceof HTMLImageElement) {
+			const src = language === "en" ? root.dataset.srcEn : root.dataset.srcZh;
+			if (src && root.getAttribute("src") !== src) root.setAttribute("src", src);
+		}
 		for (const attribute of attributes) {
 			if (attribute === "content" && !root.matches('meta[name="description"], meta[property$="title"], meta[property$="description"], meta[name$="title"], meta[name$="description"]')) continue;
 			const value = root.getAttribute(attribute);

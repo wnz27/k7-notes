@@ -88,6 +88,8 @@ class EnglishPage(BlogText):
         for name, value in attrs:
             if tag == "html" and name == "lang":
                 value = "en"
+            elif tag == "img" and name == "src":
+                value = values.get("data-src-en", value)
             elif not skipped and value and (name in ATTRIBUTES or name == "content" and tag == "meta" and (values.get("name", "") in {"description", "title", "twitter:title", "twitter:description"} or values.get("property", "") in {"og:title", "og:description", "twitter:title", "twitter:description"})):
                 value = self.translations.get(normalize(value), value)
             translated.append(name if value is None else f'{name}="{escape(value, quote=True)}"')

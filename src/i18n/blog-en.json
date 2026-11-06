@@ -507,5 +507,9 @@
   "这个限制约束的是 MCP 到模型服务这一段请求。如果 Agent 本身连接云端模型，输入文本如何传给 Agent 仍由所用客户端和模型服务决定，不能仅凭「本地翻译 MCP」推断整条工作流都在本机完成。": "This restriction applies to the MCP-to-model service request. If the Agent itself connects to a cloud model, how the input text is passed to the Agent is still determined by the client and model service used. It cannot be inferred solely from 'local MCP translation' that the entire workflow is completed locally.",
   "项目时间：2026 年 11 月 6 日，K7 Translate MCP 首次提交到 K7s-Arsenal。本文基于当天的代码，记录它的用途、接入方式和目前的边界。": "Project timeline: K7 Translate MCP was first committed to K7s-Arsenal on November 6, 2026. This article describes its purpose, setup, and current limits based on that day's code.",
   "，返回连接状态和服务列出的模型 ID。": ", returning the connection status and the model IDs listed by the service.",
-  "；若默认的 Index 提示词不合适，还可以把": "; if the default Index prompt does not fit, set"
+  "；若默认的 Index 提示词不合适，还可以把": "; if the default Index prompt does not fit, set",
+  "Codex 中的 K7 Translate MCP 配置示例": "K7 Translate MCP configuration example in Codex",
+  "在 Codex 界面中配置 K7 Translate MCP。": "Configuring K7 Translate MCP in the Codex interface.",
+  "1079 字": "1079 characters",
+  "1084 字": "1084 characters"
 }

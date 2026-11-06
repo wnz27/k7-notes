@@ -9,6 +9,8 @@ draft: false
 
 > 项目时间：2026 年 11 月 6 日，K7 Translate MCP 首次提交到 K7s-Arsenal。本文基于当天的代码，记录它的用途、接入方式和目前的边界。
 
+项目地址：[https://github.com/wnz27/K7s-Arsenal](https://github.com/wnz27/K7s-Arsenal)
+
 之前做的 [K7-Translate 浏览器扩展](/posts/k7-translate-local-browser-translation/)，让网页选文和正文可以交给本地模型翻译。今天我在 K7s-Arsenal 仓库的 `mcps/k7_translater` 目录里加了一个 MCP 服务，让支持 MCP 的 Agent 也能调用本机的翻译模型。阅读英文资料或处理多语言文本时，Agent 可以直接请求翻译，省去在浏览器中手动复制的步骤。
 
 MCP 通过 stdio 接收 Agent 的工具调用，构造翻译提示词，再向本机的 OpenAI 兼容模型服务发送 HTTP 请求。我目前用 Docker 运行 `Index-Translate-2B`，宿主机的 `127.0.0.1:8001` 映射到容器中的 llama.cpp 服务。仓库默认配置使用 8000 端口，接入时需要按实际端口修改。
@@ -60,6 +62,11 @@ args = ["/absolute/path/to/K7s-Arsenal/mcps/k7_translater/src/index.mjs"]
 K7_TRANSLATE_BASE_URL = "http://127.0.0.1:8001/v1"
 K7_TRANSLATE_MODEL = "Index-Translate-2B"
 ```
+
+<figure>
+  <img src="/images/posts/k7-translate-mcp/codex-config-zh.jpeg" data-src-zh="/images/posts/k7-translate-mcp/codex-config-zh.jpeg" data-src-en="/images/posts/k7-translate-mcp/codex-config-en.jpeg" alt="Codex 中的 K7 Translate MCP 配置示例" width="1279" height="1454" loading="lazy" decoding="async" />
+  <figcaption>在 Codex 界面中配置 K7 Translate MCP。</figcaption>
+</figure>
 
 保存后按客户端要求重新加载 MCP。先调用 `k7_translate_status`，确认列表里有 `Index-Translate-2B`，再用短句测试 `k7_translate_text`。其他支持 stdio MCP 的客户端也可以接入，配置格式见项目 README。
 
