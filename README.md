@@ -81,12 +81,22 @@ All commands are run from the root of the project, from a terminal:
 | `pnpm install`             | Installs dependencies                               |
 | `pnpm dev`                 | Starts local dev server at `localhost:4321`         |
 | `pnpm build`               | Build your production site to `./dist/`             |
+| `pnpm translate:blog`      | Update cached English translations, then build both search indexes |
 | `pnpm preview`             | Preview your build locally, before deploying        |
 | `pnpm check`               | Run checks for errors in your code                  |
 | `pnpm format`              | Format your code using Biome                        |
 | `pnpm new-post <filename>` | Create a new post                                   |
 | `pnpm astro ...`           | Run CLI commands like `astro add`, `astro check`    |
 | `pnpm astro --help`        | Get help using the Astro CLI                        |
+
+The main blog has an EN / 中文 button in the navigation bar. The browser saves the selected language.
+Article text, navigation, archives, and the career timeline follow this selection. Code and link targets stay unchanged.
+The design pattern handbook keeps its existing language switch.
+
+After editing Chinese content, start the local translation service on port 8001 and run `pnpm translate:blog`.
+This command uses `Index-Translate-2B` at `http://127.0.0.1:8001/v1/chat/completions` and saves new translations in `src/i18n/blog-en.json`.
+Commit that file with the content changes. Normal builds check translation coverage and create separate Chinese and English search indexes.
+Readers and normal builds do not need the translation service. The translation command also requires Python 3.
 
 ## ✏️ Contributing
 

@@ -37,10 +37,6 @@ function formatDate(date: Date) {
 	return `${month}-${day}`;
 }
 
-function formatTag(tagList: string[]) {
-	return tagList.map((t) => `#${t}`).join(" ");
-}
-
 onMount(async () => {
 	let filteredPosts: Post[] = sortedPosts;
 
@@ -141,7 +137,7 @@ onMount(async () => {
                                 class="hidden md:block md:w-[15%] text-left text-sm transition
                      whitespace-nowrap overflow-ellipsis overflow-hidden text-30"
                         >
-                            {formatTag(post.data.tags)}
+                            {#each post.data.tags as tag}<span>#<span>{tag}</span> </span>{/each}
                         </div>
                     </div>
                 </a>

@@ -12,6 +12,26 @@ let result: SearchResult[] = [];
 let isSearching = false;
 let pagefindLoaded = false;
 let initialized = false;
+let searchId = 0;
+let englishIndex: Promise<typeof window.pagefind> | undefined;
+
+function getEnglishIndex() {
+	if (!englishIndex) {
+		const scriptUrl = url("/pagefind/en/pagefind.js");
+		englishIndex = import(/* @vite-ignore */ scriptUrl).then(async (pagefind) => {
+			await pagefind.options({
+				language: "en",
+				baseUrl: url("/"),
+				excerptLength: 20,
+			});
+			return pagefind;
+		}).catch((error) => {
+			englishIndex = undefined;
+			throw error;
+		});
+	}
+	return englishIndex;
+}
 
 const fakeResult: SearchResult[] = [
 	{
@@ -48,6 +68,8 @@ const setPanelVisibility = (show: boolean, isDesktop: boolean): void => {
 };
 
 const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
+	const requestId = ++searchId;
+	const language = document.documentElement.lang;
 	if (!keyword) {
 		setPanelVisibility(false, isDesktop);
 		result = [];
@@ -63,8 +85,9 @@ const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
 	try {
 		let searchResults: SearchResult[] = [];
 
-		if (import.meta.env.PROD && pagefindLoaded && window.pagefind) {
-			const response = await window.pagefind.search(keyword);
+		if (import.meta.env.PROD && (language === "en" || pagefindLoaded)) {
+			const pagefind = language === "en" ? await getEnglishIndex() : window.pagefind;
+			const response = await pagefind.search(keyword);
 			searchResults = await Promise.all(
 				response.results.map((item) => item.data()),
 			);
@@ -75,67 +98,56 @@ const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
 			console.error("Pagefind is not available in production environment.");
 		}
 
+		if (requestId !== searchId || language !== document.documentElement.lang) return;
 		result = searchResults;
 		setPanelVisibility(result.length > 0, isDesktop);
 	} catch (error) {
+		if (requestId !== searchId) return;
 		console.error("Search error:", error);
 		result = [];
 		setPanelVisibility(false, isDesktop);
 	} finally {
-		isSearching = false;
+		if (requestId === searchId) isSearching = false;
 	}
 };
 
 onMount(() => {
+	const searchCurrentInput = () => {
+		const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
+		void search(isDesktop ? keywordDesktop : keywordMobile, isDesktop);
+	};
 	const initializeSearch = () => {
 		initialized = true;
-		pagefindLoaded =
-			typeof window !== "undefined" &&
-			!!window.pagefind &&
-			typeof window.pagefind.search === "function";
-		console.log("Pagefind status on init:", pagefindLoaded);
-		if (keywordDesktop) search(keywordDesktop, true);
-		if (keywordMobile) search(keywordMobile, false);
+		pagefindLoaded = !!window.pagefind && typeof window.pagefind.search === "function";
+		searchCurrentInput();
+	};
+	const changeLanguage = () => {
+		result = [];
+		searchCurrentInput();
 	};
 
-	if (import.meta.env.DEV) {
-		console.log(
-			"Pagefind is not available in development mode. Using mock data.",
-		);
-		initializeSearch();
-	} else {
-		document.addEventListener("pagefindready", () => {
-			console.log("Pagefind ready event received.");
-			initializeSearch();
-		});
-		document.addEventListener("pagefindloaderror", () => {
-			console.warn(
-				"Pagefind load error event received. Search functionality will be limited.",
-			);
-			initializeSearch(); // Initialize with pagefindLoaded as false
-		});
+	document.addEventListener("blog:language-change", changeLanguage);
+	document.addEventListener("pagefindready", initializeSearch);
+	document.addEventListener("pagefindloaderror", initializeSearch);
+	if (import.meta.env.DEV || window.pagefind) initializeSearch();
+	const fallback = setTimeout(() => {
+		if (!initialized) initializeSearch();
+	}, 2000);
 
-		// Fallback in case events are not caught or pagefind is already loaded by the time this script runs
-		setTimeout(() => {
-			if (!initialized) {
-				console.log("Fallback: Initializing search after timeout.");
-				initializeSearch();
-			}
-		}, 2000); // Adjust timeout as needed
-	}
+	return () => {
+		searchId++;
+		clearTimeout(fallback);
+		document.removeEventListener("blog:language-change", changeLanguage);
+		document.removeEventListener("pagefindready", initializeSearch);
+		document.removeEventListener("pagefindloaderror", initializeSearch);
+	};
 });
 
-$: if (initialized && keywordDesktop) {
-	(async () => {
-		await search(keywordDesktop, true);
-	})();
+$: if (initialized) {
+	const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
+	void search(isDesktop ? keywordDesktop : keywordMobile, isDesktop);
 }
 
-$: if (initialized && keywordMobile) {
-	(async () => {
-		await search(keywordMobile, false);
-	})();
-}
 </script>
 
 <!-- search bar for desktop view -->

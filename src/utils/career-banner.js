@@ -5,8 +5,8 @@ export function initCareerBanner(root) {
     const MONTH_COMPANIES = {"2020-04":"weimang","2020-05":"weimang","2020-06":"weimang","2020-07":"weimang","2020-08":"weimang","2020-09":"weimang","2020-10":"weimang","2020-11":"weimang","2020-12":"weimang","2021-01":"weimang","2021-02":"weimang","2021-03":"weimang","2021-04":"weimang","2021-05":"weimang","2021-06":"weimang","2021-07":"weimang","2021-09":"wayz","2021-10":"wayz","2021-11":"wayz","2021-12":"wayz","2022-01":"wayz","2022-02":"wayz","2022-03":"wayz","2022-04":"wayz","2022-05":"wayz","2022-06":"wayz","2022-07":"wayz","2022-08":"wayz","2022-09":"wayz","2022-10":"wayz","2022-11":"wayz","2022-12":"wayz","2023-01":"wayz","2023-02":"wayz","2023-03":"wayz","2023-06":"guanmai","2023-07":"guanmai","2023-08":"guanmai","2023-09":"guanmai","2023-10":"guanmai","2023-11":"guanmai","2023-12":"guanmai","2024-01":"guanmai","2024-02":"guanmai","2024-03":"guanmai","2024-04":"guanmai","2024-05":"guanmai","2024-06":"guanmai","2024-07":"guanmai","2024-08":"guanmai","2024-09":"guanmai","2024-11":"liveme","2024-12":"liveme","2025-01":"liveme","2025-02":"liveme","2025-03":"liveme","2025-04":"quanku","2025-05":"quanku","2025-06":"quanku","2025-07":"quanku","2025-08":"quanku","2025-09":"quanku","2025-10":"quanku","2025-11":"quanku","2025-12":"quanku","2026-01":"quanku","2026-02":"quanku","2026-03":"quanku","2026-04":"quanku","2026-05":"quanku","2026-06":"quanku","2026-07":"quanku","2026-08":"quanku","2026-09":"quanku","2026-10":"quanku","2026-11":"quanku"};
     const COMPANIES = {
       weimang: { name: '微芒', english: 'WEIMANG', color: '#8c9d56' },
-      wayz: { name: '维智', english: '维智', color: '#c49b43' },
-      guanmai: { name: '观麦科技', english: '观麦科技', color: '#c77957' },
+      wayz: { name: '维智', english: 'WAYZ', color: '#c49b43' },
+      guanmai: { name: '观麦科技', english: 'GUANMAI', color: '#c77957' },
       liveme: { name: '乐我无限', english: 'LIVEME', color: '#9183ac' },
       quanku: { name: '全酷文化', english: 'QUANKU', color: '#548b7a' }
     };
@@ -17,6 +17,12 @@ export function initCareerBanner(root) {
     const COLUMNS = 53;
     const PERIOD = 4000;
     const WEEKDAYS = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+    const EN_WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const EN_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const english = () => document.documentElement.lang.startsWith('en');
+    const t = (zh, en) => english() ? en : zh;
+    const weekdays = () => english() ? EN_WEEKDAYS : WEEKDAYS;
+    const companyName = key => t(COMPANIES[key].name, COMPANIES[key].english);
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const $ = id => root.querySelector(`[id="${id}"]`);
     const matrix = $('matrix');
@@ -69,12 +75,12 @@ export function initCareerBanner(root) {
       return { timestamp: start, end, company, companies, status, row, col, year, weekly: true };
     }
     function describe(data) {
-      const dates = data.weekly ? `${dateText(data.timestamp)} — ${dateText(data.end)}` : `${dateText(data.timestamp)} · ${WEEKDAYS[data.row]}`;
-      const company = data.companies.map(key => COMPANIES[key].name).join(' / ');
-      return `${dates}，${company || (data.status === 'future' ? '待续' : '日志留白')}`;
+      const dates = data.weekly ? `${dateText(data.timestamp)} — ${dateText(data.end)}` : `${dateText(data.timestamp)} · ${weekdays()[data.row]}`;
+      const company = data.companies.map(companyName).join(' / ');
+      return `${dates}${t('，', ', ')}${company || (data.status === 'future' ? t('待续', 'To be continued') : t('日志留白', 'No archived logs'))}`;
     }
     function renderAxes(view) {
-      $('row-axis').replaceChildren(...(view === 'all' ? YEARS : WEEKDAYS).map(label => {
+      $('row-axis').replaceChildren(...(view === 'all' ? YEARS : weekdays()).map(label => {
         const span = document.createElement('span');
         span.textContent = label;
         return span;
@@ -84,9 +90,18 @@ export function initCareerBanner(root) {
         const year = view === 'all' ? 2026 : Number(view);
         const col = Math.floor((Date.UTC(year, month, 1) - yearStart(year)) / DAY / 7);
         span.style.gridColumn = `${col + 1} / span 3`;
-        span.textContent = `${month + 1}月`;
+        span.textContent = t(`${month + 1}月`, EN_MONTHS[month]);
         return span;
       }));
+    }
+    function renderViewLabels(view) {
+      $('chart-heading').textContent = view === 'all' ? t('把七年，放在同一张日历里。', 'Seven years, on one calendar.') : t(`${view}，这一年的日子。`, `${view}, day by day.`);
+      $('view-badge').textContent = view === 'all' ? t('七年全景', 'Seven-year view') : t('逐日视图', 'Daily view');
+      matrix.setAttribute('aria-label', view === 'all' ? t('七年工作日志全景，每格一周，方向键移动', 'Seven years of work logs, one week per cell. Use the arrow keys to move.') : t(`${view}年工作日志，每格一天，方向键移动`, `${view} work logs, one day per cell. Use the arrow keys to move.`));
+      $('announcement').textContent = view === 'all' ? t('已切换到七年全景，每格代表一周', 'Showing all seven years, one week per cell.') : t(`已切换到${view}年，每格代表一天`, `Showing ${view}, one day per cell.`);
+    }
+    function renderPlayLabel() {
+      $('play-label').textContent = playing ? t('暂停，停在这一年', 'Pause on this year') : t('让时间走一会儿', 'Let time roll');
     }
     function render(view, animate = true) {
       hideTooltip(true);
@@ -95,10 +110,8 @@ export function initCareerBanner(root) {
       yearButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.year === view)));
       $('previous').disabled = index === 0;
       $('next').disabled = index === VIEWS.length - 1;
-      $('chart-heading').textContent = view === 'all' ? '把七年，放在同一张日历里。' : `${view}，这一年的日子。`;
-      $('view-badge').textContent = view === 'all' ? '七年全景' : '逐日视图';
+      renderViewLabels(view);
       $('date-label').textContent = view === 'all' ? '2020.04 — 2026.11' : `${view}.01 — ${view}.12`;
-      matrix.setAttribute('aria-label', view === 'all' ? '七年工作日志全景，每格一周，方向键移动' : `${view}年工作日志，每格一天，方向键移动`);
       renderAxes(view);
       cellData = cells.map((cell, index) => {
         const row = Math.floor(index / COLUMNS);
@@ -130,7 +143,6 @@ export function initCareerBanner(root) {
         item.classList.toggle('current', represented.has(item.dataset.company));
         item.setAttribute('aria-pressed', 'false');
       });
-      $('announcement').textContent = view === 'all' ? '已切换到七年全景，每格代表一周' : `已切换到${view}年，每格代表一天`;
       resetProgress();
     }
     function positionTooltip(cell) {
@@ -159,10 +171,10 @@ export function initCareerBanner(root) {
         const neighbor = index + delta;
         if (neighbor >= 0 && neighbor < cells.length && (Math.abs(delta) !== 1 || Math.floor(neighbor / COLUMNS) === data.row)) cells[neighbor].classList.add('near');
       });
-      $('tooltip-date').textContent = data.weekly ? `${dateText(data.timestamp)} — ${dateText(data.end)}` : `${dateText(data.timestamp)} · ${WEEKDAYS[data.row]}`;
-      $('tooltip-company').textContent = data.companies.length ? data.companies.map(key => COMPANIES[key].name).join(' / ') : data.status === 'future' ? '故事待续' : '给时光留一点白';
+      $('tooltip-date').textContent = data.weekly ? `${dateText(data.timestamp)} — ${dateText(data.end)}` : `${dateText(data.timestamp)} · ${weekdays()[data.row]}`;
+      $('tooltip-company').textContent = data.companies.length ? data.companies.map(companyName).join(' / ') : data.status === 'future' ? t('故事待续', 'The story continues') : t('给时光留一点白', 'A little breathing room');
       $('tooltip-dot').style.setProperty('--company-color', data.company ? COMPANIES[data.company].color : '#a4ae91');
-      $('tooltip-detail').textContent = data.company ? data.weekly ? '这一周，在这里留下记录。' : '这一格，属于这段工作日常。' : data.status === 'future' ? '还没走到的日子，留给下一段故事。' : '这个月份，目录里没有归档日志。';
+      $('tooltip-detail').textContent = data.company ? data.weekly ? t('这一周，在这里留下记录。', 'A week of work recorded here.') : t('这一格，属于这段工作日常。', 'One day in this chapter of work.') : data.status === 'future' ? t('还没走到的日子，留给下一段故事。', 'Days ahead, waiting for the next chapter.') : t('这个月份，目录里没有归档日志。', 'No archived work logs for this month.');
       $('tooltip-stamp').textContent = data.company ? data.companies.map(key => COMPANIES[key].english).join(' / ') : data.status === 'future' ? 'TO BE CONTINUED' : 'A LITTLE BREATHING ROOM';
       positionTooltip(cell);
       tooltip.classList.add('visible');
@@ -203,7 +215,7 @@ export function initCareerBanner(root) {
     function setPlaying(value) {
       playing = value;
       $('play').setAttribute('aria-pressed', String(value));
-      $('play-label').textContent = value ? '暂停，停在这一年' : '让时间走一会儿';
+      renderPlayLabel();
       $('play-symbol').innerHTML = value ? '<svg viewBox="0 0 12 12"><path d="M3 2h2v8H3zm4 0h2v8H7z"/></svg>' : '<svg viewBox="0 0 12 12"><path d="M3 1.5 10 6 3 10.5z"/></svg>';
       cancelAnimationFrame(frame);
       resetProgress();
@@ -236,11 +248,11 @@ export function initCareerBanner(root) {
       item.className = 'legend-item';
       item.type = 'button';
       item.dataset.company = key;
-      item.setAttribute('aria-label', `高亮${company.name}的时间`);
+      item.setAttribute('aria-label', t(`高亮${company.name}的时间`, `Highlight time at ${company.english}`));
       const swatch = document.createElement('i');
       swatch.style.setProperty('--color', company.color);
       swatch.setAttribute('aria-hidden', 'true');
-      item.append(swatch, document.createTextNode(company.name));
+      item.append(swatch, document.createTextNode(companyName(key)));
       item.addEventListener('pointerenter', () => focusCompany(key));
       item.addEventListener('pointerleave', restoreCompany);
       item.addEventListener('focus', () => focusCompany(key));
@@ -254,7 +266,7 @@ export function initCareerBanner(root) {
     }
     const emptyLegend = document.createElement('span');
     emptyLegend.className = 'legend-empty';
-    emptyLegend.innerHTML = '<i aria-hidden="true"></i>留白 / 待续';
+    emptyLegend.innerHTML = `<i aria-hidden="true"></i>${t('留白 / 待续', 'Unrecorded / Upcoming')}`;
     $('legend').appendChild(emptyLegend);
     yearButtons.forEach(button => button.addEventListener('click', () => selectView(button.dataset.year)));
     $('previous').addEventListener('click', () => selectView(VIEWS[Math.max(0, VIEWS.indexOf(currentView) - 1)]));
@@ -322,6 +334,20 @@ export function initCareerBanner(root) {
       setPlaying(false);
       cells.forEach(cell => cell.classList.remove('waking'));
     });
+    document.addEventListener('blog:language-change', () => {
+      renderViewLabels(currentView);
+      renderAxes(currentView);
+      cells.forEach((cell, index) => cell.setAttribute('aria-label', describe(cellData[index])));
+      root.querySelectorAll('.legend-item').forEach(item => {
+        const company = COMPANIES[item.dataset.company];
+        item.lastChild.textContent = companyName(item.dataset.company);
+        item.setAttribute('aria-label', t(`高亮${company.name}的时间`, `Highlight time at ${company.english}`));
+      });
+      emptyLegend.lastChild.textContent = t('留白 / 待续', 'Unrecorded / Upcoming');
+      renderPlayLabel();
+      if (activeCell) showTooltip(activeCell);
+    });
+    renderPlayLabel();
     render('all');
 
 
