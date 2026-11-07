@@ -377,6 +377,7 @@
   "直接返回传入对象，没有实际写入数据库。它能展示结构，无法证明复杂业务已经得到合理拆分。": "it directly returns the passed-in object without actually writing to the database. It can display the structure but cannot prove that complex business logic has been reasonably decomposed.",
   "继续用取消预约的例子。先假设产品已经确认了规则：只有已支付的预约可以申请取消，而且距离开始时间至少还有 24 小时。「恰好 24 小时」也符合条件。": "Let's continue with the example of canceling a booking. First, assume the product has confirmed the following rules: only bookings that have been paid for can be canceled, and there must be at least 24 hours remaining until the start time. \"Exactly 24 hours\" also meets the condition.",
   "继续看": "Keep reading",
+  "计算机系统知识": "Computer Systems",
   "设计模式": "Design Patterns",
   "译文：隐藏已翻译的原文，只显示译文。": "Translation: Hide the original text and display only the translation.",
   "读取文章和作者，检查发布资格，完成发布并保存": "Read the article and author, check publication eligibility, complete publication and save.",

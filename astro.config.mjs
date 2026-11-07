@@ -42,7 +42,7 @@ export default defineConfig({
 			smoothScrolling: true,
 			cache: true,
 			preload: true,
-			ignore: ["/design-patterns/"],
+			ignore: ["/computer-systems/", "/design-patterns/"],
 			accessibility: true,
 			updateHead: true,
 			updateBodyClass: false,

@@ -114,7 +114,7 @@ class EnglishPage(BlogText):
 
 def blog_pages():
     return [path for path in sorted((ROOT / "dist").rglob("*.html"))
-            if path.relative_to(ROOT / "dist").parts[0] not in {"design-patterns", "pagefind"}]
+            if path.relative_to(ROOT / "dist").parts[0] not in {"computer-systems", "design-patterns", "pagefind"}]
 
 
 def write_english_site(directory, translations):

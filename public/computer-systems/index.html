@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>TCP 全双工通信 · 计算机系统知识 · K7-Tech</title>
+<style>
+:root{--bg:#f4f3ee;--paper:#fffefa;--ink:#172b34;--muted:#53656a;--line:#c9d2ce;--soft:#e9eeea;--a:#006d65;--at:#e0f2ec;--b:#8e4b12;--bt:#f9ebd7;--focus:#246abd;--shadow:0 12px 36px #172b3407}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}button,input,textarea{font:inherit}button,a,input,textarea,[tabindex]{-webkit-tap-highlight-color:transparent}button{cursor:pointer;color:inherit}button:disabled{cursor:default;opacity:.5}a{color:var(--a);text-underline-offset:4px}button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--focus);outline-offset:4px}button{border:1px solid var(--line);border-radius:8px;background:var(--paper);padding:9px 14px;min-height:44px}button:hover{border-color:var(--muted)}button.primary{background:var(--ink);color:var(--paper);border-color:var(--ink)}button.small{font-size:14px;padding:6px 11px}input[type=checkbox],input[type=radio]{width:18px;height:18px;accent-color:var(--a);flex-shrink:0}code,.mono{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.9em;font-variant-numeric:tabular-nums}h1,h2,h3,p{margin:0}h1{font-size:clamp(30px,4.1vw,48px);line-height:1.22;letter-spacing:-1.5px;font-weight:760}h2{font-size:20px;line-height:1.4}h3{font-size:17px;line-height:1.5}p+p{margin-top:12px}[hidden]{display:none!important}.wrap{max-width:1280px;margin:auto;padding:35px 28px 60px}.topline{display:flex;justify-content:space-between;gap:20px;align-items:center;padding-bottom:18px;border-bottom:1px solid var(--line);font-size:13px;color:var(--muted);letter-spacing:1px}.kicker{font-size:12px;letter-spacing:2px;font-weight:700;color:var(--a)}header{padding:31px 0 26px}.subtitle{max-width:850px;color:var(--muted);margin:15px 0 18px}.head-actions{display:flex;gap:10px;flex-wrap:wrap}.layout{display:grid;grid-template-columns:minmax(0,1fr) 342px;gap:20px;align-items:start}.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}.stage{padding:24px;position:sticky;top:16px}.stage-title{display:flex;align-items:center;justify-content:space-between;gap:12px}.badge{border:1px solid var(--line);border-radius:20px;padding:3px 10px;font-size:12px;white-space:nowrap;color:var(--muted)}.addresses{font-size:12px;color:var(--muted);margin-top:8px;overflow-wrap:anywhere}.figure-tools{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:18px 0 14px}.check{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;min-height:40px}.hint{font-size:13px;color:var(--muted)}.endpoints{display:flex;justify-content:space-between;padding:13px 0 5px}.endpoint{display:flex;align-items:center;gap:10px}.letter{display:grid;place-items:center;font-size:24px;font-weight:700;width:44px;height:44px;border-radius:10px;background:var(--ink);color:var(--paper)}.endpoint small{display:block;font-size:12px;color:var(--muted)}.endpoint.right{text-align:right;flex-direction:row-reverse}.lane{padding:19px 0 17px;border-bottom:1px solid var(--line)}.lane-head{display:flex;justify-content:space-between;align-items:center;gap:8px}.direction{font-size:15px;font-weight:700}.forward{--accent:var(--a);--tint:var(--at)}.reverse{--accent:var(--b);--tint:var(--bt)}.direction,.bytes{color:var(--accent)}.bytes{font-weight:750;font-size:25px;line-height:1.2;font-variant-numeric:tabular-nums}.bytes small{font-size:12px;font-weight:400;color:var(--muted)}.track{position:relative;height:65px;margin-top:4px;overflow:hidden}.wire{position:absolute;left:0;top:24px;width:100%;height:24px;color:var(--accent)}.packet{position:absolute;top:16px;left:50%;transform:translateX(-50%);border:1px solid var(--accent);border-radius:5px;background:var(--tint);color:var(--accent);padding:2px 11px;font:600 12px/1.6 ui-monospace,monospace;white-space:nowrap}.packet[data-empty=true]{border-style:dashed;background:var(--paper)}.animate .forward .packet.moving{animation:tcp-send-forward 1.2s linear both}.animate .reverse .packet.moving{animation:tcp-send-reverse 1.2s linear both}@keyframes tcp-send-forward{from{left:0;transform:translateX(0)}to{left:100%;transform:translateX(-100%)}}@keyframes tcp-send-reverse{from{left:100%;transform:translateX(-100%)}to{left:0;transform:translateX(0)}}.packet-note{font-size:12px;position:absolute;bottom:0;color:var(--muted);width:100%;text-align:center}.header-fields{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:12px}.header-fields span{border:1px solid var(--line);border-radius:4px;padding:2px 6px;background:var(--bg)}.header-fields .tag{border:0;padding-left:0;background:none;color:var(--muted)}.buffers{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:20px 0}.buffer-title{font-size:14px;display:flex;justify-content:space-between;gap:8px}.meter{display:flex;gap:4px;margin:8px 0}.meter i{height:12px;flex:1;background:var(--soft);border:1px solid var(--line);border-radius:2px}.meter i.filled{background:var(--a);border-color:var(--a)}.meter i.full{background:var(--b);border-color:var(--b)}.buffer-detail{font-size:12px;color:var(--muted)}.status{font-size:14px;background:var(--soft);border-radius:8px;padding:13px 15px;min-height:70px}.transport{display:flex;gap:8px;flex-wrap:wrap;margin-top:17px}.transport .counter{margin-left:auto;align-self:center;color:var(--muted);font-size:13px}.caveat{font-size:12px;color:var(--muted);margin-top:15px}.panel{padding:22px}.panel+.panel{margin-top:16px}.step-label{display:flex;align-items:center;gap:9px;font-size:12px;letter-spacing:1px;color:var(--muted);margin-bottom:9px}.step-number{border:1px solid var(--line);border-radius:50%;width:25px;height:25px;display:grid;place-items:center;letter-spacing:0;font-size:12px}.panel p{font-size:14px;margin-top:9px}.panel h3{margin-bottom:12px}fieldset{border:0;padding:0;margin:14px 0}legend{font-size:14px;font-weight:650;margin-bottom:8px}label.option{display:flex;gap:9px;align-items:flex-start;padding:9px 10px;margin:6px 0;border:1px solid var(--line);border-radius:7px;font-size:14px;cursor:pointer}label.option input{margin-top:4px}.probe{font-size:13px;border-bottom:1px solid var(--line);padding-bottom:15px;margin-bottom:17px}.probe summary{cursor:pointer}.probe fieldset{margin-bottom:0}.probe label.option{font-size:13px;border:0;padding:4px 0}.feedback{border-left:3px solid var(--a);padding:9px 12px;font-size:14px;background:var(--at);margin-top:12px}.controls{margin-top:15px}.control{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);cursor:pointer;font-size:14px}.control small{display:block;color:var(--muted);font-size:12px}.read-control{background:var(--bt);margin:10px -10px;padding:11px 10px;border-radius:7px;border:0}.try-guide{padding:10px 0 0;font-size:13px;color:var(--muted)}.look{list-style:none;margin:12px 0;padding:0;counter-reset:look}.look li{counter-increment:look;margin-top:7px}.look button{width:100%;text-align:left;font-size:13px;display:flex;gap:10px;align-items:start}.look button:before{content:counter(look,decimal-leading-zero);font-family:monospace;color:var(--muted)}.look button[aria-pressed=true]{border-color:var(--a);background:var(--at)}.explain{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}textarea{width:100%;min-height:108px;margin-top:10px;border:1px solid var(--line);border-radius:7px;background:var(--bg);color:var(--ink);padding:10px;font-size:14px;resize:vertical}.privacy{font-size:12px;color:var(--muted)}.backend{margin-top:24px;padding:27px}.backend-head{display:flex;justify-content:space-between;gap:14px;align-items:start}.backend-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:23px}.backend h3{margin-bottom:12px}.backend p,.backend li{font-size:14px}.backend ul{padding-left:20px}.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}th,td{text-align:left;padding:8px;border-bottom:1px solid var(--line)}th{font-weight:600;color:var(--muted)}.formula{background:var(--soft);padding:13px;font-size:13px;border-radius:7px;overflow-wrap:anywhere;margin:12px 0}.events{padding:0 0 0 20px;font-size:13px;color:var(--muted);min-height:100px}.deep-note{margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}footer{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-top:25px;font-size:12px;color:var(--muted)}.prediction-mode .live-only{visibility:hidden}.prediction-mask{padding:20px 10px;color:var(--muted);font-size:14px;background:var(--bg);border:1px dashed var(--line);border-radius:8px;text-align:center;margin-top:15px}.prediction-mode .status{display:none}.practice-mode .live-only{visibility:hidden}.practice-mode .try-guide,.practice-mode .look{display:none}.practice-mode .status{visibility:hidden}.practice-mask{display:none;background:var(--bg);padding:12px;border:1px dashed var(--line);border-radius:7px;font-size:14px}.practice-mode .practice-mask{display:block}[data-part]{transition:opacity .15s,outline-color .15s}.guide-on [data-part].dimmed{opacity:.32}[data-part].highlight{outline:2px solid var(--focus);outline-offset:5px;border-radius:5px}[data-ref].term-active{background:var(--at);outline:2px solid var(--focus);border-radius:3px}.term{border-bottom:1px dotted var(--muted);cursor:help}noscript{display:block;padding:30px;color:var(--b)}
+/* Keep buffer readouts legible even when attention is directed to a stream. */
+.guide-on .buffers [data-part].dimmed{opacity:.65}
+.feedback[data-verdict=pending]{background:var(--soft);border-color:var(--muted)}
+.feedback[data-verdict=incorrect]{background:var(--bt);border-color:var(--b)}
+#prediction-verdict{display:block;font-size:17px}
+.receive-process{display:grid;grid-template-columns:minmax(0,1fr) 14px minmax(0,1fr);gap:5px;align-items:center;margin:9px 0}
+.receive-phase{padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);min-width:0}
+.receive-phase strong{display:block;font-size:12px;margin-bottom:5px}
+.receive-phase .phase-label{display:block;color:var(--muted);font-size:11px;line-height:1.5}
+.receive-phase .phase-value{display:block;font-size:12px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.receive-phase .meter{margin:6px 0 0}.receive-phase .meter i{height:9px}
+.receive-arrow{color:var(--muted);font-size:14px;text-align:center}
+.receive-tick{color:var(--muted);font-size:11px}.receive-total{display:block;margin-top:4px}
+.receive-trace{display:block;margin-top:5px;font-size:12px;font-variant-numeric:tabular-nums}
+.receive-help{margin:0 0 14px;font-size:12px;color:var(--muted)}
+[data-part="a-rx"]{--accent:var(--b);--tint:var(--bt)}
+[data-part="b-rx"]{--accent:var(--a);--tint:var(--at)}
+.buffers .meter i.filled{background:var(--accent);border-color:var(--accent)}
+.buffers .meter i.full{box-shadow:inset 0 0 0 1px var(--ink)}
+.receive-route{display:block;color:var(--accent);font-size:12px;font-weight:700;margin-top:3px}
+.receive-policy{display:block;color:var(--muted);font-size:12px;margin-top:3px}
+.receive-state{display:block;font-size:12px;font-weight:650;margin-top:4px;color:var(--accent)}
+.time-label{font-size:12px;color:var(--muted);margin:12px 0 0;padding-bottom:6px;border-bottom:1px dashed var(--line)}
+.animate .receive-process.has-arrival .tcp-phase{animation:receive-flash .55s ease-out both}
+.animate .receive-process.has-read .app-phase{animation:receive-flash .55s .55s ease-out both}
+@keyframes receive-flash{from{border-color:var(--accent);background:var(--tint)}to{border-color:var(--line);background:var(--bg)}}
+@media(max-width:600px){.buffers{grid-template-columns:1fr;gap:20px}.receive-phase{padding:10px}.receive-phase .phase-value{font-size:14px}.buffer-title{font-size:14px}}
+@media(prefers-color-scheme:dark){:root{--bg:#101d24;--paper:#17272f;--ink:#e5eee9;--muted:#adc0c3;--line:#40545b;--soft:#22383e;--a:#6ad6bf;--at:#183e39;--b:#efb271;--bt:#443322;--focus:#81baff;--shadow:none}}
+@media(max-width:1000px){.wrap{padding:22px 20px 40px}.layout{grid-template-columns:minmax(0,1fr) 310px;gap:14px}.stage{padding:18px}.panel{padding:18px}.endpoint small{font-size:11px}}
+@media(max-width:780px){.layout{grid-template-columns:1fr}.stage{position:static}.backend-grid{grid-template-columns:1fr}.subtitle{font-size:15px}.stage-title{align-items:start}.topline{font-size:11px}.backend{padding:20px}.backend-head{flex-direction:column}}
+@media(max-width:400px){.wrap{padding:16px 12px 30px}.stage,.panel{padding:16px}.topline{gap:8px;letter-spacing:0}.buffers{gap:12px}.buffer-title{font-size:12px}.bytes{font-size:22px}.endpoint{gap:7px}.endpoint small{max-width:100px}.letter{width:36px;height:38px;font-size:21px}.transport button{padding:8px 11px}.transport .counter{margin-left:0}.stage-title h2{font-size:18px}.header-fields{gap:4px;font-size:11px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+.systems-shell {
+  display: grid;
+  grid-template-columns: 13rem minmax(0, 1fr);
+  gap: 32px;
+  max-width: 1560px;
+  margin: auto;
+  padding: 32px clamp(16px, 3vw, 48px) 64px;
+}
+.systems-nav {
+  position: sticky;
+  top: 24px;
+  align-self: start;
+  padding-right: 20px;
+  border-right: 1px solid var(--line);
+}
+.systems-nav a { display: block; text-decoration: none; }
+.systems-nav a:hover { text-decoration: underline; }
+.systems-nav .back { color: var(--muted); font-size: 14px; }
+.systems-nav h2 { margin: 18px 0; }
+.systems-nav ul { list-style: none; padding: 0; margin: 0; }
+.systems-nav li > ul { margin: 7px 0 0 4px; padding-left: 12px; border-left: 1px solid var(--line); }
+.systems-nav .topic { padding: 8px; border-radius: 6px; background: var(--at); font-weight: 650; }
+.systems-shell .wrap { width: 100%; padding: 0; }
+.principles { margin-top: 24px; padding: clamp(16px, 4vw, 48px); overflow-wrap: anywhere; }
+.principles > * { max-width: 80ch; margin-inline: auto; }
+.principles h2 { margin-block: 2em .65em; }
+.principles h2:first-child { margin-top: 0; }
+.principles h3, .principles details { margin-block: 1.25em .5em; }
+.principles summary { cursor: pointer; font-weight: bold; }
+.principles pre { overflow-x: auto; padding: 12px; background: var(--soft); border-radius: 6px; }
+.principles table { margin-block: 16px; font-size: 14px; }
+@media (max-width: 1099px) {
+  .systems-shell { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .systems-nav { position: static; padding: 0 0 16px; border-right: 0; border-bottom: 1px solid var(--line); }
+  .systems-nav h2 { margin: 8px 0; }
+}
+</style>
+</head>
+<body>
+<div class="systems-shell">
+  <nav class="systems-nav" aria-labelledby="systems-title">
+    <a class="back" href="/">← K7-Tech 首页</a>
+    <h2 id="systems-title">计算机系统知识</h2>
+    <ul><li><strong>计算机网络</strong>
+      <ul><li>TCP
+        <ul><li><a class="topic" href="#tcp-full-duplex" aria-current="page">TCP 全双工通信</a></li></ul>
+      </li></ul>
+    </li></ul>
+  </nav>
+<main class="wrap" id="tcp-full-duplex" data-pagefind-body>
+
+  <header style="padding-top:0">
+    <div class="kicker">两个方向，一条连接</div>
+    <h1>TCP 全双工通信</h1>
+    <p class="subtitle">先预测，再暂停 B 的应用读取。通过缓冲区、窗口和报文，观察两个方向的变化。</p>
+    <div class="head-actions"><button id="backend-toggle" aria-expanded="false" aria-controls="backend">＋ 后端实现细节</button><a href="#principles">阅读原理说明 ↓</a></div>
+  </header>
+  <noscript>交互演示需要 JavaScript。可直接<a href="#principles">阅读原理说明</a>。</noscript>
+  <div class="layout" id="lesson">
+    <section class="card stage prediction-mode guide-on" id="experiment" aria-label="TCP 双向字节流实验">
+      <div class="stage-title"><h2>同一连接里的两个方向</h2><span class="badge">已完成握手</span></div>
+      <p class="addresses mono">A 192.0.2.10:41000 ↔ B 198.51.100.20:8080</p>
+      <div class="figure-tools"><label class="check"><input id="focus-guide" type="checkbox" checked>关注提示</label><span class="hint">两条线表示逻辑字节流</span></div>
+      <div class="endpoints"><div class="endpoint"><span class="letter">A</span><div><strong>端点 A</strong><small>一个 socket，可读也可写</small></div></div><div class="endpoint right"><span class="letter">B</span><div><strong>端点 B</strong><small>一个 socket，可读也可写</small></div></div></div>
+      <p class="time-label live-only">上方动效：本步新发出的在途报文，下一步才到达目标端点</p>
+      <div class="lane forward" data-part="forward" tabindex="0" aria-label="A 到 B 的逻辑字节流">
+        <div class="lane-head"><span class="direction">A 发送 → B 接收</span><span class="bytes live-only"><span id="b-received">0</span> <small>字节到达 B</small></span></div>
+        <div class="track"><svg class="wire" viewBox="0 0 600 24" preserveAspectRatio="none" aria-hidden="true"><path d="M1 12 H596 M586 5 L596 12 L586 19" fill="none" stroke="currentColor" stroke-width="2"/></svg><span class="packet live-only" id="packet-a">尚未发送</span><span class="packet-note live-only" id="note-a" data-ref="b-rx" tabindex="0">点击「下一步」发出首个报文</span></div>
+        <div class="header-fields live-only" id="header-a"><span class="tag">A→B 报头</span><span>SEQ —</span><span>ACK —</span><span>WIN —</span></div>
+      </div>
+      <div class="lane reverse" data-part="reverse" tabindex="0" aria-label="B 到 A 的逻辑字节流">
+        <div class="lane-head"><span class="direction">A 接收 ← B 发送</span><span class="bytes live-only"><span id="a-received">0</span> <small>字节到达 A</small></span></div>
+        <div class="track"><svg class="wire" viewBox="0 0 600 24" preserveAspectRatio="none" aria-hidden="true"><path d="M599 12 H4 M14 5 L4 12 L14 19" fill="none" stroke="currentColor" stroke-width="2"/></svg><span class="packet live-only" id="packet-b">尚未发送</span><span class="packet-note live-only" id="note-b" data-ref="a-rx" tabindex="0">两个方向无需轮流获得发送资格</span></div>
+        <div class="header-fields live-only" id="header-b"><span class="tag">B→A 报头</span><span>SEQ —</span><span>ACK —</span><span>WIN —</span></div>
+      </div>
+      <p class="time-label live-only">下方快照：上一轮报文在本步已经到达，并完成了接收与应用读取</p>
+      <div class="buffers live-only">
+        <div data-part="a-rx" data-receives-from="B" tabindex="0" aria-label="A 接收来自 B 的数据与应用读取过程">
+          <div class="buffer-title"><strong>A 接收过程</strong><span class="receive-tick">第 <span id="a-receive-tick">0</span> 步快照</span></div>
+          <span class="receive-route">B→A 数据进入这里（橙色方向）</span><span class="receive-policy">A 应用读取：开启，每步读清</span>
+          <div class="receive-process" id="receive-a">
+            <div class="receive-phase tcp-phase"><strong>① TCP 收包</strong><span class="phase-label">本步到达</span><b class="phase-value" id="a-arrived">0 B</b><span class="phase-label">收包后缓冲</span><b class="phase-value" id="a-buffered">0 / 600 B</b><div class="meter" id="meter-a-buffered" aria-hidden="true"><i></i><i></i><i></i></div></div>
+            <span class="receive-arrow" aria-hidden="true">→</span>
+            <div class="receive-phase app-phase"><strong>② 应用读取</strong><span class="phase-label">本步读出</span><b class="phase-value" id="a-read">0 B</b><span class="phase-label">步末剩余</span><b class="phase-value" id="a-occupancy">0 / 600 B</b><div class="meter" id="meter-a" aria-hidden="true"><i></i><i></i><i></i></div></div>
+          </div>
+          <span class="receive-trace" id="a-trace">缓冲：0 → 0 → 0 B</span><span class="receive-state" id="a-buffer-state">没有数据积压</span><div class="buffer-detail">A 通告窗口：<b id="a-window">600 B</b><span class="receive-total">累计被应用读取：<b id="a-delivered">0 B</b></span></div>
+        </div>
+        <div data-part="b-rx" data-receives-from="A" tabindex="0" aria-label="B 接收来自 A 的数据与应用读取过程">
+          <div class="buffer-title"><strong>B 接收过程</strong><span class="receive-tick">第 <span id="b-receive-tick">0</span> 步快照</span></div>
+          <span class="receive-route">A→B 数据进入这里（绿色方向）</span><span class="receive-policy" id="b-reading-label">B 应用读取：开启</span>
+          <div class="receive-process" id="receive-b">
+            <div class="receive-phase tcp-phase"><strong>① TCP 收包</strong><span class="phase-label">本步到达</span><b class="phase-value" id="b-arrived">0 B</b><span class="phase-label">收包后缓冲</span><b class="phase-value" id="b-buffered">0 / 600 B</b><div class="meter" id="meter-b-buffered" aria-hidden="true"><i></i><i></i><i></i></div></div>
+            <span class="receive-arrow" aria-hidden="true">→</span>
+            <div class="receive-phase app-phase"><strong>② 应用读取</strong><span class="phase-label">本步读出</span><b class="phase-value" id="b-read">0 B</b><span class="phase-label">步末剩余</span><b class="phase-value" id="b-occupancy">0 / 600 B</b><div class="meter" id="meter-b" aria-hidden="true"><i></i><i></i><i></i></div></div>
+          </div>
+          <span class="receive-trace" id="b-trace">缓冲：0 → 0 → 0 B</span><span class="receive-state" id="b-buffer-state">没有数据积压</span><div class="buffer-detail">B 通告窗口：<b id="b-window">600 B</b><span class="receive-total">累计被应用读取：<b id="b-delivered">0 B</b></span></div>
+        </div>
+      </div>
+      <p class="receive-help live-only">默认 A 一直读取，所以收到后读清、不积满；B 暂停读取，所以数据积压至满。纯 ACK 不携带应用数据，不会填充接收缓冲区。</p>
+      <div class="prediction-mask" id="prediction-mask">先在右侧留下预测，再显示实时状态。<br>手机上请向下查看预测题。</div>
+      <div class="practice-mask">独立练习已遮住实验结果。先凭记忆作答，再按需恢复观察提示。</div>
+      <p class="status" id="summary" role="status" aria-live="polite">连接已建立，尚未发送应用数据。</p>
+      <div class="transport"><button id="step" class="primary" disabled>下一步 →</button><button id="play" disabled aria-pressed="false">连续播放</button><button id="reset">重置</button><span class="counter">第 <b id="tick">0</b> 步 · 每步最多 200 B</span></div>
+      <p class="caveat">在途报文下一步送达；单步时停在中间便于检查。每端初始待发 12000 B。缓冲区容量、时延和序号均为教学示例，未模拟丢包、拥塞、重传和零窗口探测。</p>
+    </section>
+    <aside>
+      <section class="card panel" id="predict-panel" data-focus="forward reverse">
+        <div class="step-label"><span class="step-number">01</span> 预测</div>
+        <h2>B 不再读取，会发生什么？</h2>
+        <details class="probe" open><summary>先确认两个基础概念（可跳过）</summary>
+          <fieldset><legend>ACK 表示什么？</legend><label class="option"><input type="radio" name="ack-probe" value="tcp">对端 TCP 已按序收到</label><label class="option"><input type="radio" name="ack-probe" value="app">对端业务已经处理成功</label></fieldset>
+          <fieldset><legend>SEQ 通常按什么编号？</legend><label class="option"><input type="radio" name="seq-probe" value="byte">字节</label><label class="option"><input type="radio" name="seq-probe" value="call">应用的一次 write</label></fieldset>
+        </details>
+        <p>双方都有数据要发送。如果 B 应用停止读取，直到 B 的接收窗口耗尽：</p>
+        <fieldset id="prediction"><legend class="hint">选择一个预测，也可直接开始</legend><label class="option"><input type="radio" name="prediction" value="both">两个方向都会停止</label><label class="option"><input type="radio" name="prediction" value="one">A→B 的新数据暂停，B→A 仍可继续</label><label class="option"><input type="radio" name="prediction" value="ack">B 的 TCP 不再发送 ACK</label></fieldset>
+        <button id="start" class="primary">保留预测，验证 B 不读取</button>
+      </section>
+      <section class="card panel" id="try-panel" hidden data-focus="forward reverse a-rx b-rx">
+        <div class="step-label"><span class="step-number">02</span> 尝试</div><h2>推进实验，观察缓冲区</h2>
+        <div class="feedback" id="probe-feedback" hidden></div>
+        <div class="controls">
+          <label class="control"><span>A 允许发送新数据<small>关闭后仍处理接收与 ACK</small></span><input type="checkbox" id="send-a" checked></label>
+          <label class="control"><span>B 允许发送新数据<small>关闭后仍处理接收与 ACK</small></span><input type="checkbox" id="send-b" checked></label>
+          <label class="control read-control"><span>B 应用读取接收缓冲区<small>开始时已暂停；开启后可观察窗口恢复</small></span><input type="checkbox" id="read-b" checked></label>
+        </div>
+        <p class="try-guide">开始验证时已暂停 B 的应用读取。<br>① 第一步发出报文；第 2 至 4 步，B 缓冲区从 200 B 增至 600 B。<br>② 继续推进到第 6 步，查看预测结论。<br>③ 勾选 B 读取，观察窗口更新后 A→B 恢复。</p>
+        <button id="go-step" class="small" style="margin-top:12px">推进一步 →</button>
+        <section class="feedback" id="prediction-feedback" hidden role="status" aria-live="polite" aria-atomic="true" data-verdict="pending">
+          <strong id="prediction-verdict">预测尚未验证</strong>
+          <p id="prediction-choice"></p><p id="prediction-progress"></p>
+          <div id="prediction-result" hidden><p id="prediction-observation"></p><p id="prediction-reason"></p></div>
+        </section>
+        <div class="explain" id="explain" hidden>
+          <div class="step-label"><span class="step-number">03</span> 解释</div>
+          <p><span class="term" data-ref="b-rx" tabindex="0">B 的接收窗口</span>限制 <span class="term" data-ref="forward" tabindex="0">A→B</span> 的新数据；<span class="term" data-ref="reverse" tabindex="0">B→A</span> 由 A 的接收窗口等条件控制。应用不读，TCP 仍然收包和确认。</p>
+          <ol class="look"><li><button data-look="forward reverse" aria-pressed="false">比较两个方向的累计接收字节</button></li><li><button data-look="b-rx" aria-pressed="false">观察 B 的占用与 WIN = 0</button></li><li><button data-look="reverse" aria-pressed="false">在 B→A 报头找 ACK 与 WIN</button></li></ol>
+          <label for="explanation" class="hint">用自己的话补全因果关系</label><textarea id="explanation" placeholder="B 不读 → ___ 接收窗口变成零 → ___ 方向暂停；另一方向能继续，因为 ___。"></textarea><span class="privacy">草稿仅保留在本页，刷新即清空。</span>
+          <button id="practice" style="margin-top:12px">收起提示，做一道练习</button>
+        </div>
+      </section>
+      <section class="card panel" id="practice-panel" hidden>
+        <div class="step-label"><span class="step-number">04</span> 独立练习</div><h2>A 没有新数据要发了</h2><p>B 仍有数据，且 A 的接收窗口足够。A 还需要发 ACK 吗？</p>
+        <fieldset><legend class="hint">此时实验结果已遮住</legend><label class="option"><input type="radio" name="practice" value="yes">需要，可以发送不带数据的纯 ACK</label><label class="option"><input type="radio" name="practice" value="no">不需要，ACK 只能捎带在数据中</label></fieldset><button id="check-practice">查看解析</button><div class="feedback" id="practice-feedback" role="status" hidden></div><button id="restore" class="small" style="margin-top:12px">恢复观察提示</button>
+        <div id="transfer" hidden style="margin-top:20px"><h3>换个场景再判断</h3><p>如果底层 Wi-Fi 的同一信道只能分时收发，TCP 还能提供全双工语义吗？</p><fieldset><legend class="hint">把协议语义与介质调度分开考虑</legend><label class="option"><input type="radio" name="transfer" value="yes">能，两个方向的进度可并发推进</label><label class="option"><input type="radio" name="transfer" value="no">不能，必须在介质上同刻收发</label></fieldset><button id="check-transfer">查看解析</button><div class="feedback" id="transfer-feedback" role="status" hidden></div></div>
+      </section>
+    </aside>
+  </div>
+  <section class="card backend" id="backend" hidden aria-labelledby="backend-heading">
+    <div class="backend-head"><div><div class="kicker">按需深入</div><h2 id="backend-heading">后端开发：协议状态与内核收发</h2></div><button id="backend-close" class="small">收起细节 ↑</button></div>
+    <p class="hint" style="margin-top:12px">主图是逻辑状态图。这里将同一模型映射到报头、TCP 控制块和 socket 读写；不代表某一版本内核的具体内存布局。</p>
+    <div class="backend-grid">
+      <div><h3>01 · 一个连接，两组方向状态</h3><p><code>SND.UNA</code> 是最早未确认字节的序号，<code>SND.NXT</code> 是下一个发送序号；<code>RCV.NXT</code> 是下一期待接收序号。每个端点都同时维护发送和接收状态。</p><div class="table-wrap"><table><thead><tr><th>状态 / B 为字节</th><th>端点 A</th><th>端点 B</th></tr></thead><tbody id="state-table"></tbody></table></div><p class="hint">发出的 ACK = 本端 RCV.NXT。表中接收窗口为本地状态；对方要等窗口通告到达后才知道。</p></div>
+      <div><h3>02 · 一份报头同时描述两个方向</h3><p>A→B 报文的 <code>SEQ</code> 标记 A 的数据；<code>ACK</code> 确认 B 的数据；<code>WIN</code> 通告 A 自己还能接收多少 B 的数据。三个字段不能按同一方向解读。</p><p>首轮双方同时发送时，A 的 ACK 仍为 5001，B 的 ACK 仍为 1001。各收到对方的 200 B 后，下一轮才分别变为 5201、1201。确认可以捎带在数据中，也可单独发送；纯 ACK 不消耗序号。</p><div class="formula"><strong>本例的新数据发送额度</strong><br><code>max(0, 对端已通告的右边界 - SND.NXT)</code><br>本步还受 200 B 和剩余待发数据限制。</div><p class="hint">真实 TCP 的流控与拥塞控制还共同约束发送。常见近似：<code>max(0, min(rwnd, cwnd) - FlightSize)</code>；另受 MSS、发送缓存、恢复算法、调度与 pacing 等影响。本图假设 cwnd 足够大。</p></div>
+      <div><h3>03 · 应用读写与网络收发分开推进</h3><p>常见内核实现中，应用写入发送缓冲区，TCP 选择可发数据交给 IP；网卡收包后，内核协议栈校验、处理 ACK、更新接收状态，再让应用读取数据。发送队列保留尚未确认的数据以备重传。</p><p>应用的 <code>read</code> 和 <code>write</code>、协议栈的输入与输出可交错调度。一个事件循环或多个线程都能使用全双工 socket；TCP 不要求应用创建两个线程。阻塞调用和应用协议仍会影响程序何时读写。</p><p><strong>ACK 不代表业务成功。</strong> 数据进入接收端 TCP 后，即使应用没有读取，仍然可以被确认。需要业务处理完成的证据时，应由应用协议定义响应。</p></div>
+      <div><h3>04 · 为什么零窗口不会封住反向 ACK？</h3><p>B 的 WIN=0 表示 B 暂无空间容纳 A 的常规新数据。它不要求 B 停止发数据，也不要求 B 停止接收纯 ACK。主图的 B→A 数据可以继续捎带对 A 的确认与 WIN=0。</p><p>两条流的状态分别维护，但性能仍可能被共享带宽、CPU、应用读写方式和反向 ACK 可达性耦合。「独立」不意味着永远互不影响。真实 TCP 还会发送零窗口探测，本例省略。</p><p>FIN 则用于关闭发送方向：A 发完 FIN 后仍可接收 B 的数据。图中「允许发送新数据」开关只暂停发送调度，<strong>不发送 FIN，也不模拟半关闭</strong>。</p></div>
+    </div>
+    <div class="deep-note"><h3>本步事件</h3><ol id="events" class="events"><li>开始实验后显示报文事件。</li></ol><p class="hint">延迟以「步」计，示意路径每个方向延迟一步；这不表示现实网络两个方向一定具有相同路径或时延。</p></div>
+    <div class="deep-note"><h3>分层理解「同时」</h3><p>TCP 允许双方在彼此的发送尚未完成时继续发送和接收。具体比特何时经过介质，由底层链路调度决定。共享无线介质可以分时承载双向 TCP 报文；全双工以太网也可以在链路层同时收发。图中的双箭头不能理解为 TCP 自己铺设了两条独占线路。</p></div>
+    <p class="caveat">事实依据：<a href="https://www.rfc-editor.org/rfc/rfc9293.html#section-3.3.1">RFC 9293 状态变量</a>、<a href="https://www.rfc-editor.org/rfc/rfc9293.html#section-3.4">序号与零窗口</a>、<a href="https://www.rfc-editor.org/rfc/rfc9293.html#section-3.8.6">窗口管理</a>、<a href="https://www.rfc-editor.org/rfc/rfc5681.html#section-2">RFC 5681 拥塞窗口</a>、<a href="https://man7.org/linux/man-pages/man7/tcp.7.html">Linux tcp(7)</a>。</p>
+  </section>
+  <article class="card principles" id="principles">
+<h2>为什么 TCP 可以同时收发？</h2>
+<p>TCP 的全双工意味着：同一个连接提供 <strong>A→B 和 B→A 两条字节流</strong>，双方可以在发送本方向数据的同时，接收另一个方向的数据。TCP 没有「轮到谁说话」的协议步骤，也不要求先把一个方向发完，再开启另一个方向。<a href="https://www.rfc-editor.org/rfc/rfc793.html#section-2.7">RFC 793 §2.7</a></p>
+<p>先打开 <a href="#lesson">交互演示</a>，预测 B 停止读取后会影响哪个方向，再观察缓冲区、ACK 和接收窗口。点击页面中的「后端实现细节」，可以查看协议状态与实现上的对应关系。</p>
+<p>点击「保留预测，验证 B 不读取」会直接暂停 B 的应用读取。随后单步推进或连续播放：第一步发出报文，第 2 至 4 步 B 缓冲区按 200、400、600 B 填满，第 6 步完成比较，明确给出「你的预测正确／不正确」，同时保留原选择、实际计数变化和原因；跳过预测时只显示实验结论。</p>
+<p>两端的接收过程分别展示「① TCP 收包」和「② 应用读取」：本步到达多少、收包后缓冲多少、应用读出多少、步末剩余多少。第 2 步 A 的缓冲轨迹是 <code>0 → 200 → 0 B</code>，表示先收到 200 B，再由应用读清；B 暂停读取时为 <code>0 → 200 → 200 B</code>，之后逐步积满。B 缓冲区积满后恢复读取，下一步可见 <code>600 → 600 → 0 B</code>。这些中间快照在单步和减少动态效果模式下也会保留；连续播放只按顺序高亮，不改变 TCP 时序。「累计被应用读取」统计读取量，不表示业务处理成功。</p>
+<p>开始验证后的默认状态如下。箭头和对应接收区使用相同方向色；满状态由文字说明，不改变方向色。</p>
+<table>
+<thead>
+<tr>
+<th>数据方向</th>
+<th>接收端</th>
+<th>默认应用读取状态</th>
+<th>缓冲区变化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A→B（绿色）</td>
+<td>B，接收来自 A 的数据</td>
+<td>暂停读取</td>
+<td>200 → 400 → 600 B，逐步积满</td>
+</tr>
+<tr>
+<td>B→A（橙色）</td>
+<td>A，接收来自 B 的数据</td>
+<td>每步读清</td>
+<td>每步 0 → 200 → 0 B，不积满</td>
+</tr>
+</tbody>
+</table>
+<p>上方在途报文是本步发出、下一步才到达的报文；下方快照展示本步已经收包和读取的过程，两者不是同一个时刻的占用。纯 ACK 的载荷为 0，不填入数据接收缓冲区。切换控件保留当前快照，不会重复播放上一轮的收包动画。</p>
+<h2>1. 一个连接，两套方向状态</h2>
+<p>连接两端都兼任发送者和接收者。概念上可以画成：</p>
+<pre><code class="language-text">A 的应用 → A 发送缓冲 → A 的发送状态 ──数据──→ B 的接收状态 → B 接收缓冲 → B 的应用
+A 的应用 ← A 接收缓冲 ← A 的接收状态 ←──数据── B 的发送状态 ← B 发送缓冲 ← B 的应用
+</code></pre>
+<p>发送状态记录哪些字节已经发出、哪些已被确认、还能发送多少；接收状态记录接下来期待哪个字节，并组织收到的数据。每个方向有自己的字节编号，因此 A 发到第 1201 号、B 发到第 5201 号完全可以同时成立。这些是逻辑状态，不要求实现为两个独立进程或两块固定内存。<a href="https://www.rfc-editor.org/rfc/rfc9293.html#section-3.3.1">RFC 9293 §3.3.1</a></p>
+<p>收发缓冲区让应用和网络可以按不同节奏推进：应用把数据交给发送侧，TCP 负责后续传输；数据抵达接收侧后，可以先进入接收缓冲区，等应用读取。Linux 也分别提供发送和接收缓冲区设置；实际缓冲区的内存大小与对外通告的窗口数值不能简单画等号。<a href="https://man7.org/linux/man-pages/man7/tcp.7.html">Linux tcp(7)</a></p>
+<h2>2. 同一个报文可以同时「发自己的、确认对方的」</h2>
+<p>看 A→B 的一个 TCP 报文，三个字段分别回答三个问题：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>站在 A 的角度解释</th>
+<th>对应的数据方向</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SEQ</code></td>
+<td>这段载荷的第一个字节编号是多少？</td>
+<td>A→B</td>
+</tr>
+<tr>
+<td><code>ACK</code></td>
+<td>我接下来期待收到 B 的哪个字节？</td>
+<td>B→A</td>
+</tr>
+<tr>
+<td><code>WIN</code></td>
+<td>从这个确认位置开始，我允许 B 再发多少字节？</td>
+<td>限制 B→A</td>
+</tr>
+</tbody>
+</table>
+<p>这里假定 ACK 标志有效、连接已经建立；窗口缩放等细节暂不展开。<code>ACK=N</code> 累计确认对方在 N 之前的连续字节。<strong>A 报文中的 ACK 不是在确认 A 自己发送的数据。</strong> <a href="https://www.rfc-editor.org/rfc/rfc9293.html#section-3.1">RFC 9293 §3.1</a></p>
+<p>假定握手已完成，A 的下一个数据序号是 1001，B 的是 5001，双方各发送 200 B：</p>
+<table>
+<thead>
+<tr>
+<th>时刻</th>
+<th>A→B</th>
+<th>B→A</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>双方交叉发出数据</td>
+<td><code>SEQ=1001, LEN=200, ACK=5001</code></td>
+<td><code>SEQ=5001, LEN=200, ACK=1001</code></td>
+</tr>
+<tr>
+<td>各自收到对方数据后</td>
+<td>A 发出 <code>ACK=5201</code></td>
+<td>B 发出 <code>ACK=1201</code></td>
+</tr>
+</tbody>
+</table>
+<p>第一次发包时，双方尚未收到交叉而来的数据，所以 ACK 仍是原来的值。收到后，A 期待 B 的 5201 号字节，B 期待 A 的 1201 号字节。这些数字按字节累加，不是按报文个数累加。</p>
+<p>确认可以捎带在下一段反向数据中，也可以用没有应用载荷的纯 ACK 报文发送。<strong>不需要等反向业务产生数据，才能确认收到的内容。</strong> <a href="https://www.rfc-editor.org/rfc/rfc793.html#section-3.9">RFC 793 §3.9</a></p>
+<h2>3. 为什么不必「发一包，等一包」？</h2>
+<p>滑动窗口允许一个方向存在多个尚未确认的数据段。发送者只要仍有可用额度，就可以继续发送；确认抵达后，额度又向前移动。这使传输能在等待网络往返期间继续推进。<a href="https://www.rfc-editor.org/rfc/rfc793.html#section-2.6">RFC 793 §2.6</a></p>
+<p>两个方向各自执行这个过程。A 发数据不需要先取得 B→A 的「使用权」，B 也不需要等 A 暂停。并发能力来自协议允许两条流分别推进，缓冲区和状态管理使这种能力能够落实。</p>
+<h3>试一下：让 B 停止读取</h3>
+<p>如果 B 的应用不再读取，已经抵达的 A→B 数据会逐渐占满 B 的接收缓冲区。B 通告的接收窗口可能降为 0，A 因而暂停该方向正常的新数据发送。实际 TCP 仍会进行零窗口探测，避免错过窗口重新打开的通知。<a href="https://www.rfc-editor.org/rfc/rfc9293.html#section-3.8.6.1">RFC 9293 §3.8.6.1</a></p>
+<p>此时 B→A <strong>仍有可能继续传输</strong>：B 的发送侧和 A 的接收侧仍可工作，且 A 仍能发回 ACK。B 的 <code>WIN=0</code> 描述的是「B 接收 A 数据的能力」，没有把「B 发送数据的能力」也设为 0。</p>
+<p>这不代表两个方向性能完全无关。如果共用链路、CPU 或内存遇到瓶颈，或者确认报文不能及时抵达，另一个方向也可能变慢甚至停滞。应区分「协议上没有要求互相等待」与「运行时没有共享资源」。</p>
+<h2>4. TCP 的同时，与物理链路的同时</h2>
+<p>TCP 位于 IP 之上，数据最终由下面的网络逐段承载。TCP 要求的底层服务是数据报传递，并不要求端到端拥有一条专用电路。<a href="https://www.rfc-editor.org/rfc/rfc793.html#section-1.1">RFC 793 §1.1、§2.5</a></p>
+<p>由这种分层关系可以推知：即使路径中有一段共享介质需要轮流传输，例如通常共享信道的 Wi-Fi，TCP 的两条字节流仍可在同一时间区间内持续推进。那一段介质上，比特可能是在交替传输。图中的双向箭头表示逻辑数据流，不代表两根专用网线。</p>
+<p>同理，TCP 全双工也不要求应用开两个线程。一个线程可以使用非阻塞 I/O，按可读、可写事件分别处理接收和发送。线程的代码可能依次执行，网络传输和内核协议处理仍可以在应用两次调用之间继续进行。<a href="https://man7.org/linux/man-pages/man7/socket.7.html">Linux socket(7)</a></p>
+<details>
+<summary>后端实现细节：状态变量与可发送额度</summary>
+<p>每端常用三个序号状态描述进度：<code>SND.UNA</code> 是尚未确认的最早序号，<code>SND.NXT</code> 是下一个要发送的序号，<code>RCV.NXT</code> 是接下来期待收到的序号。发送推进 <code>SND.NXT</code>，有序接收推进 <code>RCV.NXT</code>，确认抵达发送侧后推进 <code>SND.UNA</code>。<a href="https://www.rfc-editor.org/rfc/rfc9293.html#section-3.8">RFC 9293 §3.8</a></p>
+<p>在忽略恢复过程、序号回绕等细节的简化估算中：</p>
+<pre><code class="language-text">正常新数据可发送额度 ≈ max(0, min(rwnd, cwnd) - flight)
+</code></pre>
+<p><code>rwnd</code> 是对端通告的接收窗口，保护接收方；<code>cwnd</code> 是发送方维护的拥塞窗口，限制对网络的注入量；<code>flight</code> 是已发出但尚未确认的数据量。还需要有待发送数据，并受分段、发送节奏等实现约束。这是额度估算，不是完整发送算法。<a href="https://www.rfc-editor.org/rfc/rfc5681.html#section-2">RFC 5681 §2、§3.1</a></p>
+<p>应用的一次发送调用成功，也不等于对端已经收到。调用可能只是让内核接受了部分或全部待发送数据；发送缓冲区不足时，阻塞调用可能等待，非阻塞调用可能报告暂不可写。TCP ACK 进一步表示对端 TCP 已确认接收相应字节，仍然不能证明对端业务已经处理、入库或持久化；业务成功需要应用协议自己的响应。<a href="https://man7.org/linux/man-pages/man2/send.2.html">Linux send(2)</a>、<a href="https://www.rfc-editor.org/rfc/rfc9293.html#section-3.10.3">RFC 9293 §3.10.3</a></p>
+</details>
+<h2>5. 关闭发送方向后，还可以接收</h2>
+<p>TCP 关闭也能按方向进行：A 发出 FIN 表示「A 没有更多数据要发」，B 仍可继续向 A 发送剩余数据，直到 B 也结束发送。<a href="https://www.rfc-editor.org/rfc/rfc9293.html#section-3.6">RFC 9293 §3.6</a></p>
+<p>在 Linux 套接字接口中，<code>shutdown(..., SHUT_WR)</code> 关闭发送方向，接收方向仍可使用；它与直接关闭整个套接字有区别。<a href="https://man7.org/linux/man-pages/man2/shutdown.2.html">Linux shutdown(2)</a></p>
+<p>这提供了另一个检验问题：A 已经发送 FIN，是否就不能再收到 B 的数据？只要连接的接收方向仍然有效，答案是可以收到。</p>
+<h2>模型边界</h2>
+<p>演示从握手完成后开始：两端的初始待发送数据各为 12000 B，接收容量各为 600 B，每段载荷最多 200 B。开启读取时仍每步读清，但展示收包前、收包后和应用读取后的真实快照。模型采用立即 ACK，不模拟丢包、拥塞控制、FIN 或零窗口探测。暂停发送数据只是停止产生数据段，不代表已经半关闭连接。</p>
+<p>这些是用于理解双向状态和流量控制的示意参数，不是性能测量；演示并非完整 TCP 实现。</p>
+  </article>
+</main>
+</div>
+<script src="tcp-model.js"></script>
+<script>
+'use strict';
+const $=id=>document.getElementById(id), model=window.TCPModel;
+let state=model.initialState(), started=false, timer=null, focus='forward reverse', evidence=null, conclusion=null, prediction='', renderedTick=-1;
+const stage=$('experiment'), reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+function selected(name){return document.querySelector('input[name="'+name+'"]:checked')?.value||''}
+function stop(){clearInterval(timer);timer=null;stage.classList.remove('animate');$('play').textContent=reduced.matches?'单步播放':'连续播放';$('play').setAttribute('aria-pressed','false')}
+function attention(){document.querySelectorAll('[data-part]').forEach(el=>el.classList.toggle('dimmed',$('focus-guide').checked&&!!focus&&!focus.split(' ').includes(el.dataset.part)))}
+function setFocus(value){focus=value;attention();document.querySelectorAll('[data-look]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.look===value)))}
+function backendTable(){
+  const d=model.derive(state), rows=[['SND.UNA',n=>n.sndUna],['SND.NXT',n=>n.sndNxt],['RCV.NXT',n=>n.rcvNxt],['接收窗口 / B',(n,id)=>d[id].window],['在途未确认 / B',(n,id)=>d[id].flight],['当前新数据额度 / B',(n,id)=>d[id].available],['发送缓冲 / B',(n,id)=>d[id].sendBuffer],['应用已读取 / B',n=>n.delivered]];
+  $('state-table').replaceChildren(...rows.map(([label,fn])=>{const tr=document.createElement('tr');[label,started?fn(state.nodes.A,'A'):'—',started?fn(state.nodes.B,'B'):'—'].forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.append(td)});return tr}));
+}
+function predictionFeedback(d){
+  if(!started)return;
+  const labels={both:'两个方向都会停止',one:'A→B 的新数据暂停，B→A 仍可继续',ack:'B 的 TCP 不再发送 ACK'};
+  const eligible=state.nodes.A.sending&&state.nodes.B.sending&&state.nodes.A.queued>0&&state.nodes.B.queued>0&&!state.nodes.B.reading&&d.B.window===0&&d.A.blocked;
+  if(!conclusion){
+    if(!eligible)evidence=null;
+    else{
+      if(!evidence)evidence={tick:state.tick,a:state.nodes.A.received,b:state.nodes.B.received};
+      if(state.tick>=evidence.tick+2&&state.nodes.A.received>evidence.a&&state.nodes.B.received===evidence.b){
+        conclusion={start:evidence.tick,end:state.tick,a:state.nodes.A.received-evidence.a,b:state.nodes.B.received-evidence.b};
+        $('explain').hidden=false;stop();
+      }
+    }
+  }
+  const verdict=conclusion?(prediction?(prediction==='one'?'你的预测正确':'你的预测不正确'):'实验结论（未作预测）'):(prediction?'预测尚未验证':'等待实验结果（未作预测）');
+  let progress='下一步：取消「B 应用读取接收缓冲区」，继续推进实验。';
+  if(state.nodes.A.queued===0||state.nodes.B.queued===0)progress='本轮待发数据已耗尽，无法完成比较。请重置后再试。';
+  else if(!state.nodes.A.sending||!state.nodes.B.sending)progress='请开启双方「允许发送新数据」，才能验证接收窗口是否只限制一个方向。';
+  else if(!state.nodes.B.reading)progress=d.B.window>0?'B 的接收窗口尚未耗尽。继续推进，直到 WIN = 0。':'B 的接收窗口已耗尽。继续推进至少两步，比较两个方向的接收计数。';
+  function text(id,value){if($(id).textContent!==value)$(id).textContent=value}
+  $('prediction-feedback').hidden=false;$('prediction-feedback').dataset.verdict=conclusion?(prediction&&prediction!=='one'?'incorrect':'correct'):'pending';
+  text('prediction-verdict',verdict);text('prediction-choice',prediction?'你的预测：'+labels[prediction]+'。':'你跳过了预测，本次只展示实验结论。');
+  $('prediction-progress').hidden=!!conclusion;$('prediction-result').hidden=!conclusion;
+  if(!conclusion)text('prediction-progress',progress);
+  else{
+    text('prediction-observation','实际观察：第 '+conclusion.start+' 至 '+conclusion.end+' 步，A→B 新到达 '+conclusion.b+' B；B→A 新到达 '+conclusion.a+' B。');
+    text('prediction-reason',prediction==='ack'?'因此「B 不再发送 ACK」不成立。B→A 报文仍携带 ACK 和 WIN=0；应用不读，TCP 仍处理报文。':'结论：只有 A→B 的新数据因 B 的接收窗口耗尽而暂停，B→A 仍继续。两个方向分别受各自接收端的窗口控制。');
+  }
+  return conclusion?verdict+'。本次验证时 A→B 暂停、B→A 继续。':'';
+}
+function render(){
+  const d=model.derive(state),tickChanged=state.tick!==renderedTick;$('tick').textContent=state.tick;if(!timer)$('play').textContent=reduced.matches?'单步播放':'连续播放';
+  ['A','B'].forEach(id=>{const low=id.toLowerCase(),n=state.nodes[id],p=state.packets.find(p=>p.from===id),packet=$('packet-'+low),r=n.receive;$('send-'+low).checked=n.sending;
+    $(low+'-received').textContent=n.received;$(low+'-occupancy').textContent=n.rx+' / 600 B';$(low+'-window').textContent=d[id].window+' B';
+    $(low+'-receive-tick').textContent=state.tick;$(low+'-arrived').textContent=r.arrived+' B';$(low+'-buffered').textContent=r.buffered+' / 600 B';$(low+'-read').textContent=r.read+' B';$(low+'-delivered').textContent=n.delivered+' B';$(low+'-trace').textContent='缓冲：'+r.before+' → '+r.buffered+' → '+n.rx+' B';
+    $(low+'-buffer-state').textContent=n.rx===600?'已满：等待应用读取':n.rx>0?'数据保留在接收缓冲区':r.read>0?'本步收到后已被应用读清':'没有数据积压';
+    [['meter-'+low,n.rx],['meter-'+low+'-buffered',r.buffered]].forEach(([meter,bytes])=>$(meter).querySelectorAll('i').forEach((el,i)=>{el.classList.toggle('filled',bytes>i*200);el.classList.toggle('full',bytes===600)}));
+    if(tickChanged){const receive=$('receive-'+low);receive.classList.remove('has-arrival','has-read');packet.classList.remove('moving');void receive.offsetWidth;void packet.offsetWidth;if(r.arrived>0)receive.classList.add('has-arrival');if(r.read>0)receive.classList.add('has-read');if(p)packet.classList.add('moving')}
+    packet.dataset.empty=String(!p||p.len===0);packet.dataset.recipient=p?p.to:'';packet.dataset.payload=p?p.len:0;packet.textContent=p?(p.from+'→'+p.to+' · '+(p.len?'DATA '+p.len+' B + ACK':'纯 ACK · 0 B')):(d[id].blocked?'窗口限制 · 暂无新数据':'本步无报文');
+    $('note-'+low).textContent=p?('下一步到达 '+p.to+' · '+(p.len?'载荷 '+p.len+' B':'纯 ACK，不占数据缓冲')):(d[id].blocked?'等待窗口更新；仍可发送纯 ACK':'本步没有报文在途');
+    $('header-'+low).innerHTML='<span class="tag">'+id+'→'+(id==='A'?'B':'A')+' 报头</span>'+['SEQ','ACK','WIN'].map((k,i)=>'<span>'+k+' '+(p?[p.seq,p.ack,p.win][i]:'—')+'</span>').join('');
+  });
+  $('read-b').checked=state.nodes.B.reading;$('b-reading-label').textContent=state.nodes.B.reading?'B 应用读取：开启，下步继续读清':'B 应用读取：暂停，TCP 仍收包与确认';
+  const verdict=predictionFeedback(d);$('summary').textContent=(verdict||'')+d.summary;backendTable();
+  $('events').replaceChildren(...(started?state.events:['开始实验后显示报文事件。']).map(t=>{const li=document.createElement('li');li.textContent=t;return li}));
+  attention();renderedTick=state.tick;
+}
+function advance(){if(!started)return;state=model.step(state);render()}
+$('start').onclick=()=>{started=true;prediction=selected('prediction');state=model.applyAction(state,{type:'toggle-read',id:'B',value:false});stage.classList.remove('prediction-mode');$('prediction-mask').hidden=true;$('predict-panel').hidden=true;$('try-panel').hidden=false;$('step').disabled=false;$('play').disabled=false;
+  const feedback=[];if(selected('ack-probe')==='app')feedback.push('ACK 只确认 TCP 已按序收到；不代表应用读取或业务处理成功。');if(selected('seq-probe')==='call')feedback.push('SEQ 按字节计数；TCP 不保留每次 write 的边界。');
+  if(feedback.length){$('probe-feedback').textContent=feedback.join(' ');$('probe-feedback').hidden=false}setFocus('forward reverse a-rx b-rx');render()};
+$('step').onclick=$('go-step').onclick=advance;
+$('play').onclick=()=>{if(timer){stop();return}if(reduced.matches){advance();return}$('play').textContent='暂停';$('play').setAttribute('aria-pressed','true');stage.classList.add('animate');timer=setInterval(advance,1300);advance()};
+['A','B'].forEach(id=>$('send-'+id.toLowerCase()).onchange=e=>{state=model.applyAction(state,{type:'toggle-send',id,value:e.target.checked});render()});
+$('read-b').onchange=e=>{state=model.applyAction(state,{type:'toggle-read',id:'B',value:e.target.checked});if(!e.target.checked)evidence=null;setFocus('a-rx b-rx forward reverse');render()};
+$('reset').onclick=()=>{stop();toggleBackend(false);state=model.initialState();started=false;evidence=null;conclusion=null;prediction='';stage.classList.remove('practice-mode');stage.classList.add('prediction-mode');$('focus-guide').checked=true;$('prediction-mask').hidden=false;$('predict-panel').hidden=false;$('try-panel').hidden=true;$('practice-panel').hidden=true;$('explain').hidden=true;$('probe-feedback').hidden=true;$('prediction-feedback').hidden=true;$('practice-feedback').hidden=true;$('transfer').hidden=true;$('transfer-feedback').hidden=true;$('step').disabled=true;$('play').disabled=true;$('explanation').value='';document.querySelectorAll('input[type=radio]').forEach(el=>el.checked=false);setFocus('forward reverse');render()};
+$('focus-guide').onchange=attention;
+document.querySelectorAll('[data-look]').forEach(el=>el.onclick=()=>setFocus(focus===el.dataset.look?'':el.dataset.look));
+document.querySelectorAll('[data-ref],[data-part]').forEach(el=>{function highlight(on){const id=el.dataset.ref||el.dataset.part;document.querySelectorAll('[data-part="'+id+'"]').forEach(p=>p.classList.toggle('highlight',on));document.querySelectorAll('[data-ref="'+id+'"]').forEach(t=>t.classList.toggle('term-active',on))}el.addEventListener('mouseenter',()=>highlight(true));el.addEventListener('mouseleave',()=>highlight(false));el.addEventListener('focus',()=>highlight(true));el.addEventListener('blur',()=>highlight(false))});
+$('practice').onclick=()=>{stop();stage.classList.add('practice-mode');$('practice-panel').hidden=false;$('step').disabled=true;$('play').disabled=true;setFocus('');$('practice-panel').scrollIntoView({block:'start',behavior:'auto'})};
+$('restore').onclick=()=>{stage.classList.remove('practice-mode');$('step').disabled=false;$('play').disabled=false;setFocus('forward reverse a-rx b-rx');stage.scrollIntoView({block:'start',behavior:'auto'})};
+$('check-practice').onclick=()=>{const answer=selected('practice');$('practice-feedback').hidden=false;$('practice-feedback').textContent=!answer?'先选择一个答案。':answer==='yes'?'正确。没有应用数据可捎带时，TCP 可以单独发纯 ACK，确认序号继续跟踪接收进度。':'你把 ACK 绑定到了应用数据上。纯 ACK 可以独立发送；关闭 A 的新数据发送后仍可确认 B。可恢复提示验证。';if(answer)$('transfer').hidden=false};
+$('check-transfer').onclick=()=>{const answer=selected('transfer');$('transfer-feedback').hidden=false;$('transfer-feedback').textContent=!answer?'先选择一个答案。':answer==='yes'?'正确。TCP 的全双工描述逻辑双向传输；底层可以分时调度报文，实际吞吐仍受共享信道限制。':'这里混淆了传输层语义与链路介质。即使介质分时收发，双方仍可在一段重叠时间内推进各自的 TCP 字节流。'};
+function toggleBackend(open){$('backend').hidden=!open;$('backend-toggle').setAttribute('aria-expanded',String(open));$('backend-toggle').textContent=open?'− 收起后端细节':'＋ 后端实现细节';if(open){stop();$('backend').scrollIntoView({block:'start',behavior:'auto'})}}
+$('backend-toggle').onclick=()=>toggleBackend($('backend').hidden);$('backend-close').onclick=()=>{toggleBackend(false);$('backend-toggle').focus()};
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stop()});
+const observer=new IntersectionObserver(entries=>{if(!entries[0].isIntersecting)stop()});observer.observe(stage);
+window.addEventListener('pagehide',()=>{stop();observer.disconnect()});reduced.addEventListener('change',()=>stop());
+render();
+</script>
+</body>
+</html>
